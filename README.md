@@ -153,6 +153,3 @@ Bằng chứng: [tóm tắt lịch sử](tests/reference_evidence/final_regressi
 
 Các file đã duyệt là tài liệu tham khảo khóa theo hash. Tạo bản làm việc riêng và PR để được review trước khi thay thế. Ảnh render PDF là bản xem tài liệu, không phải screenshot SSMS.
 
-## 20. Đóng góp
-
-Chia 4 vai trò theo [TEAM_HANDOFF](docs/TEAM_HANDOFF.md). Làm việc trên nhánh `report/...`, `slides/...` hoặc `docs/...`, commit đúng tệp và mở pull request vào main theo [CONTRIBUTING](CONTRIBUTING.md). Không đưa dữ liệu riêng, mật khẩu, backup DB hoặc ảnh chứa bản ghi nghiên cứu lên GitHub. Danh sách công bố nằm trong [allowlist](docs/PUBLICATION_ALLOWLIST.json); có kiểm tra từng tệp, không chỉ `.gitignore`. Không tự gán giấy phép cho dữ liệu nguồn hoặc toàn dự án.
