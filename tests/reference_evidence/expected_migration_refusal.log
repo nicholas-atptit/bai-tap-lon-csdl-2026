@@ -1,0 +1,3 @@
+Changed database context to 'MarketLabVN30_Refusal_20261027T201039'.
+Msg 51200, Level 16, State 1, Server homematepc, Line 2
+Ambiguous target date; migration refused before schema changes

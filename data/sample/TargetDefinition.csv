@@ -1,0 +1,2 @@
+﻿TargetId,TargetCode,HorizonSessions,OutputType,LabelRule
+1,CLOSE_UP_5,5,PROBABILITY_CLOSE_UP,CLOSE_TARGET_GT_CLOSE_ORIGIN_ELSE_ZERO

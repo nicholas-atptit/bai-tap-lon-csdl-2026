@@ -1,0 +1,3 @@
+# Optional document QA only. SQL demo and offline unit tests use no pip packages.
+PyMuPDF>=1.24,<2
+Pillow>=10,<13

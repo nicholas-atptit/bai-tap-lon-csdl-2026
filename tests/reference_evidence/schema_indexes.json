@@ -1,0 +1,502 @@
+[
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "IX_DailyPrice_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "DatasetId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "IX_DailyPrice_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "TradeDate",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "IX_DailyPrice_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "IX_DailyPrice_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ClosePrice",
+    "KeyOrdinal": 0,
+    "IsIncluded": true
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "IX_DailyPrice_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "Volume",
+    "KeyOrdinal": 0,
+    "IsIncluded": true
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "PK_DailyPrice",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "DatasetId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "PK_DailyPrice",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "DailyPrice",
+    "KeyName": "PK_DailyPrice",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "TradeDate",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Dataset",
+    "KeyName": "PK_Dataset",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "DatasetId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Dataset",
+    "KeyName": "UQ_Dataset_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "DatasetCode",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ForecastModel",
+    "KeyName": "PK_ForecastModel",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ModelId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ForecastModel",
+    "KeyName": "UQ_ForecastModel_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "ModelCode",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ForecastOrigin",
+    "KeyName": "PK_ForecastOrigin",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "RunId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ForecastOrigin",
+    "KeyName": "PK_ForecastOrigin",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "OriginDate",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "IX_IndexMembership_Stock",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "IX_IndexMembership_Stock",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ValidFrom",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "IX_IndexMembership_Stock",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "IndexId",
+    "KeyOrdinal": 0,
+    "IsIncluded": true
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "IX_IndexMembership_Stock",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ValidTo",
+    "KeyOrdinal": 0,
+    "IsIncluded": true
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "PK_IndexMembership",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "IndexId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "PK_IndexMembership",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "IndexMembership",
+    "KeyName": "PK_IndexMembership",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ValidFrom",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Industry",
+    "KeyName": "PK_Industry",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "IndustryId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Industry",
+    "KeyName": "UQ_Industry_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "IndustryCode",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Market",
+    "KeyName": "PK_Market",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "MarketId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Market",
+    "KeyName": "UQ_Market_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "MarketCode",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ModelRun",
+    "KeyName": "IX_ModelRun_Model",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ModelId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ModelRun",
+    "KeyName": "IX_ModelRun_Model",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "DatasetId",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ModelRun",
+    "KeyName": "IX_ModelRun_Model",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "TargetId",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ModelRun",
+    "KeyName": "PK_ModelRun",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "RunId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "ModelRun",
+    "KeyName": "UQ_ModelRun_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "RunCode",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "IX_Prediction_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "OriginDate",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "IX_Prediction_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "RunId",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "IX_Prediction_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "IX_Prediction_Date",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": false,
+    "ColumnName": "ProbabilityPositive",
+    "KeyOrdinal": 0,
+    "IsIncluded": true
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "PK_Prediction",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "RunId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "PK_Prediction",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Prediction",
+    "KeyName": "PK_Prediction",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "OriginDate",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Stock",
+    "KeyName": "PK_Stock",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "StockId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Stock",
+    "KeyName": "UQ_Stock_MarketTicker",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "MarketId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "Stock",
+    "KeyName": "UQ_Stock_MarketTicker",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "Ticker",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "StockIndex",
+    "KeyName": "PK_StockIndex",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "IndexId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "StockIndex",
+    "KeyName": "UQ_StockIndex_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "MarketId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "StockIndex",
+    "KeyName": "UQ_StockIndex_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "IndexCode",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TargetDefinition",
+    "KeyName": "PK_TargetDefinition",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "TargetId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TargetDefinition",
+    "KeyName": "UQ_Target_Definition",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "HorizonSessions",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TargetDefinition",
+    "KeyName": "UQ_Target_Definition",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "OutputType",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TargetDefinition",
+    "KeyName": "UQ_Target_Definition",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "LabelRule",
+    "KeyOrdinal": 3,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TargetDefinition",
+    "KeyName": "UQ_TargetDefinition_Code",
+    "IndexType": "NONCLUSTERED",
+    "IsPrimaryKey": false,
+    "IsUniqueConstraint": true,
+    "ColumnName": "TargetCode",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TradingDay",
+    "KeyName": "PK_TradingDay",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "DatasetId",
+    "KeyOrdinal": 1,
+    "IsIncluded": false
+  },
+  {
+    "TableName": "TradingDay",
+    "KeyName": "PK_TradingDay",
+    "IndexType": "CLUSTERED",
+    "IsPrimaryKey": true,
+    "IsUniqueConstraint": false,
+    "ColumnName": "TradeDate",
+    "KeyOrdinal": 2,
+    "IsIncluded": false
+  }
+]

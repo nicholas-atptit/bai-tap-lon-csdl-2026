@@ -1,0 +1,30 @@
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+
+(258 rows affected)
+Changed database context to 'master'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+TableName|RowsInput|RowsAlreadyPresent|RowsInserted
+---------|---------|------------------|------------
+DailyPrice|280|280|0
+Dataset|1|1|0
+ForecastModel|2|2|0
+ForecastOrigin|34|34|0
+IndexMembership|8|8|0
+Industry|2|2|0
+Market|1|1|0
+ModelRun|2|2|0
+Prediction|258|258|0
+Stock|8|8|0
+StockIndex|1|1|0
+TargetDefinition|1|1|0
+TradingDay|42|42|0
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+Result|PredictionsPreserved
+------|--------------------
+MIGRATION_LOSSLESS_PASS|258

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "scope": "Offline files and optional actual Git index; not SQL runtime or absolute secret assurance",
+  "file_count": 138,
+  "internal_markdown_links": 192,
+  "sql_tables": 13,
+  "queries": 16,
+  "procedures": 4,
+  "functions": 3,
+  "views": 4,
+  "secret_pattern_findings": 0,
+  "staged_index_verified": false,
+  "checked_utc": "2026-10-27T15:35:21.890213+00:00"
+}

@@ -1,0 +1,10 @@
+Changed database context to 'MarketLabVN30_Demo'.
+Ticker|SourceCloseReturnPct
+------|--------------------
+DEMO05|15.69396831
+DEMO06|14.33899579
+DEMO01|11.81670419
+DEMO04|11.68434729
+DEMO07|9.17575974
+
+(5 rows affected)

@@ -1,0 +1,4918 @@
+{
+  "Market": [
+    {
+      "MarketId": 1,
+      "MarketCode": "DEMO",
+      "MarketName": "Thị trường mô phỏng",
+      "CurrencyCode": "VND"
+    }
+  ],
+  "Industry": [
+    {
+      "IndustryId": 1,
+      "IndustryCode": "DEMO_SECTOR_1",
+      "IndustryName": "Ngành mô phỏng 1",
+      "EvidenceNote": "Dữ liệu danh mục mô phỏng, không ánh xạ ngành thực."
+    },
+    {
+      "IndustryId": 2,
+      "IndustryCode": "DEMO_SECTOR_2",
+      "IndustryName": "Ngành mô phỏng 2",
+      "EvidenceNote": "Dữ liệu danh mục mô phỏng, không ánh xạ ngành thực."
+    }
+  ],
+  "Stock": [
+    {
+      "StockId": 1,
+      "MarketId": 1,
+      "Ticker": "DEMO01",
+      "CompanyName": "Công ty mô phỏng 1",
+      "IndustryId": 1,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 2,
+      "MarketId": 1,
+      "Ticker": "DEMO02",
+      "CompanyName": "Công ty mô phỏng 2",
+      "IndustryId": 1,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 3,
+      "MarketId": 1,
+      "Ticker": "DEMO03",
+      "CompanyName": "Công ty mô phỏng 3",
+      "IndustryId": 1,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 4,
+      "MarketId": 1,
+      "Ticker": "DEMO04",
+      "CompanyName": "Công ty mô phỏng 4",
+      "IndustryId": 1,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 5,
+      "MarketId": 1,
+      "Ticker": "DEMO05",
+      "CompanyName": "Công ty mô phỏng 5",
+      "IndustryId": 2,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 6,
+      "MarketId": 1,
+      "Ticker": "DEMO06",
+      "CompanyName": "Công ty mô phỏng 6",
+      "IndustryId": 2,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 7,
+      "MarketId": 1,
+      "Ticker": "DEMO07",
+      "CompanyName": "Công ty mô phỏng 7",
+      "IndustryId": 2,
+      "IsSynthetic": 1
+    },
+    {
+      "StockId": 8,
+      "MarketId": 1,
+      "Ticker": "DEMO08",
+      "CompanyName": "Công ty mô phỏng 8",
+      "IndustryId": 2,
+      "IsSynthetic": 1
+    }
+  ],
+  "Dataset": [
+    {
+      "DatasetId": 1,
+      "DatasetCode": "SYNTHETIC_DEMO_V1",
+      "MarketId": 1,
+      "DataKind": "SYNTHETIC",
+      "PriceBasis": "SOURCE_CLOSE",
+      "PriceUnit": "Đơn vị mô phỏng",
+      "ObservedThrough": "2025-02-19",
+      "ManifestPath": "data/sample/tables.json",
+      "ProvenanceNote": "DỮ LIỆU MÔ PHỎNG, không phải giao dịch hay kết quả nghiên cứu."
+    }
+  ],
+  "TradingDay": [
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-02"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-03"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-06"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-07"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-08"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-09"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-10"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-13"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-14"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-15"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-16"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-17"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-20"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-21"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-22"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-23"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-24"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-27"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-28"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-29"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-30"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-01-31"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-03"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-04"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-05"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-06"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-07"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-10"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-11"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-12"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-13"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-14"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-17"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-18"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-19"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-20"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-21"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-24"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-25"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-26"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-27"
+    },
+    {
+      "DatasetId": 1,
+      "TradeDate": "2025-02-28"
+    }
+  ],
+  "DailyPrice": [
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "23.2622",
+      "HighPrice": "23.7622",
+      "LowPrice": "22.5098",
+      "ClosePrice": "23.0098",
+      "Volume": 11000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "23.5623",
+      "HighPrice": "24.0623",
+      "LowPrice": "22.7895",
+      "ClosePrice": "23.2895",
+      "Volume": 11200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "23.1925",
+      "HighPrice": "23.6925",
+      "LowPrice": "22.6502",
+      "ClosePrice": "23.1502",
+      "Volume": 11400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "22.445",
+      "HighPrice": "23.172",
+      "LowPrice": "21.945",
+      "ClosePrice": "22.672",
+      "Volume": 11600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "21.7657",
+      "HighPrice": "22.5534",
+      "LowPrice": "21.2657",
+      "ClosePrice": "22.0534",
+      "Volume": 11800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "21.458",
+      "HighPrice": "22.0418",
+      "LowPrice": "20.958",
+      "ClosePrice": "21.5418",
+      "Volume": 12000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "21.5447",
+      "HighPrice": "22.0447",
+      "LowPrice": "20.8476",
+      "ClosePrice": "21.3476",
+      "Volume": 12200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "21.8667",
+      "HighPrice": "22.3667",
+      "LowPrice": "21.0699",
+      "ClosePrice": "21.5699",
+      "Volume": 12400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "22.2861",
+      "HighPrice": "22.7861",
+      "LowPrice": "21.6625",
+      "ClosePrice": "22.1625",
+      "Volume": 12600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "22.7867",
+      "HighPrice": "23.4499",
+      "LowPrice": "22.2867",
+      "ClosePrice": "22.9499",
+      "Volume": 12800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "23.3884",
+      "HighPrice": "24.1884",
+      "LowPrice": "22.8884",
+      "ClosePrice": "23.6884",
+      "Volume": 13000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "23.9905",
+      "HighPrice": "24.6515",
+      "LowPrice": "23.4905",
+      "ClosePrice": "24.1515",
+      "Volume": 13200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "24.335",
+      "HighPrice": "24.835",
+      "LowPrice": "23.7089",
+      "ClosePrice": "24.2089",
+      "Volume": 13400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "24.1691",
+      "HighPrice": "24.6691",
+      "LowPrice": "23.3719",
+      "ClosePrice": "23.8719",
+      "Volume": 13600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "23.4848",
+      "HighPrice": "23.9848",
+      "LowPrice": "22.7897",
+      "ClosePrice": "23.2897",
+      "Volume": 13800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "22.6108",
+      "HighPrice": "23.1972",
+      "LowPrice": "22.1108",
+      "ClosePrice": "22.6972",
+      "Volume": 14000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "22.0443",
+      "HighPrice": "22.8327",
+      "LowPrice": "21.5443",
+      "ClosePrice": "22.3327",
+      "Volume": 14200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "22.1297",
+      "HighPrice": "22.855",
+      "LowPrice": "21.6297",
+      "ClosePrice": "22.355",
+      "Volume": 14400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "22.8328",
+      "HighPrice": "23.3328",
+      "LowPrice": "22.2878",
+      "ClosePrice": "22.7878",
+      "Volume": 14600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "23.7852",
+      "HighPrice": "24.2852",
+      "LowPrice": "23.0113",
+      "ClosePrice": "23.5113",
+      "Volume": 14800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "24.5552",
+      "HighPrice": "25.0552",
+      "LowPrice": "23.8042",
+      "ClosePrice": "24.3042",
+      "Volume": 15000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "24.9183",
+      "HighPrice": "25.421",
+      "LowPrice": "24.4183",
+      "ClosePrice": "24.921",
+      "Volume": 15200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "24.9237",
+      "HighPrice": "25.6776",
+      "LowPrice": "24.4237",
+      "ClosePrice": "25.1776",
+      "Volume": 15400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "24.7442",
+      "HighPrice": "25.5159",
+      "LowPrice": "24.2442",
+      "ClosePrice": "25.0159",
+      "Volume": 15600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "24.484",
+      "HighPrice": "25.0237",
+      "LowPrice": "23.984",
+      "ClosePrice": "24.5237",
+      "Volume": 15800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "24.1333",
+      "HighPrice": "24.6333",
+      "LowPrice": "23.4045",
+      "ClosePrice": "23.9045",
+      "Volume": 16000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "23.6929",
+      "HighPrice": "24.1929",
+      "LowPrice": "22.906",
+      "ClosePrice": "23.406",
+      "Volume": 16200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "23.315",
+      "HighPrice": "23.815",
+      "LowPrice": "22.7337",
+      "ClosePrice": "23.2337",
+      "Volume": 16400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "23.2803",
+      "HighPrice": "23.9794",
+      "LowPrice": "22.7803",
+      "ClosePrice": "23.4794",
+      "Volume": 16600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "23.7921",
+      "HighPrice": "24.5885",
+      "LowPrice": "23.2921",
+      "ClosePrice": "24.0885",
+      "Volume": 16800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "24.7587",
+      "HighPrice": "25.3799",
+      "LowPrice": "24.2587",
+      "ClosePrice": "24.8799",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "25.7738",
+      "HighPrice": "26.2738",
+      "LowPrice": "25.1084",
+      "ClosePrice": "25.6084",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "26.351",
+      "HighPrice": "26.851",
+      "LowPrice": "25.551",
+      "ClosePrice": "26.051",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "26.2433",
+      "HighPrice": "26.7433",
+      "LowPrice": "25.5846",
+      "ClosePrice": "26.0846",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 1,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "25.6003",
+      "HighPrice": "26.2288",
+      "LowPrice": "25.1003",
+      "ClosePrice": "25.7288",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "25.364",
+      "HighPrice": "25.864",
+      "LowPrice": "24.5912",
+      "ClosePrice": "25.0912",
+      "Volume": 12000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "24.7509",
+      "HighPrice": "25.2509",
+      "LowPrice": "24.2086",
+      "ClosePrice": "24.7086",
+      "Volume": 12200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "23.883",
+      "HighPrice": "24.61",
+      "LowPrice": "23.383",
+      "ClosePrice": "24.11",
+      "Volume": 12400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "23.2481",
+      "HighPrice": "24.0358",
+      "LowPrice": "22.7481",
+      "ClosePrice": "23.5358",
+      "Volume": 12600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "23.1343",
+      "HighPrice": "23.7181",
+      "LowPrice": "22.6343",
+      "ClosePrice": "23.2181",
+      "Volume": 12800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "23.4964",
+      "HighPrice": "23.9964",
+      "LowPrice": "22.7993",
+      "ClosePrice": "23.2993",
+      "Volume": 13000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "24.0793",
+      "HighPrice": "24.5793",
+      "LowPrice": "23.2825",
+      "ClosePrice": "23.7825",
+      "Volume": 13200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "24.6539",
+      "HighPrice": "25.1539",
+      "LowPrice": "24.0303",
+      "ClosePrice": "24.5303",
+      "Volume": 13400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "25.1497",
+      "HighPrice": "25.8129",
+      "LowPrice": "24.6497",
+      "ClosePrice": "25.3129",
+      "Volume": 13600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "25.5884",
+      "HighPrice": "26.3884",
+      "LowPrice": "25.0884",
+      "ClosePrice": "25.8884",
+      "Volume": 13800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "25.9262",
+      "HighPrice": "26.5872",
+      "LowPrice": "25.4262",
+      "ClosePrice": "26.0872",
+      "Volume": 14000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "25.9974",
+      "HighPrice": "26.4974",
+      "LowPrice": "25.3713",
+      "ClosePrice": "25.8713",
+      "Volume": 14200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "25.6447",
+      "HighPrice": "26.1447",
+      "LowPrice": "24.8475",
+      "ClosePrice": "25.3475",
+      "Volume": 14400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "24.9253",
+      "HighPrice": "25.4253",
+      "LowPrice": "24.2302",
+      "ClosePrice": "24.7302",
+      "Volume": 14600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "24.1802",
+      "HighPrice": "24.7666",
+      "LowPrice": "23.6802",
+      "ClosePrice": "24.2666",
+      "Volume": 14800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "23.8616",
+      "HighPrice": "24.65",
+      "LowPrice": "23.3616",
+      "ClosePrice": "24.15",
+      "Volume": 15000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "24.2273",
+      "HighPrice": "24.9526",
+      "LowPrice": "23.7273",
+      "ClosePrice": "24.4526",
+      "Volume": 15200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "25.1451",
+      "HighPrice": "25.6451",
+      "LowPrice": "24.6001",
+      "ClosePrice": "25.1001",
+      "Volume": 15400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "26.1717",
+      "HighPrice": "26.6717",
+      "LowPrice": "25.3978",
+      "ClosePrice": "25.8978",
+      "Volume": 15600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "26.8495",
+      "HighPrice": "27.3495",
+      "LowPrice": "26.0985",
+      "ClosePrice": "26.5985",
+      "Volume": 15800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "26.986",
+      "HighPrice": "27.4887",
+      "LowPrice": "26.486",
+      "ClosePrice": "26.9887",
+      "Volume": 16000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "26.7098",
+      "HighPrice": "27.4637",
+      "LowPrice": "26.2098",
+      "ClosePrice": "26.9637",
+      "Volume": 16200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "26.292",
+      "HighPrice": "27.0637",
+      "LowPrice": "25.792",
+      "ClosePrice": "26.5637",
+      "Volume": 16400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "25.92",
+      "HighPrice": "26.4597",
+      "LowPrice": "25.42",
+      "ClosePrice": "25.9597",
+      "Volume": 16600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "25.6231",
+      "HighPrice": "26.1231",
+      "LowPrice": "24.8943",
+      "ClosePrice": "25.3943",
+      "Volume": 16800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "25.3832",
+      "HighPrice": "25.8832",
+      "LowPrice": "24.5963",
+      "ClosePrice": "25.0963",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "25.2827",
+      "HighPrice": "25.7827",
+      "LowPrice": "24.7014",
+      "ClosePrice": "25.2014",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "25.5051",
+      "HighPrice": "26.2042",
+      "LowPrice": "25.0051",
+      "ClosePrice": "25.7042",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "26.1642",
+      "HighPrice": "26.9606",
+      "LowPrice": "25.6642",
+      "ClosePrice": "26.4606",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "27.1165",
+      "HighPrice": "27.7377",
+      "LowPrice": "26.6165",
+      "ClosePrice": "27.2377",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "27.9609",
+      "HighPrice": "28.4609",
+      "LowPrice": "27.2955",
+      "ClosePrice": "27.7955",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "28.2707",
+      "HighPrice": "28.7707",
+      "LowPrice": "27.4707",
+      "ClosePrice": "27.9707",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "27.8921",
+      "HighPrice": "28.3921",
+      "LowPrice": "27.2334",
+      "ClosePrice": "27.7334",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "27.0695",
+      "HighPrice": "27.698",
+      "LowPrice": "26.5695",
+      "ClosePrice": "27.198",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 2,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "26.2854",
+      "HighPrice": "27.0829",
+      "LowPrice": "25.7854",
+      "ClosePrice": "26.5829",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "26.2116",
+      "HighPrice": "26.7116",
+      "LowPrice": "25.6693",
+      "ClosePrice": "26.1693",
+      "Volume": 13000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "25.332",
+      "HighPrice": "26.059",
+      "LowPrice": "24.832",
+      "ClosePrice": "25.559",
+      "Volume": 13200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "24.8464",
+      "HighPrice": "25.6341",
+      "LowPrice": "24.3464",
+      "ClosePrice": "25.1341",
+      "Volume": 13400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "24.9908",
+      "HighPrice": "25.5746",
+      "LowPrice": "24.4908",
+      "ClosePrice": "25.0746",
+      "Volume": 13600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "25.6298",
+      "HighPrice": "26.1298",
+      "LowPrice": "24.9327",
+      "ClosePrice": "25.4327",
+      "Volume": 13800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "26.4115",
+      "HighPrice": "26.9115",
+      "LowPrice": "25.6147",
+      "ClosePrice": "26.1147",
+      "Volume": 14000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "27.0374",
+      "HighPrice": "27.5374",
+      "LowPrice": "26.4138",
+      "ClosePrice": "26.9138",
+      "Volume": 14200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "27.4192",
+      "HighPrice": "28.0824",
+      "LowPrice": "26.9192",
+      "ClosePrice": "27.5824",
+      "Volume": 14400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "27.6183",
+      "HighPrice": "28.4183",
+      "LowPrice": "27.1183",
+      "ClosePrice": "27.9183",
+      "Volume": 14600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "27.6745",
+      "HighPrice": "28.3355",
+      "LowPrice": "27.1745",
+      "ClosePrice": "27.8355",
+      "Volume": 14800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "27.5206",
+      "HighPrice": "28.0206",
+      "LowPrice": "26.8945",
+      "ClosePrice": "27.3945",
+      "Volume": 15000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "27.078",
+      "HighPrice": "27.578",
+      "LowPrice": "26.2808",
+      "ClosePrice": "26.7808",
+      "Volume": 15200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "26.4353",
+      "HighPrice": "26.9353",
+      "LowPrice": "25.7402",
+      "ClosePrice": "26.2402",
+      "Volume": 15400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "25.9065",
+      "HighPrice": "26.4929",
+      "LowPrice": "25.4065",
+      "ClosePrice": "25.9929",
+      "Volume": 15600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "25.8684",
+      "HighPrice": "26.6568",
+      "LowPrice": "25.3684",
+      "ClosePrice": "26.1568",
+      "Volume": 15800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "26.4808",
+      "HighPrice": "27.2061",
+      "LowPrice": "25.9808",
+      "ClosePrice": "26.7061",
+      "Volume": 16000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "27.5253",
+      "HighPrice": "28.0253",
+      "LowPrice": "26.9803",
+      "ClosePrice": "27.4803",
+      "Volume": 16200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "28.5144",
+      "HighPrice": "29.0144",
+      "LowPrice": "27.7405",
+      "ClosePrice": "28.2405",
+      "Volume": 16400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "29.0034",
+      "HighPrice": "29.5034",
+      "LowPrice": "28.2524",
+      "ClosePrice": "28.7524",
+      "Volume": 16600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "28.8661",
+      "HighPrice": "29.3688",
+      "LowPrice": "28.3661",
+      "ClosePrice": "28.8688",
+      "Volume": 16800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "28.3264",
+      "HighPrice": "29.0803",
+      "LowPrice": "27.8264",
+      "ClosePrice": "28.5803",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "27.7476",
+      "HighPrice": "28.5193",
+      "LowPrice": "27.2476",
+      "ClosePrice": "28.0193",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "27.3734",
+      "HighPrice": "27.9131",
+      "LowPrice": "26.8734",
+      "ClosePrice": "27.4131",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "27.2337",
+      "HighPrice": "27.7337",
+      "LowPrice": "26.5049",
+      "ClosePrice": "27.0049",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "27.2557",
+      "HighPrice": "27.7557",
+      "LowPrice": "26.4688",
+      "ClosePrice": "26.9688",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "27.4301",
+      "HighPrice": "27.9301",
+      "LowPrice": "26.8488",
+      "ClosePrice": "27.3488",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "27.8445",
+      "HighPrice": "28.5436",
+      "LowPrice": "27.3445",
+      "ClosePrice": "28.0436",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "28.5456",
+      "HighPrice": "29.342",
+      "LowPrice": "28.0456",
+      "ClosePrice": "28.842",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "29.3752",
+      "HighPrice": "29.9964",
+      "LowPrice": "28.8752",
+      "ClosePrice": "29.4964",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "29.9752",
+      "HighPrice": "30.4752",
+      "LowPrice": "29.3098",
+      "ClosePrice": "29.8098",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "30.004",
+      "HighPrice": "30.504",
+      "LowPrice": "29.204",
+      "ClosePrice": "29.704",
+      "Volume": 19000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "29.4062",
+      "HighPrice": "29.9062",
+      "LowPrice": "28.7475",
+      "ClosePrice": "29.2475",
+      "Volume": 19200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "28.5027",
+      "HighPrice": "29.1312",
+      "LowPrice": "28.0027",
+      "ClosePrice": "28.6312",
+      "Volume": 19400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "27.8043",
+      "HighPrice": "28.6018",
+      "LowPrice": "27.3043",
+      "ClosePrice": "28.1018",
+      "Volume": 19600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 3,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "27.6826",
+      "HighPrice": "28.3757",
+      "LowPrice": "27.1826",
+      "ClosePrice": "27.8757",
+      "Volume": 19800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "26.8648",
+      "HighPrice": "27.5918",
+      "LowPrice": "26.3648",
+      "ClosePrice": "27.0918",
+      "Volume": 14000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "26.6099",
+      "HighPrice": "27.3976",
+      "LowPrice": "26.1099",
+      "ClosePrice": "26.8976",
+      "Volume": 14200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "27.0361",
+      "HighPrice": "27.6199",
+      "LowPrice": "26.5361",
+      "ClosePrice": "27.1199",
+      "Volume": 14400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "27.9096",
+      "HighPrice": "28.4096",
+      "LowPrice": "27.2125",
+      "ClosePrice": "27.7125",
+      "Volume": 14600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "28.7967",
+      "HighPrice": "29.2967",
+      "LowPrice": "27.9999",
+      "ClosePrice": "28.4999",
+      "Volume": 14800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "29.362",
+      "HighPrice": "29.862",
+      "LowPrice": "28.7384",
+      "ClosePrice": "29.2384",
+      "Volume": 15000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "29.5383",
+      "HighPrice": "30.2015",
+      "LowPrice": "29.0383",
+      "ClosePrice": "29.7015",
+      "Volume": 15200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "29.4589",
+      "HighPrice": "30.2589",
+      "LowPrice": "28.9589",
+      "ClosePrice": "29.7589",
+      "Volume": 15400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "29.2609",
+      "HighPrice": "29.9219",
+      "LowPrice": "28.7609",
+      "ClosePrice": "29.4219",
+      "Volume": 15600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "28.9658",
+      "HighPrice": "29.4658",
+      "LowPrice": "28.3397",
+      "ClosePrice": "28.8397",
+      "Volume": 15800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "28.5444",
+      "HighPrice": "29.0444",
+      "LowPrice": "27.7472",
+      "ClosePrice": "28.2472",
+      "Volume": 16000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "28.0778",
+      "HighPrice": "28.5778",
+      "LowPrice": "27.3827",
+      "ClosePrice": "27.8827",
+      "Volume": 16200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "27.8186",
+      "HighPrice": "28.405",
+      "LowPrice": "27.3186",
+      "ClosePrice": "27.905",
+      "Volume": 16400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "28.0494",
+      "HighPrice": "28.8378",
+      "LowPrice": "27.5494",
+      "ClosePrice": "28.3378",
+      "Volume": 16600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "28.836",
+      "HighPrice": "29.5613",
+      "LowPrice": "28.336",
+      "ClosePrice": "29.0613",
+      "Volume": 16800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "29.8992",
+      "HighPrice": "30.3992",
+      "LowPrice": "29.3542",
+      "ClosePrice": "29.8542",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "30.7449",
+      "HighPrice": "31.2449",
+      "LowPrice": "29.971",
+      "ClosePrice": "30.471",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "30.9786",
+      "HighPrice": "31.4786",
+      "LowPrice": "30.2276",
+      "ClosePrice": "30.7276",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "30.5632",
+      "HighPrice": "31.0659",
+      "LowPrice": "30.0632",
+      "ClosePrice": "30.5659",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "29.8198",
+      "HighPrice": "30.5737",
+      "LowPrice": "29.3198",
+      "ClosePrice": "30.0737",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "29.1828",
+      "HighPrice": "29.9545",
+      "LowPrice": "28.6828",
+      "ClosePrice": "29.4545",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "28.9163",
+      "HighPrice": "29.456",
+      "LowPrice": "28.4163",
+      "ClosePrice": "28.956",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "29.0125",
+      "HighPrice": "29.5125",
+      "LowPrice": "28.2837",
+      "ClosePrice": "28.7837",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "29.3163",
+      "HighPrice": "29.8163",
+      "LowPrice": "28.5294",
+      "ClosePrice": "29.0294",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "29.7198",
+      "HighPrice": "30.2198",
+      "LowPrice": "29.1385",
+      "ClosePrice": "29.6385",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "30.2308",
+      "HighPrice": "30.9299",
+      "LowPrice": "29.7308",
+      "ClosePrice": "30.4299",
+      "Volume": 19000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "30.862",
+      "HighPrice": "31.6584",
+      "LowPrice": "30.362",
+      "ClosePrice": "31.1584",
+      "Volume": 19200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "31.4798",
+      "HighPrice": "32.101",
+      "LowPrice": "30.9798",
+      "ClosePrice": "31.601",
+      "Volume": 19400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "31.8",
+      "HighPrice": "32.3",
+      "LowPrice": "31.1346",
+      "ClosePrice": "31.6346",
+      "Volume": 19600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "31.5788",
+      "HighPrice": "32.0788",
+      "LowPrice": "30.7788",
+      "ClosePrice": "31.2788",
+      "Volume": 19800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "30.8481",
+      "HighPrice": "31.3481",
+      "LowPrice": "30.1894",
+      "ClosePrice": "30.6894",
+      "Volume": 20000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "29.9752",
+      "HighPrice": "30.6037",
+      "LowPrice": "29.4752",
+      "ClosePrice": "30.1037",
+      "Volume": 20200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "29.4602",
+      "HighPrice": "30.2577",
+      "LowPrice": "28.9602",
+      "ClosePrice": "29.7577",
+      "Volume": 20400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "29.6107",
+      "HighPrice": "30.3038",
+      "LowPrice": "29.1107",
+      "ClosePrice": "29.8038",
+      "Volume": 20600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 4,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "30.3462",
+      "HighPrice": "30.8462",
+      "LowPrice": "29.7573",
+      "ClosePrice": "30.2573",
+      "Volume": 20800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "28.5616",
+      "HighPrice": "29.3493",
+      "LowPrice": "28.0616",
+      "ClosePrice": "28.8493",
+      "Volume": 15000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "29.2487",
+      "HighPrice": "29.8325",
+      "LowPrice": "28.7487",
+      "ClosePrice": "29.3325",
+      "Volume": 15200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "30.2774",
+      "HighPrice": "30.7774",
+      "LowPrice": "29.5803",
+      "ClosePrice": "30.0803",
+      "Volume": 15400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "31.1597",
+      "HighPrice": "31.6597",
+      "LowPrice": "30.3629",
+      "ClosePrice": "30.8629",
+      "Volume": 15600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "31.562",
+      "HighPrice": "32.062",
+      "LowPrice": "30.9384",
+      "ClosePrice": "31.4384",
+      "Volume": 15800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "31.474",
+      "HighPrice": "32.1372",
+      "LowPrice": "30.974",
+      "ClosePrice": "31.6372",
+      "Volume": 16000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "31.1213",
+      "HighPrice": "31.9213",
+      "LowPrice": "30.6213",
+      "ClosePrice": "31.4213",
+      "Volume": 16200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "30.7365",
+      "HighPrice": "31.3975",
+      "LowPrice": "30.2365",
+      "ClosePrice": "30.8975",
+      "Volume": 16400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "30.4063",
+      "HighPrice": "30.9063",
+      "LowPrice": "29.7802",
+      "ClosePrice": "30.2802",
+      "Volume": 16600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "30.1138",
+      "HighPrice": "30.6138",
+      "LowPrice": "29.3166",
+      "ClosePrice": "29.8166",
+      "Volume": 16800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "29.8951",
+      "HighPrice": "30.3951",
+      "LowPrice": "29.2",
+      "ClosePrice": "29.7",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "29.9162",
+      "HighPrice": "30.5026",
+      "LowPrice": "29.4162",
+      "ClosePrice": "30.0026",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "30.3617",
+      "HighPrice": "31.1501",
+      "LowPrice": "29.8617",
+      "ClosePrice": "30.6501",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "31.2225",
+      "HighPrice": "31.9478",
+      "LowPrice": "30.7225",
+      "ClosePrice": "31.4478",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "32.1935",
+      "HighPrice": "32.6935",
+      "LowPrice": "31.6485",
+      "ClosePrice": "32.1485",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "32.8126",
+      "HighPrice": "33.3126",
+      "LowPrice": "32.0387",
+      "ClosePrice": "32.5387",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "32.7647",
+      "HighPrice": "33.2647",
+      "LowPrice": "32.0137",
+      "ClosePrice": "32.5137",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "32.111",
+      "HighPrice": "32.6137",
+      "LowPrice": "31.611",
+      "ClosePrice": "32.1137",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "31.2558",
+      "HighPrice": "32.0097",
+      "LowPrice": "30.7558",
+      "ClosePrice": "31.5097",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "30.6726",
+      "HighPrice": "31.4443",
+      "LowPrice": "30.1726",
+      "ClosePrice": "30.9443",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "30.6066",
+      "HighPrice": "31.1463",
+      "LowPrice": "30.1066",
+      "ClosePrice": "30.6463",
+      "Volume": 19000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "30.9802",
+      "HighPrice": "31.4802",
+      "LowPrice": "30.2514",
+      "ClosePrice": "30.7514",
+      "Volume": 19200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "31.5411",
+      "HighPrice": "32.0411",
+      "LowPrice": "30.7542",
+      "ClosePrice": "31.2542",
+      "Volume": 19400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "32.0919",
+      "HighPrice": "32.5919",
+      "LowPrice": "31.5106",
+      "ClosePrice": "32.0106",
+      "Volume": 19600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "32.5886",
+      "HighPrice": "33.2877",
+      "LowPrice": "32.0886",
+      "ClosePrice": "32.7877",
+      "Volume": 19800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "33.0491",
+      "HighPrice": "33.8455",
+      "LowPrice": "32.5491",
+      "ClosePrice": "33.3455",
+      "Volume": 20000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "33.3995",
+      "HighPrice": "34.0207",
+      "LowPrice": "32.8995",
+      "ClosePrice": "33.5207",
+      "Volume": 20200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "33.4488",
+      "HighPrice": "33.9488",
+      "LowPrice": "32.7834",
+      "ClosePrice": "33.2834",
+      "Volume": 20400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "33.048",
+      "HighPrice": "33.548",
+      "LowPrice": "32.248",
+      "ClosePrice": "32.748",
+      "Volume": 20600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "32.2916",
+      "HighPrice": "32.7916",
+      "LowPrice": "31.6329",
+      "ClosePrice": "32.1329",
+      "Volume": 20800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "31.556",
+      "HighPrice": "32.1845",
+      "LowPrice": "31.056",
+      "ClosePrice": "31.6845",
+      "Volume": 21000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "31.2934",
+      "HighPrice": "32.0909",
+      "LowPrice": "30.7934",
+      "ClosePrice": "31.5909",
+      "Volume": 21200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "31.723",
+      "HighPrice": "32.4161",
+      "LowPrice": "31.223",
+      "ClosePrice": "31.9161",
+      "Volume": 21400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "32.6669",
+      "HighPrice": "33.1669",
+      "LowPrice": "32.078",
+      "ClosePrice": "32.578",
+      "Volume": 21600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 5,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "33.666",
+      "HighPrice": "34.166",
+      "LowPrice": "32.8769",
+      "ClosePrice": "33.3769",
+      "Volume": 21800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "31.5809",
+      "HighPrice": "32.1647",
+      "LowPrice": "31.0809",
+      "ClosePrice": "31.6647",
+      "Volume": 16000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "32.6609",
+      "HighPrice": "33.1609",
+      "LowPrice": "31.9638",
+      "ClosePrice": "32.4638",
+      "Volume": 16200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "33.4292",
+      "HighPrice": "33.9292",
+      "LowPrice": "32.6324",
+      "ClosePrice": "33.1324",
+      "Volume": 16400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "33.5919",
+      "HighPrice": "34.0919",
+      "LowPrice": "32.9683",
+      "ClosePrice": "33.4683",
+      "Volume": 16600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "33.2223",
+      "HighPrice": "33.8855",
+      "LowPrice": "32.7223",
+      "ClosePrice": "33.3855",
+      "Volume": 16800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "32.6445",
+      "HighPrice": "33.4445",
+      "LowPrice": "32.1445",
+      "ClosePrice": "32.9445",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "32.1698",
+      "HighPrice": "32.8308",
+      "LowPrice": "31.6698",
+      "ClosePrice": "32.3308",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "31.9163",
+      "HighPrice": "32.4163",
+      "LowPrice": "31.2902",
+      "ClosePrice": "31.7902",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "31.8401",
+      "HighPrice": "32.3401",
+      "LowPrice": "31.0429",
+      "ClosePrice": "31.5429",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "31.9019",
+      "HighPrice": "32.4019",
+      "LowPrice": "31.2068",
+      "ClosePrice": "31.7068",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "32.1697",
+      "HighPrice": "32.7561",
+      "LowPrice": "31.6697",
+      "ClosePrice": "32.2561",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "32.7419",
+      "HighPrice": "33.5303",
+      "LowPrice": "32.2419",
+      "ClosePrice": "33.0303",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "33.5652",
+      "HighPrice": "34.2905",
+      "LowPrice": "33.0652",
+      "ClosePrice": "33.7905",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "34.3474",
+      "HighPrice": "34.8474",
+      "LowPrice": "33.8024",
+      "ClosePrice": "34.3024",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "34.6927",
+      "HighPrice": "35.1927",
+      "LowPrice": "33.9188",
+      "ClosePrice": "34.4188",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "34.3813",
+      "HighPrice": "34.8813",
+      "LowPrice": "33.6303",
+      "ClosePrice": "34.1303",
+      "Volume": 19000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "33.5666",
+      "HighPrice": "34.0693",
+      "LowPrice": "33.0666",
+      "ClosePrice": "33.5693",
+      "Volume": 19200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "32.7092",
+      "HighPrice": "33.4631",
+      "LowPrice": "32.2092",
+      "ClosePrice": "32.9631",
+      "Volume": 19400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "32.2832",
+      "HighPrice": "33.0549",
+      "LowPrice": "31.7832",
+      "ClosePrice": "32.5549",
+      "Volume": 19600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "32.4791",
+      "HighPrice": "33.0188",
+      "LowPrice": "31.9791",
+      "ClosePrice": "32.5188",
+      "Volume": 19800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "33.1276",
+      "HighPrice": "33.6276",
+      "LowPrice": "32.3988",
+      "ClosePrice": "32.8988",
+      "Volume": 20000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "33.8805",
+      "HighPrice": "34.3805",
+      "LowPrice": "33.0936",
+      "ClosePrice": "33.5936",
+      "Volume": 20200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "34.4733",
+      "HighPrice": "34.9733",
+      "LowPrice": "33.892",
+      "ClosePrice": "34.392",
+      "Volume": 20400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "34.8473",
+      "HighPrice": "35.5464",
+      "LowPrice": "34.3473",
+      "ClosePrice": "35.0464",
+      "Volume": 20600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "35.0634",
+      "HighPrice": "35.8598",
+      "LowPrice": "34.5634",
+      "ClosePrice": "35.3598",
+      "Volume": 20800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "35.1328",
+      "HighPrice": "35.754",
+      "LowPrice": "34.6328",
+      "ClosePrice": "35.254",
+      "Volume": 21000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "34.9629",
+      "HighPrice": "35.4629",
+      "LowPrice": "34.2975",
+      "ClosePrice": "34.7975",
+      "Volume": 21200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "34.4812",
+      "HighPrice": "34.9812",
+      "LowPrice": "33.6812",
+      "ClosePrice": "34.1812",
+      "Volume": 21400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "33.8105",
+      "HighPrice": "34.3105",
+      "LowPrice": "33.1518",
+      "ClosePrice": "33.6518",
+      "Volume": 21600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "33.2972",
+      "HighPrice": "33.9257",
+      "LowPrice": "32.7972",
+      "ClosePrice": "33.4257",
+      "Volume": 21800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "33.3158",
+      "HighPrice": "34.1133",
+      "LowPrice": "32.8158",
+      "ClosePrice": "33.6133",
+      "Volume": 22000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "33.9874",
+      "HighPrice": "34.6805",
+      "LowPrice": "33.4874",
+      "ClosePrice": "34.1805",
+      "Volume": 22200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "35.0495",
+      "HighPrice": "35.5495",
+      "LowPrice": "34.4606",
+      "ClosePrice": "34.9606",
+      "Volume": 22400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "36.0017",
+      "HighPrice": "36.5017",
+      "LowPrice": "35.2126",
+      "ClosePrice": "35.7126",
+      "Volume": 22600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 6,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "36.4286",
+      "HighPrice": "36.9286",
+      "LowPrice": "35.7051",
+      "ClosePrice": "36.2051",
+      "Volume": 22800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "34.9855",
+      "HighPrice": "35.4855",
+      "LowPrice": "34.2884",
+      "ClosePrice": "34.7884",
+      "Volume": 17000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "35.5483",
+      "HighPrice": "36.0483",
+      "LowPrice": "34.7515",
+      "ClosePrice": "35.2515",
+      "Volume": 17200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "35.4325",
+      "HighPrice": "35.9325",
+      "LowPrice": "34.8089",
+      "ClosePrice": "35.3089",
+      "Volume": 17400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "34.8087",
+      "HighPrice": "35.4719",
+      "LowPrice": "34.3087",
+      "ClosePrice": "34.9719",
+      "Volume": 17600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "34.0897",
+      "HighPrice": "34.8897",
+      "LowPrice": "33.5897",
+      "ClosePrice": "34.3897",
+      "Volume": 17800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "33.6362",
+      "HighPrice": "34.2972",
+      "LowPrice": "33.1362",
+      "ClosePrice": "33.7972",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "33.5588",
+      "HighPrice": "34.0588",
+      "LowPrice": "32.9327",
+      "ClosePrice": "33.4327",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "33.7522",
+      "HighPrice": "34.2522",
+      "LowPrice": "32.955",
+      "ClosePrice": "33.455",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "34.0829",
+      "HighPrice": "34.5829",
+      "LowPrice": "33.3878",
+      "ClosePrice": "33.8878",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "34.5249",
+      "HighPrice": "35.1113",
+      "LowPrice": "34.0249",
+      "ClosePrice": "34.6113",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "35.1158",
+      "HighPrice": "35.9042",
+      "LowPrice": "34.6158",
+      "ClosePrice": "35.4042",
+      "Volume": 19000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "35.7957",
+      "HighPrice": "36.521",
+      "LowPrice": "35.2957",
+      "ClosePrice": "36.021",
+      "Volume": 19200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "36.3226",
+      "HighPrice": "36.8226",
+      "LowPrice": "35.7776",
+      "ClosePrice": "36.2776",
+      "Volume": 19400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "36.3898",
+      "HighPrice": "36.8898",
+      "LowPrice": "35.6159",
+      "ClosePrice": "36.1159",
+      "Volume": 19600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "35.8747",
+      "HighPrice": "36.3747",
+      "LowPrice": "35.1237",
+      "ClosePrice": "35.6237",
+      "Volume": 19800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "35.0018",
+      "HighPrice": "35.5045",
+      "LowPrice": "34.5018",
+      "ClosePrice": "35.0045",
+      "Volume": 20000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "34.2521",
+      "HighPrice": "35.006",
+      "LowPrice": "33.7521",
+      "ClosePrice": "34.506",
+      "Volume": 20200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "34.062",
+      "HighPrice": "34.8337",
+      "LowPrice": "33.562",
+      "ClosePrice": "34.3337",
+      "Volume": 20400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "34.5397",
+      "HighPrice": "35.0794",
+      "LowPrice": "34.0397",
+      "ClosePrice": "34.5794",
+      "Volume": 20600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "35.4173",
+      "HighPrice": "35.9173",
+      "LowPrice": "34.6885",
+      "ClosePrice": "35.1885",
+      "Volume": 20800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "36.2668",
+      "HighPrice": "36.7668",
+      "LowPrice": "35.4799",
+      "ClosePrice": "35.9799",
+      "Volume": 21000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "36.7897",
+      "HighPrice": "37.2897",
+      "LowPrice": "36.2084",
+      "ClosePrice": "36.7084",
+      "Volume": 21200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "36.9519",
+      "HighPrice": "37.651",
+      "LowPrice": "36.4519",
+      "ClosePrice": "37.151",
+      "Volume": 21400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "36.8882",
+      "HighPrice": "37.6846",
+      "LowPrice": "36.3882",
+      "ClosePrice": "37.1846",
+      "Volume": 21600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "36.7076",
+      "HighPrice": "37.3288",
+      "LowPrice": "36.2076",
+      "ClosePrice": "36.8288",
+      "Volume": 21800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "36.4048",
+      "HighPrice": "36.9048",
+      "LowPrice": "35.7394",
+      "ClosePrice": "36.2394",
+      "Volume": 22000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "35.9537",
+      "HighPrice": "36.4537",
+      "LowPrice": "35.1537",
+      "ClosePrice": "35.6537",
+      "Volume": 22200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "35.4664",
+      "HighPrice": "35.9664",
+      "LowPrice": "34.8077",
+      "ClosePrice": "35.3077",
+      "Volume": 22400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "35.2253",
+      "HighPrice": "35.8538",
+      "LowPrice": "34.7253",
+      "ClosePrice": "35.3538",
+      "Volume": 22600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "35.5098",
+      "HighPrice": "36.3073",
+      "LowPrice": "35.0098",
+      "ClosePrice": "35.8073",
+      "Volume": 22800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "36.3481",
+      "HighPrice": "37.0412",
+      "LowPrice": "35.8481",
+      "ClosePrice": "36.5412",
+      "Volume": 23000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "37.4194",
+      "HighPrice": "37.9194",
+      "LowPrice": "36.8305",
+      "ClosePrice": "37.3305",
+      "Volume": 23200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "38.2202",
+      "HighPrice": "38.7202",
+      "LowPrice": "37.4311",
+      "ClosePrice": "37.9311",
+      "Volume": 23400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "38.3879",
+      "HighPrice": "38.8879",
+      "LowPrice": "37.6644",
+      "ClosePrice": "38.1644",
+      "Volume": 23600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 7,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "37.9329",
+      "HighPrice": "38.4805",
+      "LowPrice": "37.4329",
+      "ClosePrice": "37.9805",
+      "Volume": 23800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-02",
+      "OpenPrice": "37.484",
+      "HighPrice": "37.984",
+      "LowPrice": "36.6872",
+      "ClosePrice": "37.1872",
+      "Volume": 18000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-03",
+      "OpenPrice": "37.0949",
+      "HighPrice": "37.5949",
+      "LowPrice": "36.4713",
+      "ClosePrice": "36.9713",
+      "Volume": 18200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-06",
+      "OpenPrice": "36.2843",
+      "HighPrice": "36.9475",
+      "LowPrice": "35.7843",
+      "ClosePrice": "36.4475",
+      "Volume": 18400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-07",
+      "OpenPrice": "35.5302",
+      "HighPrice": "36.3302",
+      "LowPrice": "35.0302",
+      "ClosePrice": "35.8302",
+      "Volume": 18600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-08",
+      "OpenPrice": "35.2056",
+      "HighPrice": "35.8666",
+      "LowPrice": "34.7056",
+      "ClosePrice": "35.3666",
+      "Volume": 18800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-09",
+      "OpenPrice": "35.3761",
+      "HighPrice": "35.8761",
+      "LowPrice": "34.75",
+      "ClosePrice": "35.25",
+      "Volume": 19000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-10",
+      "OpenPrice": "35.8498",
+      "HighPrice": "36.3498",
+      "LowPrice": "35.0526",
+      "ClosePrice": "35.5526",
+      "Volume": 19200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-13",
+      "OpenPrice": "36.3952",
+      "HighPrice": "36.8952",
+      "LowPrice": "35.7001",
+      "ClosePrice": "36.2001",
+      "Volume": 19400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-14",
+      "OpenPrice": "36.9114",
+      "HighPrice": "37.4978",
+      "LowPrice": "36.4114",
+      "ClosePrice": "36.9978",
+      "Volume": 19600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-15",
+      "OpenPrice": "37.4101",
+      "HighPrice": "38.1985",
+      "LowPrice": "36.9101",
+      "ClosePrice": "37.6985",
+      "Volume": 19800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-16",
+      "OpenPrice": "37.8634",
+      "HighPrice": "38.5887",
+      "LowPrice": "37.3634",
+      "ClosePrice": "38.0887",
+      "Volume": 20000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-17",
+      "OpenPrice": "38.1087",
+      "HighPrice": "38.6087",
+      "LowPrice": "37.5637",
+      "ClosePrice": "38.0637",
+      "Volume": 20200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-20",
+      "OpenPrice": "37.9376",
+      "HighPrice": "38.4376",
+      "LowPrice": "37.1637",
+      "ClosePrice": "37.6637",
+      "Volume": 20400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-21",
+      "OpenPrice": "37.3107",
+      "HighPrice": "37.8107",
+      "LowPrice": "36.5597",
+      "ClosePrice": "37.0597",
+      "Volume": 20600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-22",
+      "OpenPrice": "36.4916",
+      "HighPrice": "36.9943",
+      "LowPrice": "35.9916",
+      "ClosePrice": "36.4943",
+      "Volume": 20800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-23",
+      "OpenPrice": "35.9424",
+      "HighPrice": "36.6963",
+      "LowPrice": "35.4424",
+      "ClosePrice": "36.1963",
+      "Volume": 21000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-24",
+      "OpenPrice": "36.0297",
+      "HighPrice": "36.8014",
+      "LowPrice": "35.5297",
+      "ClosePrice": "36.3014",
+      "Volume": 21200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-27",
+      "OpenPrice": "36.7645",
+      "HighPrice": "37.3042",
+      "LowPrice": "36.2645",
+      "ClosePrice": "36.8042",
+      "Volume": 21400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-28",
+      "OpenPrice": "37.7894",
+      "HighPrice": "38.2894",
+      "LowPrice": "37.0606",
+      "ClosePrice": "37.5606",
+      "Volume": 21600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-29",
+      "OpenPrice": "38.6246",
+      "HighPrice": "39.1246",
+      "LowPrice": "37.8377",
+      "ClosePrice": "38.3377",
+      "Volume": 21800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-30",
+      "OpenPrice": "38.9768",
+      "HighPrice": "39.4768",
+      "LowPrice": "38.3955",
+      "ClosePrice": "38.8955",
+      "Volume": 22000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-01-31",
+      "OpenPrice": "38.8716",
+      "HighPrice": "39.5707",
+      "LowPrice": "38.3716",
+      "ClosePrice": "39.0707",
+      "Volume": 22200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-03",
+      "OpenPrice": "38.537",
+      "HighPrice": "39.3334",
+      "LowPrice": "38.037",
+      "ClosePrice": "38.8334",
+      "Volume": 22400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-04",
+      "OpenPrice": "38.1768",
+      "HighPrice": "38.798",
+      "LowPrice": "37.6768",
+      "ClosePrice": "38.298",
+      "Volume": 22600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-05",
+      "OpenPrice": "37.8483",
+      "HighPrice": "38.3483",
+      "LowPrice": "37.1829",
+      "ClosePrice": "37.6829",
+      "Volume": 22800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-06",
+      "OpenPrice": "37.5345",
+      "HighPrice": "38.0345",
+      "LowPrice": "36.7345",
+      "ClosePrice": "37.2345",
+      "Volume": 23000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-07",
+      "OpenPrice": "37.2996",
+      "HighPrice": "37.7996",
+      "LowPrice": "36.6409",
+      "ClosePrice": "37.1409",
+      "Volume": 23200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-10",
+      "OpenPrice": "37.3376",
+      "HighPrice": "37.9661",
+      "LowPrice": "36.8376",
+      "ClosePrice": "37.4661",
+      "Volume": 23400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-11",
+      "OpenPrice": "37.8305",
+      "HighPrice": "38.628",
+      "LowPrice": "37.3305",
+      "ClosePrice": "38.128",
+      "Volume": 23600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-12",
+      "OpenPrice": "38.7338",
+      "HighPrice": "39.4269",
+      "LowPrice": "38.2338",
+      "ClosePrice": "38.9269",
+      "Volume": 23800
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-13",
+      "OpenPrice": "39.704",
+      "HighPrice": "40.204",
+      "LowPrice": "39.1151",
+      "ClosePrice": "39.6151",
+      "Volume": 24000
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-14",
+      "OpenPrice": "40.2727",
+      "HighPrice": "40.7727",
+      "LowPrice": "39.4836",
+      "ClosePrice": "39.9836",
+      "Volume": 24200
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-17",
+      "OpenPrice": "40.1586",
+      "HighPrice": "40.6586",
+      "LowPrice": "39.4351",
+      "ClosePrice": "39.9351",
+      "Volume": 24400
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-18",
+      "OpenPrice": "39.4705",
+      "HighPrice": "40.0181",
+      "LowPrice": "38.9705",
+      "ClosePrice": "39.5181",
+      "Volume": 24600
+    },
+    {
+      "DatasetId": 1,
+      "StockId": 8,
+      "TradeDate": "2025-02-19",
+      "OpenPrice": "38.6346",
+      "HighPrice": "39.4096",
+      "LowPrice": "38.1346",
+      "ClosePrice": "38.9096",
+      "Volume": 24800
+    }
+  ],
+  "StockIndex": [
+    {
+      "IndexId": 1,
+      "MarketId": 1,
+      "IndexCode": "DEMO8",
+      "IndexName": "Chỉ số mô phỏng 8 mã"
+    }
+  ],
+  "IndexMembership": [
+    {
+      "IndexId": 1,
+      "StockId": 1,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 2,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 3,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 4,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 5,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 6,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 7,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    },
+    {
+      "IndexId": 1,
+      "StockId": 8,
+      "ValidFrom": "2025-01-02",
+      "ValidTo": "2025-02-28",
+      "EvidenceNote": "Khoảng hiệu lực mô phỏng"
+    }
+  ],
+  "ForecastModel": [
+    {
+      "ModelId": 1,
+      "ModelCode": "demo_baseline",
+      "ModelName": "Baseline mô phỏng",
+      "MethodNote": "Mô phỏng phục vụ kiểm thử"
+    },
+    {
+      "ModelId": 2,
+      "ModelCode": "demo_model_b",
+      "ModelName": "Mô hình B mô phỏng",
+      "MethodNote": "Mô phỏng phục vụ kiểm thử"
+    }
+  ],
+  "TargetDefinition": [
+    {
+      "TargetId": 1,
+      "TargetCode": "CLOSE_UP_5",
+      "HorizonSessions": 5,
+      "OutputType": "PROBABILITY_CLOSE_UP",
+      "LabelRule": "CLOSE_TARGET_GT_CLOSE_ORIGIN_ELSE_ZERO"
+    }
+  ],
+  "ModelRun": [
+    {
+      "RunId": 1,
+      "RunCode": "DEMO_MODEL1_H5",
+      "ModelId": 1,
+      "DatasetId": 1,
+      "TargetId": 1,
+      "TrainStart": "2022-01-01",
+      "TrainEnd": "2023-12-31",
+      "ValidationEnd": "2024-12-31",
+      "SelectedC": null,
+      "Threshold": "0.5",
+      "EvaluationClass": "SYNTHETIC_TEST",
+      "SourceRun": "generated deterministic synthetic fixture",
+      "CompletedAt": null
+    },
+    {
+      "RunId": 2,
+      "RunCode": "DEMO_MODEL2_H5",
+      "ModelId": 2,
+      "DatasetId": 1,
+      "TargetId": 1,
+      "TrainStart": "2022-01-01",
+      "TrainEnd": "2023-12-31",
+      "ValidationEnd": "2024-12-31",
+      "SelectedC": null,
+      "Threshold": "0.5",
+      "EvaluationClass": "SYNTHETIC_TEST",
+      "SourceRun": "generated deterministic synthetic fixture",
+      "CompletedAt": null
+    }
+  ],
+  "ForecastOrigin": [
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-02",
+      "TargetDate": "2025-01-09"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-03",
+      "TargetDate": "2025-01-10"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-06",
+      "TargetDate": "2025-01-13"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-07",
+      "TargetDate": "2025-01-14"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-08",
+      "TargetDate": "2025-01-15"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-09",
+      "TargetDate": "2025-01-16"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-10",
+      "TargetDate": "2025-01-17"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-13",
+      "TargetDate": "2025-01-20"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-14",
+      "TargetDate": "2025-01-21"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-15",
+      "TargetDate": "2025-01-22"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-16",
+      "TargetDate": "2025-01-23"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-17",
+      "TargetDate": "2025-01-24"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-20",
+      "TargetDate": "2025-01-27"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-21",
+      "TargetDate": "2025-01-28"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-22",
+      "TargetDate": "2025-01-29"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-01-23",
+      "TargetDate": "2025-01-30"
+    },
+    {
+      "RunId": 1,
+      "OriginDate": "2025-02-17",
+      "TargetDate": "2025-02-24"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-02",
+      "TargetDate": "2025-01-09"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-03",
+      "TargetDate": "2025-01-10"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-06",
+      "TargetDate": "2025-01-13"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-07",
+      "TargetDate": "2025-01-14"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-08",
+      "TargetDate": "2025-01-15"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-09",
+      "TargetDate": "2025-01-16"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-10",
+      "TargetDate": "2025-01-17"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-13",
+      "TargetDate": "2025-01-20"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-14",
+      "TargetDate": "2025-01-21"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-15",
+      "TargetDate": "2025-01-22"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-16",
+      "TargetDate": "2025-01-23"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-17",
+      "TargetDate": "2025-01-24"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-20",
+      "TargetDate": "2025-01-27"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-21",
+      "TargetDate": "2025-01-28"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-22",
+      "TargetDate": "2025-01-29"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-01-23",
+      "TargetDate": "2025-01-30"
+    },
+    {
+      "RunId": 2,
+      "OriginDate": "2025-02-17",
+      "TargetDate": "2025-02-24"
+    }
+  ],
+  "Prediction": [
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.73561188"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.7792986"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.75460328"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.6675722"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5395136"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.4017807"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.2880953"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.22629157"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.2315012"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.30244871"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.42176366"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5602336"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 2,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.75460328"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.6675722"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5395136"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.4017807"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.2880953"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.22629157"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.2315012"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.30244871"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.42176366"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5602336"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 2,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 3,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5395136"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.4017807"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.2880953"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.22629157"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.2315012"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.30244871"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.42176366"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5602336"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.34767409"
+    },
+    {
+      "RunId": 2,
+      "StockId": 3,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.25368519"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 4,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.2880953"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.22629157"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.2315012"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.30244871"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.42176366"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5602336"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.34767409"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.25368519"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.22000274"
+    },
+    {
+      "RunId": 2,
+      "StockId": 4,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.25487339"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 5,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.2315012"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.30244871"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.42176366"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5602336"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.34767409"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.25368519"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.22000274"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.25487339"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.34975958"
+    },
+    {
+      "RunId": 2,
+      "StockId": 5,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.48142987"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 6,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.42176366"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5602336"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.34767409"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.25368519"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.22000274"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.25487339"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.34975958"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.48142987"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.61764677"
+    },
+    {
+      "RunId": 2,
+      "StockId": 6,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.72505964"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 7,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.68395625"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.76263999"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.34767409"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.25368519"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.22000274"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.25487339"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.34975958"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.48142987"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.61764677"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.72505964"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.77737006"
+    },
+    {
+      "RunId": 2,
+      "StockId": 7,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.76177062"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 1,
+      "StockId": 8,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.5"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-02",
+      "ProbabilityPositive": "0.77702031"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-03",
+      "ProbabilityPositive": "0.72357639"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-06",
+      "ProbabilityPositive": "0.61539318"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-07",
+      "ProbabilityPositive": "0.47895769"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-08",
+      "ProbabilityPositive": "0.34767409"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-09",
+      "ProbabilityPositive": "0.25368519"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-10",
+      "ProbabilityPositive": "0.22000274"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-13",
+      "ProbabilityPositive": "0.25487339"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-14",
+      "ProbabilityPositive": "0.34975958"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-15",
+      "ProbabilityPositive": "0.48142987"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-16",
+      "ProbabilityPositive": "0.61764677"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-17",
+      "ProbabilityPositive": "0.72505964"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-20",
+      "ProbabilityPositive": "0.77737006"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-21",
+      "ProbabilityPositive": "0.76177062"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-22",
+      "ProbabilityPositive": "0.6820806"
+    },
+    {
+      "RunId": 2,
+      "StockId": 8,
+      "OriginDate": "2025-01-23",
+      "ProbabilityPositive": "0.55781089"
+    },
+    {
+      "RunId": 1,
+      "StockId": 1,
+      "OriginDate": "2025-02-17",
+      "ProbabilityPositive": "0.55"
+    },
+    {
+      "RunId": 2,
+      "StockId": 1,
+      "OriginDate": "2025-02-17",
+      "ProbabilityPositive": "0.55"
+    }
+  ]
+}

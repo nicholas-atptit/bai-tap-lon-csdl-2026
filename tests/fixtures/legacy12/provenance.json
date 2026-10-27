@@ -1,0 +1,14 @@
+{
+  "origin": "Recovered original 12-table DDL from prior tool calls",
+  "files": [
+    {
+      "sha256_recovered_file": "cf8f4317f8c9e5ec34b12d060ba4a51c4c0a03056356bc50deceea5580225a91",
+      "file": "01_create_tables.sql"
+    },
+    {
+      "sha256_recovered_file": "2725ab9dbda609f7fdb125cc49fb05840e182d27dcce6f2ff39df7183ba204fd",
+      "file": "02_constraints_indexes.sql"
+    }
+  ],
+  "note": "Historical DDL retained as hashed regression inputs; never deploy these files alone to an existing database."
+}

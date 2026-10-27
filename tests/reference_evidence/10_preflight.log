@@ -1,0 +1,24 @@
+Changed database context to 'MarketLabVN30_Demo'.
+ServerName|Edition|EngineVersion|DatabaseName|DataClassification
+----------|-------|-------------|------------|------------------
+homematepc|Standard Developer Edition (64-bit)|17.0.1145.4|MarketLabVN30_Demo|SYNTHETIC DEMO ONLY
+Item|Actual|Expected|Status
+----|------|--------|------
+DailyPrice|280|280|PASS
+Disabled business triggers|0|0|PASS
+Disabled/untrusted CHECK|0|0|PASS
+Disabled/untrusted FK|0|0|PASS
+Eligible at 2026-07-01|256|256|PASS
+Functions|3|3|PASS
+Missing actual endpoints|2|2|PASS
+Non-synthetic datasets|0|0|PASS
+Non-synthetic stocks|0|0|PASS
+Prediction|258|258|PASS
+Prediction.TargetDate redundant column|0|0|PASS
+Procedures|4|4|PASS
+Stock|8|8|PASS
+Tables|13|13|PASS
+Views|4|4|PASS
+Result|OpenTransactions
+------|----------------
+PREFLIGHT_PASS|0

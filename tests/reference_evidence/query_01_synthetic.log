@@ -1,0 +1,13 @@
+Changed database context to 'MarketLabVN30_Polish_20261027T201039'.
+StockId|Ticker|CompanyName|IndustryId|IsSynthetic
+-------|------|-----------|----------|-----------
+1|DEMO01|Công ty mô phỏng 1|1|1
+2|DEMO02|Công ty mô phỏng 2|1|1
+3|DEMO03|Công ty mô phỏng 3|1|1
+4|DEMO04|Công ty mô phỏng 4|1|1
+5|DEMO05|Công ty mô phỏng 5|2|1
+6|DEMO06|Công ty mô phỏng 6|2|1
+7|DEMO07|Công ty mô phỏng 7|2|1
+8|DEMO08|Công ty mô phỏng 8|2|1
+
+(8 rows affected)

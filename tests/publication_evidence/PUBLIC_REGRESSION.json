@@ -1,0 +1,562 @@
+{
+  "status": "PASS",
+  "scope": "Existing synthetic demo only; no schema deployment or research database operations",
+  "started_utc": "2026-10-27T15:26:56.079447+00:00",
+  "sql_calls": [
+    {
+      "name": "preflight",
+      "exit_code": 0,
+      "sql_sha256": "165b7d45eaaeab420d8974458decb2a44ceb68dbf81db4b39a136943f5676f64",
+      "expected_error": null
+    },
+    {
+      "name": "engine",
+      "exit_code": 0,
+      "sql_sha256": "55b1e639b1842116ffc6919dd55ff86530aa26212acf7a02a30409b980d4b3c2",
+      "expected_error": null
+    },
+    {
+      "name": "before_tables",
+      "exit_code": 0,
+      "sql_sha256": "ca11eb98fa792bfdf1b5163c806abe13efe0d8696ced4ef9fdfb5bb74fe725d7",
+      "expected_error": null
+    },
+    {
+      "name": "before_Market",
+      "exit_code": 0,
+      "sql_sha256": "6d587ae615aa4e1fe5545afa5eb1e82e1b68ddccb1ae81e2b1c58352c2b2e649",
+      "expected_error": null
+    },
+    {
+      "name": "before_Industry",
+      "exit_code": 0,
+      "sql_sha256": "4b30088bfc10482a396a6428227cbce936c7fcd7e29c0024732ec609cb89e99a",
+      "expected_error": null
+    },
+    {
+      "name": "before_Stock",
+      "exit_code": 0,
+      "sql_sha256": "49565593d84d9ee7a55de946f9041b44a7b4ec75fdd3a6d07c57bc4a93b4be6c",
+      "expected_error": null
+    },
+    {
+      "name": "before_Dataset",
+      "exit_code": 0,
+      "sql_sha256": "de0eba596f8f671353853ee2184c2876bc4608cbdb7d0629374fb0772e47191c",
+      "expected_error": null
+    },
+    {
+      "name": "before_TradingDay",
+      "exit_code": 0,
+      "sql_sha256": "ec8fe29e1df940fae3c623b9af352319bc9fc3baaa5c8fd246b1a86a51b3b386",
+      "expected_error": null
+    },
+    {
+      "name": "before_DailyPrice",
+      "exit_code": 0,
+      "sql_sha256": "5dd42738e1ce66e107eec62bc7433977ac1d69997536b0c3d251cfaeaf91e003",
+      "expected_error": null
+    },
+    {
+      "name": "before_StockIndex",
+      "exit_code": 0,
+      "sql_sha256": "a2495b59f8c2c9abe034e09396414201ab64cade4cafcf083a3aafafc4289eb6",
+      "expected_error": null
+    },
+    {
+      "name": "before_IndexMembership",
+      "exit_code": 0,
+      "sql_sha256": "1ebe014354eb6fdf4c4eff29d413f48be225908a7650bfad2af9035ef79501df",
+      "expected_error": null
+    },
+    {
+      "name": "before_ForecastModel",
+      "exit_code": 0,
+      "sql_sha256": "0eec4872e9e4ea063b2ace66bb8707d7e35aa2c47fd770c8f905c1618158cfbf",
+      "expected_error": null
+    },
+    {
+      "name": "before_TargetDefinition",
+      "exit_code": 0,
+      "sql_sha256": "4cb520f1d7081d050dd0fde5cf4aa2866d6e7d703c3ef0d4ed4ddb9332671998",
+      "expected_error": null
+    },
+    {
+      "name": "before_ModelRun",
+      "exit_code": 0,
+      "sql_sha256": "6cacb898f9c0eeafe596aea236c3028008b17bf152ddf02738376cbf45c511f1",
+      "expected_error": null
+    },
+    {
+      "name": "before_ForecastOrigin",
+      "exit_code": 0,
+      "sql_sha256": "282852b110b6dcefe6df0382ac76e5b32401ec7ac26ed5a35fcc4a346ca3c9a0",
+      "expected_error": null
+    },
+    {
+      "name": "before_Prediction",
+      "exit_code": 0,
+      "sql_sha256": "919ae0f82e3bfab603fe410b558e9ce31f5dac4045ab0049da720871cdf373f4",
+      "expected_error": null
+    },
+    {
+      "name": "live_demo_1",
+      "exit_code": 0,
+      "sql_sha256": "220e14927143f6fdc37cbaeac116c419d0e6cf99b714f319deaef20b12c472e9",
+      "expected_error": null
+    },
+    {
+      "name": "live_demo_2",
+      "exit_code": 0,
+      "sql_sha256": "220e14927143f6fdc37cbaeac116c419d0e6cf99b714f319deaef20b12c472e9",
+      "expected_error": null
+    },
+    {
+      "name": "validation_44",
+      "exit_code": 0,
+      "sql_sha256": "579a37f8f9cda0fd734599566605bedc4aff1f7c9150e866b5fd85e3f8ceb181",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q01",
+      "exit_code": 0,
+      "sql_sha256": "6bb0b4fb063a7e070ebbff8941b10aad9a3cd87ed948ff40882da5268c14712a",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q02",
+      "exit_code": 0,
+      "sql_sha256": "bab0bdd6cd0df8a2b90699ba33c94b54c19795e5ab83ca1bfd211042c72e4103",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q03",
+      "exit_code": 0,
+      "sql_sha256": "b251f8a7eb723320bf5c57f5758d44883474bcb6e91d18cbb10c290da910d2c5",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q04",
+      "exit_code": 0,
+      "sql_sha256": "0c40b4a9c2fe81e2d6eb5bce2ceb0f2121b94827f5f68e376f5414de4cb099b0",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q05",
+      "exit_code": 0,
+      "sql_sha256": "89b7dd28001efd822588096c7b77412a956607994b1c46c5d68a5f51145985db",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q06",
+      "exit_code": 0,
+      "sql_sha256": "f479ff87951d75bcf1e83c815438c56a98d3b8e1c3cf21d2a1e20e94cb403da5",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q07",
+      "exit_code": 0,
+      "sql_sha256": "8852ab0184c2a2c98e2a1de1d51f3efdd182f7a8859ac522da97c85f653024d2",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q08",
+      "exit_code": 0,
+      "sql_sha256": "22b2c903ffedc2733cd6f7e560d7cab59e6dddf28681f432d7cc9b26bb3ad235",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q09",
+      "exit_code": 0,
+      "sql_sha256": "7f127c41738129c708676aeaff56115999926dcc24674525355b191ed7b6c0ef",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q10",
+      "exit_code": 0,
+      "sql_sha256": "38fb9e33b5a17900a64222e3dda867e51f4cfea812c38f8294315d18760c6db0",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q11",
+      "exit_code": 0,
+      "sql_sha256": "198dae5e448d239a433c65823f4f4497203d98f94ada5fa27256879b977ae579",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q12",
+      "exit_code": 0,
+      "sql_sha256": "c441516a093bfb881e82c962b5233ac0b8e5ca2c9f177b57c8c5353e56023023",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q13",
+      "exit_code": 0,
+      "sql_sha256": "0a38fa5ae01b0533f5bcfb5c502e64715a0e72a6ccab7d713aff938f0d9f9685",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q14",
+      "exit_code": 0,
+      "sql_sha256": "76a55fe53bfcfe32b5d8711bda72b9004f9443058879823190fc71c56ba1ff7a",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q15",
+      "exit_code": 0,
+      "sql_sha256": "daddd7b765355e946edea8fde8fc39c79cb911114ce94a1db786fa4e1e17d2f0",
+      "expected_error": null
+    },
+    {
+      "name": "query_Q16",
+      "exit_code": 0,
+      "sql_sha256": "80096a9cab4e7cc35d5c2d67448fee6fac336bc2148b768ba565129b63886a84",
+      "expected_error": null
+    },
+    {
+      "name": "metrics",
+      "exit_code": 0,
+      "sql_sha256": "c0791372e36b385bbde6cde96d51657ada3ea875f54b61e22d499173d76ef3fb",
+      "expected_error": null
+    },
+    {
+      "name": "controlled_import_conflict",
+      "exit_code": 1,
+      "sql_sha256": "8f6e9c9f0b7d314fcee736b89843f2b8749e307ee620d875122703a23c14c208",
+      "expected_error": 51100
+    },
+    {
+      "name": "rollback_parent_check",
+      "exit_code": 0,
+      "sql_sha256": "3fe5613e577c3f65776da9ef8e4ee0942c0cd7a7a1e1bd4babfd8ce8cff0aacd",
+      "expected_error": null
+    },
+    {
+      "name": "unicode_json_chunks",
+      "exit_code": 0,
+      "sql_sha256": "0f9bae45d6e748559258d14531edc9ee8d04bf495c6dd136dab9fd41a321698b",
+      "expected_error": null
+    },
+    {
+      "name": "after_tables",
+      "exit_code": 0,
+      "sql_sha256": "ca11eb98fa792bfdf1b5163c806abe13efe0d8696ced4ef9fdfb5bb74fe725d7",
+      "expected_error": null
+    },
+    {
+      "name": "after_Market",
+      "exit_code": 0,
+      "sql_sha256": "6d587ae615aa4e1fe5545afa5eb1e82e1b68ddccb1ae81e2b1c58352c2b2e649",
+      "expected_error": null
+    },
+    {
+      "name": "after_Industry",
+      "exit_code": 0,
+      "sql_sha256": "4b30088bfc10482a396a6428227cbce936c7fcd7e29c0024732ec609cb89e99a",
+      "expected_error": null
+    },
+    {
+      "name": "after_Stock",
+      "exit_code": 0,
+      "sql_sha256": "49565593d84d9ee7a55de946f9041b44a7b4ec75fdd3a6d07c57bc4a93b4be6c",
+      "expected_error": null
+    },
+    {
+      "name": "after_Dataset",
+      "exit_code": 0,
+      "sql_sha256": "de0eba596f8f671353853ee2184c2876bc4608cbdb7d0629374fb0772e47191c",
+      "expected_error": null
+    },
+    {
+      "name": "after_TradingDay",
+      "exit_code": 0,
+      "sql_sha256": "ec8fe29e1df940fae3c623b9af352319bc9fc3baaa5c8fd246b1a86a51b3b386",
+      "expected_error": null
+    },
+    {
+      "name": "after_DailyPrice",
+      "exit_code": 0,
+      "sql_sha256": "5dd42738e1ce66e107eec62bc7433977ac1d69997536b0c3d251cfaeaf91e003",
+      "expected_error": null
+    },
+    {
+      "name": "after_StockIndex",
+      "exit_code": 0,
+      "sql_sha256": "a2495b59f8c2c9abe034e09396414201ab64cade4cafcf083a3aafafc4289eb6",
+      "expected_error": null
+    },
+    {
+      "name": "after_IndexMembership",
+      "exit_code": 0,
+      "sql_sha256": "1ebe014354eb6fdf4c4eff29d413f48be225908a7650bfad2af9035ef79501df",
+      "expected_error": null
+    },
+    {
+      "name": "after_ForecastModel",
+      "exit_code": 0,
+      "sql_sha256": "0eec4872e9e4ea063b2ace66bb8707d7e35aa2c47fd770c8f905c1618158cfbf",
+      "expected_error": null
+    },
+    {
+      "name": "after_TargetDefinition",
+      "exit_code": 0,
+      "sql_sha256": "4cb520f1d7081d050dd0fde5cf4aa2866d6e7d703c3ef0d4ed4ddb9332671998",
+      "expected_error": null
+    },
+    {
+      "name": "after_ModelRun",
+      "exit_code": 0,
+      "sql_sha256": "6cacb898f9c0eeafe596aea236c3028008b17bf152ddf02738376cbf45c511f1",
+      "expected_error": null
+    },
+    {
+      "name": "after_ForecastOrigin",
+      "exit_code": 0,
+      "sql_sha256": "282852b110b6dcefe6df0382ac76e5b32401ec7ac26ed5a35fcc4a346ca3c9a0",
+      "expected_error": null
+    },
+    {
+      "name": "after_Prediction",
+      "exit_code": 0,
+      "sql_sha256": "919ae0f82e3bfab603fe410b558e9ce31f5dac4045ab0049da720871cdf373f4",
+      "expected_error": null
+    }
+  ],
+  "engine": [
+    {
+      "Edition": "Standard Developer Edition (64-bit)",
+      "Version": "17.0.1145.4"
+    }
+  ],
+  "sql_cases": 44,
+  "business_queries": [
+    {
+      "id": "Q01",
+      "rows": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "Q02",
+      "rows": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "Q03",
+      "rows": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "Q04",
+      "rows": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "Q05",
+      "rows": 2,
+      "status": "PASS"
+    },
+    {
+      "id": "Q06",
+      "rows": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "Q07",
+      "rows": 136,
+      "status": "PASS"
+    },
+    {
+      "id": "Q08",
+      "rows": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "Q09",
+      "rows": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "Q10",
+      "rows": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "Q11",
+      "rows": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "Q12",
+      "rows": 40,
+      "status": "PASS"
+    },
+    {
+      "id": "Q13",
+      "rows": 5,
+      "status": "PASS"
+    },
+    {
+      "id": "Q14",
+      "rows": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "Q15",
+      "rows": 2,
+      "status": "PASS"
+    },
+    {
+      "id": "Q16",
+      "rows": 0,
+      "status": "PASS"
+    }
+  ],
+  "preflight_runs": 1,
+  "live_demo_runs": 2,
+  "metrics": [
+    {
+      "sql": {
+        "RunId": 1,
+        "EvaluatedRows": 128,
+        "Accuracy": 0.546875,
+        "BrierScore": 0.25,
+        "NaturalLogLoss": 0.6931471805599462
+      },
+      "python": {
+        "RunId": 1,
+        "EvaluatedRows": 128,
+        "Accuracy": 0.546875,
+        "BrierScore": 0.25,
+        "NaturalLogLoss": 0.6931471805599453
+      }
+    },
+    {
+      "sql": {
+        "RunId": 2,
+        "EvaluatedRows": 128,
+        "Accuracy": 0.21875,
+        "BrierScore": 0.4114329520478056,
+        "NaturalLogLoss": 1.050525059725571
+      },
+      "python": {
+        "RunId": 2,
+        "EvaluatedRows": 128,
+        "Accuracy": 0.21875,
+        "BrierScore": 0.41143295204780544,
+        "NaturalLogLoss": 1.050525059725571
+      }
+    }
+  ],
+  "all_13_tables_unchanged": true,
+  "before": {
+    "Market": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "837efa8a30f698529d3968e0c02890ee3118c769e31fdb3c9ecfac0a21a61d81"
+    },
+    "Industry": {
+      "rows": 2,
+      "sha256_canonical_all_columns": "464f41fd691092de2763b26e8bb8946aca48c54aa9c20b5bf3fa9850f7c62bfd"
+    },
+    "Stock": {
+      "rows": 8,
+      "sha256_canonical_all_columns": "1180dc9218456fb8913d2184820ab9227f2c1bd159eabc05b201102a65ae7981"
+    },
+    "Dataset": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "98530a8f77f93f3a4d97cc9f0e1fd6f17a0c7f4b4ac15fa0d7228e0adbf233bb"
+    },
+    "TradingDay": {
+      "rows": 42,
+      "sha256_canonical_all_columns": "385916a3ca8c230561945e81349431ed97e0a027394e93a85dfacdb2819c7434"
+    },
+    "DailyPrice": {
+      "rows": 280,
+      "sha256_canonical_all_columns": "c35112cf479fe1c7ed5eb026ec6ddbae757bcbf5f7632a6ff07e41aa0015bb26"
+    },
+    "StockIndex": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "83760cd8ea295f6de9906abd4efa8a1d122bd26a1da072f0f329c346300cfe05"
+    },
+    "IndexMembership": {
+      "rows": 8,
+      "sha256_canonical_all_columns": "00a554fbc38b44058192a60ef8985013be435578c421862f5c4a1f99e3edc0a7"
+    },
+    "ForecastModel": {
+      "rows": 2,
+      "sha256_canonical_all_columns": "501bfb95d6612e6b8b4d24e6b4ea0da7ea19af0f47d575f875028fb08cfce472"
+    },
+    "TargetDefinition": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "a924384914fdfa17d99abdb3da26da953c741c28693c1e79a87f67ef639fec48"
+    },
+    "ModelRun": {
+      "rows": 2,
+      "sha256_canonical_all_columns": "89d16fabb2e22c6016168726edc3a1024be28c0d0c44e5fe5856036d0bfe9030"
+    },
+    "ForecastOrigin": {
+      "rows": 34,
+      "sha256_canonical_all_columns": "436e98c666a848b895851363a8ce240a449155b041bc04ae3459871b8085ad14"
+    },
+    "Prediction": {
+      "rows": 258,
+      "sha256_canonical_all_columns": "1c6a71cdc5ba0c95c8eeb41589ed258efdc636489d304e54cd3a6cb0240efb5d"
+    }
+  },
+  "after": {
+    "Market": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "837efa8a30f698529d3968e0c02890ee3118c769e31fdb3c9ecfac0a21a61d81"
+    },
+    "Industry": {
+      "rows": 2,
+      "sha256_canonical_all_columns": "464f41fd691092de2763b26e8bb8946aca48c54aa9c20b5bf3fa9850f7c62bfd"
+    },
+    "Stock": {
+      "rows": 8,
+      "sha256_canonical_all_columns": "1180dc9218456fb8913d2184820ab9227f2c1bd159eabc05b201102a65ae7981"
+    },
+    "Dataset": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "98530a8f77f93f3a4d97cc9f0e1fd6f17a0c7f4b4ac15fa0d7228e0adbf233bb"
+    },
+    "TradingDay": {
+      "rows": 42,
+      "sha256_canonical_all_columns": "385916a3ca8c230561945e81349431ed97e0a027394e93a85dfacdb2819c7434"
+    },
+    "DailyPrice": {
+      "rows": 280,
+      "sha256_canonical_all_columns": "c35112cf479fe1c7ed5eb026ec6ddbae757bcbf5f7632a6ff07e41aa0015bb26"
+    },
+    "StockIndex": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "83760cd8ea295f6de9906abd4efa8a1d122bd26a1da072f0f329c346300cfe05"
+    },
+    "IndexMembership": {
+      "rows": 8,
+      "sha256_canonical_all_columns": "00a554fbc38b44058192a60ef8985013be435578c421862f5c4a1f99e3edc0a7"
+    },
+    "ForecastModel": {
+      "rows": 2,
+      "sha256_canonical_all_columns": "501bfb95d6612e6b8b4d24e6b4ea0da7ea19af0f47d575f875028fb08cfce472"
+    },
+    "TargetDefinition": {
+      "rows": 1,
+      "sha256_canonical_all_columns": "a924384914fdfa17d99abdb3da26da953c741c28693c1e79a87f67ef639fec48"
+    },
+    "ModelRun": {
+      "rows": 2,
+      "sha256_canonical_all_columns": "89d16fabb2e22c6016168726edc3a1024be28c0d0c44e5fe5856036d0bfe9030"
+    },
+    "ForecastOrigin": {
+      "rows": 34,
+      "sha256_canonical_all_columns": "436e98c666a848b895851363a8ce240a449155b041bc04ae3459871b8085ad14"
+    },
+    "Prediction": {
+      "rows": 258,
+      "sha256_canonical_all_columns": "1c6a71cdc5ba0c95c8eeb41589ed258efdc636489d304e54cd3a6cb0240efb5d"
+    }
+  },
+  "controlled_conflict_rollback": "PASS",
+  "unicode_json_chunks": "PASS",
+  "finished_utc": "2026-10-27T15:27:02.097298+00:00"
+}

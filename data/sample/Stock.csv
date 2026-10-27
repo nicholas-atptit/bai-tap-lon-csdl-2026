@@ -1,0 +1,9 @@
+﻿StockId,MarketId,Ticker,CompanyName,IndustryId,IsSynthetic
+1,1,DEMO01,Công ty mô phỏng 1,1,1
+2,1,DEMO02,Công ty mô phỏng 2,1,1
+3,1,DEMO03,Công ty mô phỏng 3,1,1
+4,1,DEMO04,Công ty mô phỏng 4,1,1
+5,1,DEMO05,Công ty mô phỏng 5,2,1
+6,1,DEMO06,Công ty mô phỏng 6,2,1
+7,1,DEMO07,Công ty mô phỏng 7,2,1
+8,1,DEMO08,Công ty mô phỏng 8,2,1

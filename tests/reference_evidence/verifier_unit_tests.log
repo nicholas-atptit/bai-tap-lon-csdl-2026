@@ -1,0 +1,12 @@
+test_actual_empty_array_is_valid (__main__.EvidenceTests.test_actual_empty_array_is_valid) ... ok
+test_complete_run_set (__main__.EvidenceTests.test_complete_run_set) ... ok
+test_duplicate_run_cannot_pass (__main__.EvidenceTests.test_duplicate_run_cannot_pass) ... ok
+test_empty_metrics_cannot_pass (__main__.EvidenceTests.test_empty_metrics_cannot_pass) ... ok
+test_json_chunks_inside_unicode_string (__main__.EvidenceTests.test_json_chunks_inside_unicode_string) ... ok
+test_missing_json_is_not_empty_result (__main__.EvidenceTests.test_missing_json_is_not_empty_result) ... ok
+test_missing_run_cannot_pass (__main__.EvidenceTests.test_missing_run_cannot_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.001s
+
+OK

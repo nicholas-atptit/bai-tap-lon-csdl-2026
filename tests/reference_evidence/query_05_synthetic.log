@@ -1,0 +1,7 @@
+Changed database context to 'MarketLabVN30_Polish_20261027T201039'.
+IndustryName|PriceRows|AverageVolume
+------------|---------|-------------
+Ngành mô phỏng 1|140|15900.000000
+Ngành mô phỏng 2|140|19900.000000
+
+(2 rows affected)

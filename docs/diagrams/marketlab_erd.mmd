@@ -1,0 +1,116 @@
+erDiagram
+    DailyPrice {
+        int DatasetId PK,FK
+        int StockId PK,FK
+        date TradeDate PK,FK
+        decimal OpenPrice 
+        decimal HighPrice 
+        decimal LowPrice 
+        decimal ClosePrice 
+        bigint Volume 
+        datetime2 LoadedAt 
+    }
+    Dataset {
+        int DatasetId PK
+        varchar DatasetCode UK
+        int MarketId FK
+        varchar DataKind 
+        varchar PriceBasis 
+        nvarchar PriceUnit 
+        date ObservedThrough 
+        nvarchar ManifestPath 
+        nvarchar ProvenanceNote 
+    }
+    ForecastModel {
+        int ModelId PK
+        varchar ModelCode UK
+        nvarchar ModelName 
+        nvarchar MethodNote 
+    }
+    ForecastOrigin {
+        int RunId PK,FK
+        date OriginDate PK
+        date TargetDate 
+    }
+    IndexMembership {
+        int IndexId PK,FK
+        int StockId PK,FK
+        date ValidFrom PK
+        date ValidTo 
+        nvarchar EvidenceNote 
+    }
+    Industry {
+        int IndustryId PK
+        varchar IndustryCode UK
+        nvarchar IndustryName 
+        nvarchar EvidenceNote 
+    }
+    Market {
+        int MarketId PK
+        varchar MarketCode UK
+        nvarchar MarketName 
+        char CurrencyCode 
+    }
+    ModelRun {
+        int RunId PK
+        varchar RunCode UK
+        int ModelId FK
+        int DatasetId FK
+        int TargetId FK
+        date TrainStart 
+        date TrainEnd 
+        date ValidationEnd 
+        decimal SelectedC 
+        decimal Threshold 
+        varchar EvaluationClass 
+        nvarchar SourceRun 
+        datetime2 CompletedAt 
+    }
+    Prediction {
+        int RunId PK,FK
+        int StockId PK,FK
+        date OriginDate PK,FK
+        decimal ProbabilityPositive 
+        datetime2 LoadedAt 
+    }
+    Stock {
+        int StockId PK
+        int MarketId FK,UK
+        varchar Ticker UK
+        nvarchar CompanyName 
+        int IndustryId FK
+        bit IsSynthetic 
+    }
+    StockIndex {
+        int IndexId PK
+        int MarketId FK,UK
+        varchar IndexCode UK
+        nvarchar IndexName 
+    }
+    TargetDefinition {
+        int TargetId PK
+        varchar TargetCode UK
+        int HorizonSessions UK
+        varchar OutputType UK
+        varchar LabelRule UK
+    }
+    TradingDay {
+        int DatasetId PK,FK
+        date TradeDate PK
+    }
+    Stock ||--o{ DailyPrice : DailyPrice_Stock
+    TradingDay ||--o{ DailyPrice : DailyPrice_TradingDay
+    Market ||--o{ Dataset : Dataset_Market
+    ModelRun ||--o{ ForecastOrigin : ForecastOrigin_Run
+    StockIndex ||--o{ IndexMembership : IndexMembership_Index
+    Stock ||--o{ IndexMembership : IndexMembership_Stock
+    Dataset ||--o{ ModelRun : ModelRun_Dataset
+    ForecastModel ||--o{ ModelRun : ModelRun_Model
+    TargetDefinition ||--o{ ModelRun : ModelRun_Target
+    ForecastOrigin ||--o{ Prediction : Prediction_ForecastOrigin
+    ModelRun ||--o{ Prediction : Prediction_Run
+    Stock ||--o{ Prediction : Prediction_Stock
+    Industry |o--o{ Stock : Stock_Industry
+    Market ||--o{ Stock : Stock_Market
+    Market ||--o{ StockIndex : StockIndex_Market
+    Dataset ||--o{ TradingDay : TradingDay_Dataset

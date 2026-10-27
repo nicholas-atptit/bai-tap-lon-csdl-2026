@@ -1,0 +1,9 @@
+test_authoritative_absence_passes (__main__.DeliveryGateTests.test_authoritative_absence_passes) ... ok
+test_live_worker_cannot_pass (__main__.DeliveryGateTests.test_live_worker_cannot_pass) ... ok
+test_other_helper_receipt_cannot_pass (__main__.DeliveryGateTests.test_other_helper_receipt_cannot_pass) ... ok
+test_stale_or_missing_receipt_is_not_terminal (__main__.DeliveryGateTests.test_stale_or_missing_receipt_is_not_terminal) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK

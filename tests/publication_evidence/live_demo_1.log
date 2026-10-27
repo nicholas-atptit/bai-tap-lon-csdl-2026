@@ -1,0 +1,80 @@
+Changed database context to 'MarketLabVN30_Demo'.
+TableName|PrimaryKey|ForeignKeyCount
+---------|----------|---------------
+DailyPrice|[DatasetId],[StockId],[TradeDate]|2
+Dataset|[DatasetId]|1
+ForecastModel|[ModelId]|0
+ForecastOrigin|[RunId],[OriginDate]|1
+IndexMembership|[IndexId],[StockId],[ValidFrom]|2
+Industry|[IndustryId]|0
+Market|[MarketId]|0
+ModelRun|[RunId]|3
+Prediction|[RunId],[StockId],[OriginDate]|3
+Stock|[StockId]|2
+StockIndex|[IndexId]|1
+TargetDefinition|[TargetId]|0
+TradingDay|[DatasetId],[TradeDate]|1
+ForeignKey|ChildTable|ParentTable
+----------|----------|-----------
+FK_DailyPrice_Stock|DailyPrice|Stock
+FK_DailyPrice_TradingDay|DailyPrice|TradingDay
+FK_Dataset_Market|Dataset|Market
+FK_ForecastOrigin_Run|ForecastOrigin|ModelRun
+FK_IndexMembership_Index|IndexMembership|StockIndex
+FK_IndexMembership_Stock|IndexMembership|Stock
+FK_ModelRun_Dataset|ModelRun|Dataset
+FK_ModelRun_Model|ModelRun|ForecastModel
+FK_ModelRun_Target|ModelRun|TargetDefinition
+FK_Prediction_ForecastOrigin|Prediction|ForecastOrigin
+FK_Prediction_Run|Prediction|ModelRun
+FK_Prediction_Stock|Prediction|Stock
+FK_Stock_Industry|Stock|Industry
+FK_Stock_Market|Stock|Market
+FK_StockIndex_Market|StockIndex|Market
+FK_TradingDay_Dataset|TradingDay|Dataset
+Ticker|IndustryName|TradeDate|ClosePrice
+------|------------|---------|----------
+DEMO01|Ngành mô phỏng 1|2025-02-19|25.728800
+DEMO02|Ngành mô phỏng 1|2025-02-19|26.582900
+DEMO03|Ngành mô phỏng 1|2025-02-19|27.875700
+DEMO04|Ngành mô phỏng 1|2025-02-19|30.257300
+DEMO05|Ngành mô phỏng 2|2025-02-19|33.376900
+Ticker|ObservedSessions|AverageVolume
+------|----------------|-------------
+DEMO01|35|14400.000000
+DEMO02|35|15400.000000
+DEMO03|35|16400.000000
+DEMO04|35|17400.000000
+DEMO05|35|18400.000000
+DEMO06|35|19400.000000
+DEMO07|35|20400.000000
+DEMO08|35|21400.000000
+Ticker|TradeDate|Volume
+------|---------|------
+DEMO01|2025-01-28|14600
+DEMO01|2025-01-29|14800
+DEMO01|2025-01-30|15000
+DEMO01|2025-01-31|15200
+DEMO01|2025-02-03|15400
+RunId|ModelCode|CommonObservations|EvaluationAsOf|Accuracy|BrierScore
+-----|---------|------------------|--------------|--------|----------
+1|demo_baseline|128|2026-07-01|.5468750000|0.25
+2|demo_model_b|128|2026-07-01|.2187500000|0.41143295204780556
+SourceCloseReturnPct|FlatMatchesFlat|EvaluatedPredictions
+--------------------|---------------|--------------------
+10.00000000|1|256
+ExpectedError|ConstraintEvidence|Result
+-------------|------------------|------
+547|The UPDATE statement conflicted with the CHECK constraint "CK_DailyPrice_Volume". The conflict occurred in database "MarketLabVN30_Demo", table "dbo.DailyPrice", column 'Volume'.|PASS: invalid update rejected; session continues
+Stage|Volume
+-----|------
+BEFORE|11000
+Stage|Volume
+-----|------
+DURING|11001
+Stage|Volume
+-----|------
+AFTER ROLLBACK|11000
+Result|PriceHashBefore|PriceHashAfter|OpenTransactions
+------|---------------|--------------|----------------
+LIVE_DEMO_PASS|A627B1D349986C7ABC6863D9D73787F470FF12471F9E72541F2257CB45AA7731|A627B1D349986C7ABC6863D9D73787F470FF12471F9E72541F2257CB45AA7731|0

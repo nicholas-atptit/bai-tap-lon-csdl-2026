@@ -1,0 +1,7 @@
+Changed database context to 'MarketLabVN30_Polish_20261027T201039'.
+RunCode|ModelCode|RunId|ModelId|DatasetId|TargetId|HorizonSessions|EvaluatedRows|Accuracy|BrierScore|NaturalLogLoss
+-------|---------|-----|-------|---------|--------|---------------|-------------|--------|----------|--------------
+DEMO_MODEL1_H5|demo_baseline|1|1|1|1|5|128|.5468750000|0.25|0.69314718055994617
+DEMO_MODEL2_H5|demo_model_b|2|2|1|1|5|128|.2187500000|0.41143295204780556|1.0505250597255711
+
+(2 rows affected)

@@ -1,0 +1,95 @@
+{
+  "classification": "SYNTHETIC ONLY",
+  "tables": {
+    "Market": 1,
+    "Industry": 2,
+    "Stock": 8,
+    "Dataset": 1,
+    "TradingDay": 42,
+    "DailyPrice": 280,
+    "StockIndex": 1,
+    "IndexMembership": 8,
+    "ForecastModel": 2,
+    "TargetDefinition": 1,
+    "ModelRun": 2,
+    "ForecastOrigin": 34,
+    "Prediction": 258
+  },
+  "files": [
+    {
+      "path": "data/sample/DailyPrice.csv",
+      "sha256": "1418333cf919ef3c636d31ff42333964f4cbe57a9caf8aacb8c5a7e368d70653",
+      "bytes": 15071
+    },
+    {
+      "path": "data/sample/Dataset.csv",
+      "sha256": "5b3c827b3fe9ec82c819c4ce380c64053c096b3a4ba6204354321a98ea7ed22b",
+      "bytes": 297
+    },
+    {
+      "path": "data/sample/ForecastModel.csv",
+      "sha256": "91f7d3b44d8637fe69d483ab584725f6b06b1b2d1ff720c9d91e6225d149459e",
+      "bytes": 195
+    },
+    {
+      "path": "data/sample/ForecastOrigin.csv",
+      "sha256": "dea2e857b54be297a2b682da673df73af15261186676aeb8014ca46fa519b54f",
+      "bytes": 882
+    },
+    {
+      "path": "data/sample/IndexMembership.csv",
+      "sha256": "2c10dfc833029aca8e21050970f2e7f349f03318957108928519428acb0ffc9b",
+      "bytes": 539
+    },
+    {
+      "path": "data/sample/Industry.csv",
+      "sha256": "27e2b11db037a9a5820998ce862a08255d5e409646d938049187a3ef5772ae91",
+      "bytes": 270
+    },
+    {
+      "path": "data/sample/Market.csv",
+      "sha256": "281586962907ee72f828e8db623f6c9aca83707dc7faf3b641d9887b1efb4bd4",
+      "bytes": 88
+    },
+    {
+      "path": "data/sample/ModelRun.csv",
+      "sha256": "5e7ed7384ba201b36514ad382257e16c85c7c31c4b63b599af87b466bceab911",
+      "bytes": 377
+    },
+    {
+      "path": "data/sample/Prediction.csv",
+      "sha256": "5cdc69f1e4ab12a0d851ff44227ed6a2f2bb7cfe297c66ea2be14f534f6316f9",
+      "bytes": 6082
+    },
+    {
+      "path": "data/sample/README.md",
+      "sha256": "503ebef20a5a1f9e60e27bff81ca44751c3b92b43bfcb695ae7eecf4665f84e7",
+      "bytes": 705
+    },
+    {
+      "path": "data/sample/Stock.csv",
+      "sha256": "8b1cc9556e97ae6d746b639848c7db96864016fc08d041456f300bcf808827a6",
+      "bytes": 375
+    },
+    {
+      "path": "data/sample/StockIndex.csv",
+      "sha256": "9125862f3c381940d841c09addee2ffa5df0180c3a3398657fd31bcb3ea3166a",
+      "bytes": 81
+    },
+    {
+      "path": "data/sample/tables.json",
+      "sha256": "b7839cfee2f5ee3fb19da51594b4e6e7de0a4fc5197af22a0575a2717ba73729",
+      "bytes": 112723
+    },
+    {
+      "path": "data/sample/TargetDefinition.csv",
+      "sha256": "94dd092de3493316438fc41a074f3b0e845fa5a0458b9e97b107152312bd4813",
+      "bytes": 137
+    },
+    {
+      "path": "data/sample/TradingDay.csv",
+      "sha256": "02d8b5585e3ee23ea6849ff34571937de31b8be5ef8b3bf43e44b29ec5edc413",
+      "bytes": 612
+    }
+  ]
+}

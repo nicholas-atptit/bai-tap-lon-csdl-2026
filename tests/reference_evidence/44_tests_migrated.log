@@ -1,0 +1,50 @@
+Changed database context to 'MarketLabVN30_Migration_20261027T201039'.
+TestName|Status|Evidence
+--------|------|--------
+AsOf prevents future actuals|PASS|Executed; all writes rolled back
+CHECK negative volume|PASS|547: The UPDATE statement conflicted with the CHECK constraint "CK_DailyPrice_Volume". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.DailyPrice", column 'Volume'.
+CHECK OHLC range|PASS|547: The UPDATE statement conflicted with the CHECK constraint "CK_DailyPrice_OHLC". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.DailyPrice".
+CHECK positive price|PASS|547: The UPDATE statement conflicted with the CHECK constraint "CK_DailyPrice_Positive". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.DailyPrice".
+CHECK probability|PASS|547: The UPDATE statement conflicted with the CHECK constraint "CK_Prediction_Probability". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.Prediction", column 'ProbabilityPositive'.
+CHECK target ordering|PASS|547: The UPDATE statement conflicted with the CHECK constraint "CK_ForecastOrigin_Dates". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.ForecastOrigin".
+COMMIT then ROLLBACK|PASS|Executed; all writes rolled back
+Constraints enabled and trusted|PASS|Executed; all writes rolled back
+DEFAULT load timestamp|PASS|Executed; all writes rolled back
+DEFAULT stock flag|PASS|Executed; all writes rolled back
+FK rejects date outside calendar|PASS|547: The INSERT statement conflicted with the FOREIGN KEY constraint "FK_DailyPrice_TradingDay". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.TradingDay".
+FK rejects unknown industry|PASS|547: The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Stock_Industry". The conflict occurred in database "MarketLabVN30_Migration_20261027T201039", table "dbo.Industry", column 'IndustryId'.
+Functions return/zero/null|PASS|Executed; all writes rolled back
+Missing endpoint excluded|PASS|Executed; all writes rolled back
+NOT NULL rejects missing name|PASS|515: Cannot insert the value NULL into column 'IndustryName', table 'MarketLabVN30_Migration_20261027T201039.dbo.Industry'; column does not allow nulls. INSERT fails.
+PK rejects duplicate|PASS|2627: Violation of PRIMARY KEY constraint 'PK_Market'. Cannot insert duplicate key in object 'dbo.Market'. The duplicate key value is (1).
+Schema thirteen tables|PASS|Executed; all writes rolled back
+SP compare incompatible targets|PASS|51020: Khong so sanh khac dataset hoac dinh nghia bien muc tieu.
+SP compare invalid id|PASS|51018: RunId phai la so nguyen.
+SP compare missing run|PASS|51019: Can 2 den 8 run ton tai.
+SP compare no mature overlap|PASS|51021: Khong co quan sat da truong thanh chung cho tat ca run.
+SP comparison uses common observations|PASS|Executed; all writes rolled back
+SP performance invalid filter|PASS|51016: Bo loc ngay/horizon khong hop le.
+SP performance returns evaluated rows|PASS|Executed; all writes rolled back
+SP performance unknown model|PASS|51017: Model hoac dataset khong ton tai.
+SP prediction conflicting duplicate|PASS|51015: Du bao trung khoa nhung khac gia tri.
+SP prediction insert then replay|PASS|Executed; all writes rolled back
+SP prediction invalid probability|PASS|51013: Ngay hoac xac suat du bao khong hop le.
+SP prediction unknown run|PASS|51014: Ma co phieu hoac model run khong ton tai.
+SP price conflicting duplicate|PASS|51012: Khoa gia da ton tai voi gia tri khac. Can @AllowUpdate=1.
+SP price explicit update|PASS|Executed; all writes rolled back
+SP price idempotent|PASS|Executed; all writes rolled back
+SP price invalid|PASS|51010: OHLCV khong hop le.
+SP price invalid calendar|PASS|51011: Ngay khong thuoc lich phien cua dataset.
+TRIGGER calendar preserves endpoint|PASS|51022: Thay doi lich lam sai horizon cua du bao da luu.
+TRIGGER immutable dataset|PASS|51007: Ngu nghia dataset da su dung la bat bien; tao dataset moi.
+TRIGGER immutable run|PASS|51006: Run da co du bao la bat bien; tao run moi.
+TRIGGER immutable stock|PASS|51008: Khong doi thi truong/loai ma da su dung.
+TRIGGER immutable target|PASS|51009: Dinh nghia muc tieu da su dung la bat bien.
+TRIGGER native horizon|PASS|51002: Du bao sai lich phien, horizon, pham vi hoac khong ngoai mau.
+TRIGGER out of sample|PASS|51002: Du bao sai lich phien, horizon, pham vi hoac khong ngoai mau.
+TRIGGER overlap membership|PASS|51004: Khoang hieu luc thanh phan chi so bi chong lan.
+UNIQUE rejects duplicate code|PASS|2627: Violation of UNIQUE KEY constraint 'UQ_Market_Code'. Cannot insert duplicate key in object 'dbo.Market'. The duplicate key value is (DEMO).
+Views execute|PASS|Executed; all writes rolled back
+Status|Tests
+------|-----
+PASS|44

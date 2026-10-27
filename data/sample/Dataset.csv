@@ -1,0 +1,2 @@
+﻿DatasetId,DatasetCode,MarketId,DataKind,PriceBasis,PriceUnit,ObservedThrough,ManifestPath,ProvenanceNote
+1,SYNTHETIC_DEMO_V1,1,SYNTHETIC,SOURCE_CLOSE,Đơn vị mô phỏng,2025-02-19,data/sample/tables.json,"DỮ LIỆU MÔ PHỎNG, không phải giao dịch hay kết quả nghiên cứu."

@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "server_identity": [
+    {
+      "Edition": "Standard Developer Edition (64-bit)",
+      "Version": "17.0.1145.4"
+    }
+  ],
+  "installed_sql_instances": [
+    {
+      "instance": "MSSQLSERVER",
+      "edition": "Standard Developer Edition"
+    },
+    {
+      "instance": "MSSQLSERVER01",
+      "edition": "Standard Developer Edition"
+    },
+    {
+      "instance": "MSSQLSERVER02",
+      "edition": "Standard Developer Edition"
+    }
+  ],
+  "original_test_cases": 44,
+  "original_suite_executions_passed": 176,
+  "business_query_executions_passed": 64,
+  "verifier_regression_tests": 7,
+  "preflight_runs_passed": 3,
+  "live_demo_runs_passed": 5,
+  "migration_predictions_preserved": 258,
+  "migration_origins_created": 34,
+  "existing_all_13_tables_unchanged": true,
+  "fresh_all_13_tables_unchanged": true,
+  "migrated_all_13_tables_unchanged": true,
+  "migration_refusal_preserved_all_12_tables": true,
+  "additional_launcher_sql_cases": 44,
+  "additional_launcher_queries": 16,
+  "additional_launcher_preflight": 1,
+  "additional_launcher_demo": 1,
+  "source_files_unchanged": 35,
+  "delivery_gate_tests": 4,
+  "classification": "Historical 4-database verification; private research rows and logs withheld"
+}

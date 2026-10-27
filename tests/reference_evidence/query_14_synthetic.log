@@ -1,0 +1,6 @@
+Changed database context to 'MarketLabVN30_Polish_20261027T201039'.
+PositiveMatch|FlatMatch|FlatMismatch
+-------------|---------|------------
+1|1|0
+
+(1 rows affected)

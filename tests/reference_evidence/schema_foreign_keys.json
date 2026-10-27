@@ -1,0 +1,128 @@
+[
+  {
+    "ParentTable": "DailyPrice",
+    "ParentColumn": "StockId",
+    "ReferencedTable": "Stock",
+    "ReferencedColumn": "StockId",
+    "ForeignKey": "FK_DailyPrice_Stock"
+  },
+  {
+    "ParentTable": "DailyPrice",
+    "ParentColumn": "DatasetId",
+    "ReferencedTable": "TradingDay",
+    "ReferencedColumn": "DatasetId",
+    "ForeignKey": "FK_DailyPrice_TradingDay"
+  },
+  {
+    "ParentTable": "DailyPrice",
+    "ParentColumn": "TradeDate",
+    "ReferencedTable": "TradingDay",
+    "ReferencedColumn": "TradeDate",
+    "ForeignKey": "FK_DailyPrice_TradingDay"
+  },
+  {
+    "ParentTable": "Dataset",
+    "ParentColumn": "MarketId",
+    "ReferencedTable": "Market",
+    "ReferencedColumn": "MarketId",
+    "ForeignKey": "FK_Dataset_Market"
+  },
+  {
+    "ParentTable": "ForecastOrigin",
+    "ParentColumn": "RunId",
+    "ReferencedTable": "ModelRun",
+    "ReferencedColumn": "RunId",
+    "ForeignKey": "FK_ForecastOrigin_Run"
+  },
+  {
+    "ParentTable": "IndexMembership",
+    "ParentColumn": "IndexId",
+    "ReferencedTable": "StockIndex",
+    "ReferencedColumn": "IndexId",
+    "ForeignKey": "FK_IndexMembership_Index"
+  },
+  {
+    "ParentTable": "IndexMembership",
+    "ParentColumn": "StockId",
+    "ReferencedTable": "Stock",
+    "ReferencedColumn": "StockId",
+    "ForeignKey": "FK_IndexMembership_Stock"
+  },
+  {
+    "ParentTable": "ModelRun",
+    "ParentColumn": "DatasetId",
+    "ReferencedTable": "Dataset",
+    "ReferencedColumn": "DatasetId",
+    "ForeignKey": "FK_ModelRun_Dataset"
+  },
+  {
+    "ParentTable": "ModelRun",
+    "ParentColumn": "ModelId",
+    "ReferencedTable": "ForecastModel",
+    "ReferencedColumn": "ModelId",
+    "ForeignKey": "FK_ModelRun_Model"
+  },
+  {
+    "ParentTable": "ModelRun",
+    "ParentColumn": "TargetId",
+    "ReferencedTable": "TargetDefinition",
+    "ReferencedColumn": "TargetId",
+    "ForeignKey": "FK_ModelRun_Target"
+  },
+  {
+    "ParentTable": "Prediction",
+    "ParentColumn": "RunId",
+    "ReferencedTable": "ForecastOrigin",
+    "ReferencedColumn": "RunId",
+    "ForeignKey": "FK_Prediction_ForecastOrigin"
+  },
+  {
+    "ParentTable": "Prediction",
+    "ParentColumn": "OriginDate",
+    "ReferencedTable": "ForecastOrigin",
+    "ReferencedColumn": "OriginDate",
+    "ForeignKey": "FK_Prediction_ForecastOrigin"
+  },
+  {
+    "ParentTable": "Prediction",
+    "ParentColumn": "RunId",
+    "ReferencedTable": "ModelRun",
+    "ReferencedColumn": "RunId",
+    "ForeignKey": "FK_Prediction_Run"
+  },
+  {
+    "ParentTable": "Prediction",
+    "ParentColumn": "StockId",
+    "ReferencedTable": "Stock",
+    "ReferencedColumn": "StockId",
+    "ForeignKey": "FK_Prediction_Stock"
+  },
+  {
+    "ParentTable": "Stock",
+    "ParentColumn": "IndustryId",
+    "ReferencedTable": "Industry",
+    "ReferencedColumn": "IndustryId",
+    "ForeignKey": "FK_Stock_Industry"
+  },
+  {
+    "ParentTable": "Stock",
+    "ParentColumn": "MarketId",
+    "ReferencedTable": "Market",
+    "ReferencedColumn": "MarketId",
+    "ForeignKey": "FK_Stock_Market"
+  },
+  {
+    "ParentTable": "StockIndex",
+    "ParentColumn": "MarketId",
+    "ReferencedTable": "Market",
+    "ReferencedColumn": "MarketId",
+    "ForeignKey": "FK_StockIndex_Market"
+  },
+  {
+    "ParentTable": "TradingDay",
+    "ParentColumn": "DatasetId",
+    "ReferencedTable": "Dataset",
+    "ReferencedColumn": "DatasetId",
+    "ForeignKey": "FK_TradingDay_Dataset"
+  }
+]

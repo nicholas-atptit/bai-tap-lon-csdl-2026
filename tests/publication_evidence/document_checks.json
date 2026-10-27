@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "report_pdf_pages": 9,
+  "presentation_pdf_pages": 14,
+  "pptx_slides": 14,
+  "erd_pdf_pages": 1,
+  "docx_pdf_tokens_missing": 0,
+  "pptx_pdf_tokens_missing": 0,
+  "text_outside_page": [],
+  "source_bytes_unchanged": true,
+  "contacts": [],
+  "word_native_pdf": "BLOCKED",
+  "docx_page_layout_fidelity_claimed": false,
+  "visual_review": "PASS: all 9 report pages, 14 slides and full ERD contact sheets reviewed; no clipped tables/text found. Dense ERD requires the separate vector for zoom.",
+  "checked_utc": "2026-10-27T15:34:52.780126+00:00",
+  "approved_document_hashes": {
+    "report/MarketLabVN30_Report.docx": "9f4f752112a011399ab28fa836874d072788ab7866aebccfbaee9c538ce9a304",
+    "report/MarketLabVN30_Report.pdf": "5aa3f2ecee145acf74c5834e869e36fa35bbfac83a93723f101a244898b8bb6a",
+    "slides/MarketLabVN30_Presentation.pptx": "04eb27d85ddb477a72948929ec5590fc31cd5325d8e2f8154b99b094b9249da3",
+    "slides/MarketLabVN30_Presentation.pdf": "c7829e9b0f42bda048227f3de6754979ccfbb24e4ab38e9f5d197739bda0f312",
+    "docs/diagrams/marketlab_erd.pdf": "8654bcf7110c05eccf0b3a3e0e7aedf7704a65ffa18e7b4ac244d014c2799c61"
+  }
+}

@@ -1,0 +1,344 @@
+[
+  {
+    "ConstraintName": "CK_DailyPrice_OHLC",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": "([HighPrice]>=[OpenPrice] AND [HighPrice]>=[ClosePrice] AND [HighPrice]>=[LowPrice] AND [LowPrice]<=[OpenPrice] AND [LowPrice]<=[ClosePrice])"
+  },
+  {
+    "ConstraintName": "CK_DailyPrice_Positive",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": "([OpenPrice]>(0) AND [HighPrice]>(0) AND [LowPrice]>(0) AND [ClosePrice]>(0))"
+  },
+  {
+    "ConstraintName": "CK_DailyPrice_Volume",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": "([Volume]>=(0))"
+  },
+  {
+    "ConstraintName": "DF_DailyPrice_LoadedAt",
+    "ConstraintType": "DEFAULT_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": "(sysutcdatetime())"
+  },
+  {
+    "ConstraintName": "FK_DailyPrice_Stock",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_DailyPrice_TradingDay",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_DailyPrice",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "DailyPrice",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "CK_Dataset_Basis",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "Dataset",
+    "Definition": "([PriceBasis]='SOURCE_CLOSE')"
+  },
+  {
+    "ConstraintName": "CK_Dataset_Kind",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "Dataset",
+    "Definition": "([DataKind]='REAL_PRIVATE' OR [DataKind]='SYNTHETIC')"
+  },
+  {
+    "ConstraintName": "FK_Dataset_Market",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "Dataset",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_Dataset",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "Dataset",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_Dataset_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "Dataset",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_ForecastModel",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "ForecastModel",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_ForecastModel_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "ForecastModel",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "CK_ForecastOrigin_Dates",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "ForecastOrigin",
+    "Definition": "([TargetDate]>[OriginDate])"
+  },
+  {
+    "ConstraintName": "FK_ForecastOrigin_Run",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "ForecastOrigin",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_ForecastOrigin",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "ForecastOrigin",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "CK_IndexMembership_Dates",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "IndexMembership",
+    "Definition": "([ValidTo]>=[ValidFrom])"
+  },
+  {
+    "ConstraintName": "FK_IndexMembership_Index",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "IndexMembership",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_IndexMembership_Stock",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "IndexMembership",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_IndexMembership",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "IndexMembership",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_Industry",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "Industry",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_Industry_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "Industry",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_Market",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "Market",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_Market_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "Market",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "CK_ModelRun_C",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": "([SelectedC] IS NULL OR [SelectedC]>(0))"
+  },
+  {
+    "ConstraintName": "CK_ModelRun_Class",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": "([EvaluationClass]='RETROSPECTIVE_OOS' OR [EvaluationClass]='SYNTHETIC_TEST')"
+  },
+  {
+    "ConstraintName": "CK_ModelRun_Dates",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": "([TrainStart]<=[TrainEnd] AND [TrainEnd]<[ValidationEnd])"
+  },
+  {
+    "ConstraintName": "CK_ModelRun_Threshold",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": "([Threshold]>(0) AND [Threshold]<(1))"
+  },
+  {
+    "ConstraintName": "DF_ModelRun_Threshold",
+    "ConstraintType": "DEFAULT_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": "((0.5))"
+  },
+  {
+    "ConstraintName": "FK_ModelRun_Dataset",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_ModelRun_Model",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_ModelRun_Target",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_ModelRun",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_ModelRun_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "ModelRun",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "CK_Prediction_Probability",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "Prediction",
+    "Definition": "([ProbabilityPositive]>=(0) AND [ProbabilityPositive]<=(1))"
+  },
+  {
+    "ConstraintName": "DF_Prediction_LoadedAt",
+    "ConstraintType": "DEFAULT_CONSTRAINT",
+    "TableName": "Prediction",
+    "Definition": "(sysutcdatetime())"
+  },
+  {
+    "ConstraintName": "FK_Prediction_ForecastOrigin",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "Prediction",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_Prediction_Run",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "Prediction",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_Prediction_Stock",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "Prediction",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_Prediction",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "Prediction",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "DF_Stock_Synthetic",
+    "ConstraintType": "DEFAULT_CONSTRAINT",
+    "TableName": "Stock",
+    "Definition": "((0))"
+  },
+  {
+    "ConstraintName": "FK_Stock_Industry",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "Stock",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_Stock_Market",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "Stock",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_Stock",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "Stock",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_Stock_MarketTicker",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "Stock",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_StockIndex_Market",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "StockIndex",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_StockIndex",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "StockIndex",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_StockIndex_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "StockIndex",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "CK_Target_Horizon",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "TargetDefinition",
+    "Definition": "([HorizonSessions]>(0))"
+  },
+  {
+    "ConstraintName": "CK_Target_Output",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "TargetDefinition",
+    "Definition": "([OutputType]='PROBABILITY_CLOSE_UP')"
+  },
+  {
+    "ConstraintName": "CK_Target_Rule",
+    "ConstraintType": "CHECK_CONSTRAINT",
+    "TableName": "TargetDefinition",
+    "Definition": "([LabelRule]='CLOSE_TARGET_GT_CLOSE_ORIGIN_ELSE_ZERO')"
+  },
+  {
+    "ConstraintName": "PK_TargetDefinition",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "TargetDefinition",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_Target_Definition",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "TargetDefinition",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "UQ_TargetDefinition_Code",
+    "ConstraintType": "UNIQUE_CONSTRAINT",
+    "TableName": "TargetDefinition",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "FK_TradingDay_Dataset",
+    "ConstraintType": "FOREIGN_KEY_CONSTRAINT",
+    "TableName": "TradingDay",
+    "Definition": null
+  },
+  {
+    "ConstraintName": "PK_TradingDay",
+    "ConstraintType": "PRIMARY_KEY_CONSTRAINT",
+    "TableName": "TradingDay",
+    "Definition": null
+  }
+]

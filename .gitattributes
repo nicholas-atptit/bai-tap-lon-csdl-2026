@@ -1,0 +1,6 @@
+# Preserve verified source bytes across Windows and GitHub.
+* -text
+*.docx binary
+*.pptx binary
+*.pdf binary
+*.png binary

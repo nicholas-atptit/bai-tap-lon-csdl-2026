@@ -1,0 +1,6 @@
+Changed database context to 'MarketLabVN30_Demo'.
+PositiveMatch|FlatMatch|FlatMismatch
+-------------|---------|------------
+1|1|0
+
+(1 rows affected)

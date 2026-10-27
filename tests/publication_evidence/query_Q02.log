@@ -1,0 +1,13 @@
+Changed database context to 'MarketLabVN30_Demo'.
+Ticker|TradeDate|ClosePrice|PriceUnit
+------|---------|----------|---------
+DEMO01|2025-02-19|25.728800|Đơn vị mô phỏng
+DEMO02|2025-02-19|26.582900|Đơn vị mô phỏng
+DEMO03|2025-02-19|27.875700|Đơn vị mô phỏng
+DEMO04|2025-02-19|30.257300|Đơn vị mô phỏng
+DEMO05|2025-02-19|33.376900|Đơn vị mô phỏng
+DEMO06|2025-02-19|36.205100|Đơn vị mô phỏng
+DEMO07|2025-02-19|37.980500|Đơn vị mô phỏng
+DEMO08|2025-02-19|38.909600|Đơn vị mô phỏng
+
+(8 rows affected)

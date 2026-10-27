@@ -1,0 +1,20 @@
+# Supporting guard only; publication uses an explicit reviewed allowlist.
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+.tools/
+tests/runs/
+tests/generated/
+tests/document_renders/
+data/private_prepared/
+data/raw/
+*PRIVATE*
+*.bak
+*.mdf
+*.ldf
+*.zip
+~$*
+*.tmp
+*.log.tmp
