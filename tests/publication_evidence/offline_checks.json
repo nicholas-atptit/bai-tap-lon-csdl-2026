@@ -3,6 +3,7 @@
   "scope": "Offline files and optional actual Git index; not SQL runtime or absolute secret assurance",
   "file_count": 138,
   "internal_markdown_links": 192,
+  "audit_revision_internal_markdown_links_verified": 196,
   "sql_tables": 13,
   "queries": 16,
   "procedures": 4,
@@ -10,5 +11,95 @@
   "views": 4,
   "secret_pattern_findings": 0,
   "staged_index_verified": false,
-  "checked_utc": "2026-10-27T15:35:21.890213+00:00"
+  "checked_utc": "2026-10-27T15:35:21.890213+00:00",
+  "github_publication": {
+    "phase": "payload",
+    "utc": "2026-10-27T15:44:37.791680+00:00",
+    "repository": "https://github.com/nicholas-atptit/bai-tap-lon-csdl-2026",
+    "branch": "main",
+    "status": "PASS",
+    "log_oneline": "497ef30 Initial public release: MarketLab VN30 and team handoff guides",
+    "local_head": "497ef300d1515e4f2026492c0120cd6476121ed5",
+    "origin_main": "497ef300d1515e4f2026492c0120cd6476121ed5",
+    "remote_main_direct": "497ef300d1515e4f2026492c0120cd6476121ed5",
+    "sha_match": true,
+    "file_count": 138,
+    "all_remote_clone_files_match": true,
+    "downloads": [
+      {
+        "path": "report/MarketLabVN30_Report.docx",
+        "http_status": 200,
+        "bytes": 300574,
+        "sha256": "9f4f752112a011399ab28fa836874d072788ab7866aebccfbaee9c538ce9a304"
+      },
+      {
+        "path": "report/MarketLabVN30_Report.pdf",
+        "http_status": 200,
+        "bytes": 539280,
+        "sha256": "5aa3f2ecee145acf74c5834e869e36fa35bbfac83a93723f101a244898b8bb6a"
+      },
+      {
+        "path": "slides/MarketLabVN30_Presentation.pptx",
+        "http_status": 200,
+        "bytes": 356766,
+        "sha256": "04eb27d85ddb477a72948929ec5590fc31cd5325d8e2f8154b99b094b9249da3"
+      },
+      {
+        "path": "slides/MarketLabVN30_Presentation.pdf",
+        "http_status": 200,
+        "bytes": 322946,
+        "sha256": "c7829e9b0f42bda048227f3de6754979ccfbb24e4ab38e9f5d197739bda0f312"
+      },
+      {
+        "path": "docs/diagrams/marketlab_erd.svg",
+        "http_status": 200,
+        "bytes": 227405,
+        "sha256": "29c675f1042e5dea316d0d759b9887f94a0cf5c08b48256687d720220e72df09"
+      },
+      {
+        "path": "docs/diagrams/marketlab_erd.pdf",
+        "http_status": 200,
+        "bytes": 38439,
+        "sha256": "8654bcf7110c05eccf0b3a3e0e7aedf7704a65ffa18e7b4ac244d014c2799c61"
+      },
+      {
+        "path": "sql/all_in_one.sql",
+        "http_status": 200,
+        "bytes": 107172,
+        "sha256": "6692e7dad0c734bd2e37fa60ab537d91bc81a49bc6b7503ba3339f9a1222bca0"
+      }
+    ],
+    "github_rendered_documents": [
+      {
+        "path": "README.md",
+        "http_status": 200,
+        "html_bytes": 36670,
+        "rendered_headings": 21
+      },
+      {
+        "path": "docs/REPORT_WRITING_GUIDE.md",
+        "http_status": 200,
+        "html_bytes": 46272,
+        "rendered_headings": 28
+      },
+      {
+        "path": "docs/SLIDE_BUILD_GUIDE.md",
+        "http_status": 200,
+        "html_bytes": 38176,
+        "rendered_headings": 20
+      },
+      {
+        "path": "docs/TEAM_HANDOFF.md",
+        "http_status": 200,
+        "html_bytes": 14179,
+        "rendered_headings": 7
+      }
+    ],
+    "restricted_files_absent_by_exact_tree_allowlist": true,
+    "working_tree_clean": true,
+    "push_exit_code": 0,
+    "approved_scope": "138 reviewed files; public main at nicholas-atptit/bai-tap-lon-csdl-2026; direct user confirmation received",
+    "local_tracking_config_warning": "Push printed Permission denied writing .git/config; branch.main.remote=origin and branch.main.merge=refs/heads/main were independently read back. Fetch and all remote SHA checks succeeded. No authentication or global configuration was changed.",
+    "identity_note": "This immutable verification snapshot identifies the published content commit. The later audit-only commit is verified separately after pushing; a file cannot embed the SHA of its own containing commit."
+  }
 }
