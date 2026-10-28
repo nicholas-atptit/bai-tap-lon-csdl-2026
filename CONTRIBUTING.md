@@ -64,3 +64,15 @@ DOCX/PPTX/PDF là binary: đừng sửa marker hoặc chọn ours/theirs mù qu�
 **Người viết báo cáo:** đề cương và bảng ánh xạ đủ; schema/khóa/3NF đúng; ảnh SSMS thật hoặc placeholder; phân biệt 44 ca/176 lượt và demo/nghiên cứu; tham khảo kiểm được; DOCX/PDF không cắt nội dung; PR nêu bằng chứng.
 
 **Người làm slide:** 14 slide, kế hoạch 10–15 phút gồm 4 phút demo; notes/câu chuyển rõ; trắng–đen, font đọc được; ERD dùng vector/phóng to; không bịa accuracy; rehearsal ghi đúng là đo hay dự kiến; PPTX/PDF đồng bộ; presenter đã review.
+
+## Bản quyền và quyền sử dụng dữ liệu
+
+Dữ liệu thị trường thực tế của dự án được thu thập và truy xuất qua **VNstock**. VNstock là công cụ truy xuất; dữ liệu gốc tiếp tục chịu quyền và điều kiện của các nhà cung cấp hoặc chủ thể quyền bên thứ ba. Việc truy xuất không chuyển quyền sở hữu hoặc quyền phân phối lại dữ liệu nguồn cho dự án.
+
+Kết quả dự báo, phân tích và tài sản nghiên cứu được ghi nhận trong hoạt động nghiên cứu của **Lương Minh Quân** và **DATCOM Lab**, theo đóng góp và quyền hợp pháp của các bên. Ghi nhận này không khẳng định DATCOM Lab là pháp nhân đồng sở hữu độc quyền mọi tài sản.
+
+Dữ liệu **mô phỏng** trong bộ demo được tạo để phục vụ bài tập lớn, không phải bản ghi thị trường thu thập từ VNstock hoặc kết quả nghiên cứu thực tế. Nhóm được phân công và giảng viên chỉ sử dụng tài liệu được chia sẻ hợp pháp trong phạm vi bài tập/đánh giá; nghiên cứu khác hoặc việc khai thác tài sản hạn chế ngoài phạm vi được ủy quyền cần được cho phép trước bằng email hoặc văn bản từ chủ thể có thẩm quyền. Gửi yêu cầu mà chưa được chấp thuận không tạo sự cho phép.
+
+Xem [LICENSE.md](LICENSE.md) — **MarketLab VN30 — Restricted Research and Academic Use License (2026)**. Đây là giấy phép riêng hạn chế, không phải giấy phép nguồn mở được OSI công nhận. Quyền theo pháp luật, giấy phép có trước, điều kiện bên thứ ba và các quyền áp dụng theo GitHub vẫn được giữ nguyên.
+
+Chỉ đóng góp nội dung bạn có quyền cung cấp và cấp phép trong phạm vi phù hợp. Không thay giấy phép hoặc xóa thông báo của thành phần bên thứ ba; không đưa bộ dữ liệu nghiên cứu hạn chế vào commit, PR hoặc dịch vụ khác.

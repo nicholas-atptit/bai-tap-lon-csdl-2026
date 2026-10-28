@@ -16,8 +16,8 @@
     {
       "path": "CONTRIBUTING.md",
       "classification": "documentation",
-      "bytes": 5791,
-      "sha256": "149743f713e22e8a4a0d98666fcb13610e11d38cdf5709f2fc36dab8fbe4d229"
+      "bytes": 7890,
+      "sha256": "1f4647f7f423977717f36d6856aefe8adbbeb2238cb538afb2716cb207d422c6"
     },
     {
       "path": "data/manifests/demo_manifest.json",
@@ -230,8 +230,8 @@
     {
       "path": "docs/REPORT_WRITING_GUIDE.md",
       "classification": "documentation",
-      "bytes": 17818,
-      "sha256": "2604ebc47a4c2f79f793159cf0b703232b02fa819a08ad5382014abb23b9b895"
+      "bytes": 19914,
+      "sha256": "c6e5a5188a1333ea642752746e7d697106e8082e896cfcde2b9cfa52c89e9731"
     },
     {
       "path": "docs/REQUIREMENTS.md",
@@ -242,8 +242,8 @@
     {
       "path": "docs/SLIDE_BUILD_GUIDE.md",
       "classification": "documentation",
-      "bytes": 16041,
-      "sha256": "9ebde9728a9a6283d64c7cca61c9a73546cfac49cc5135fed0d0d9708f411d4b"
+      "bytes": 18161,
+      "sha256": "87b8e16470ee871a4118903b4bad1e9feadab7b32ca9d2a6a4c67d57a925da2e"
     },
     {
       "path": "docs/SOURCE_LINEAGE.csv",
@@ -254,14 +254,14 @@
     {
       "path": "docs/TEAM_HANDOFF.md",
       "classification": "documentation",
-      "bytes": 6297,
-      "sha256": "b15cd6e0019c34a702b15cdabf7ee68938e6f5f3537c3ded625ec6487aaa5f31"
+      "bytes": 8340,
+      "sha256": "259b8cb1762d6c123db20ade5eac95be77ebc105d2820174274efc5d578a2204"
     },
     {
       "path": "README.md",
       "classification": "documentation",
-      "bytes": 13047,
-      "sha256": "51ef6c7f199138fad4fa2f764e017f13f501cff091b46043cab5644c01ccedce"
+      "bytes": 14294,
+      "sha256": "4f1685db8028e3fb4dc1cd5374d6adfee27e70a4202fe471616feabeb11a4068"
     },
     {
       "path": "report/MarketLabVN30_Report.docx",
@@ -825,6 +825,18 @@
       "classification": "verification",
       "bytes": 1472,
       "sha256": "c6e236314491734e51298e282f3056b149057143243669347e45b2af00c72a8b"
+    },
+    {
+      "path": "LICENSE.md",
+      "classification": "documentation",
+      "bytes": 15566,
+      "sha256": "78cec79a6ce04939b5067bcc02515b22f0fcff43c08ae79239335f67a07714be"
+    },
+    {
+      "path": "docs/LICENSE_CHANGE_AUDIT.md",
+      "classification": "documentation",
+      "bytes": 9861,
+      "sha256": "ccec3f4375cd4f19c2803651fa833f61b1c02fb2dab13783e1d5c8ba900a92ec"
     }
   ]
 }
