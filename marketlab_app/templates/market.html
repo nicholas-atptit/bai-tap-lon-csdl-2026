@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "macros.html" import empty, errors_box, pager %}
+{% block title %}Giá & biểu đồ{% endblock %}
+{% block main %}
+<h1 class="page-title">Giá &amp; biểu đồ · {{ ds.DatasetCode }}</h1>
+<form class="filters" method="get" action="/market" novalidate>
+  <input type="hidden" name="ds" value="{{ ds.DatasetId }}">
+  <label for="mTicker">Mã
+    <input id="mTicker" name="t" list="tickerList" autocomplete="off" placeholder="VD: ACB" maxlength="20" value="{{ form.t }}" pattern="[A-Za-z0-9]{1,20}"></label>
+  <datalist id="tickerList">{% for s in stocks %}<option value="{{ s.Ticker }}">{{ s.PriceRows }} phiên có giá</option>{% endfor %}</datalist>
+  <label for="mFrom">Từ ngày <input type="date" id="mFrom" name="f" value="{{ form.f }}"></label>
+  <label for="mTo">Đến ngày <input type="date" id="mTo" name="to" value="{{ form.to }}"></label>
+  <input type="hidden" name="sort" value="{{ form.sort }}"><input type="hidden" name="order" value="{{ form.order }}">
+  <div class="actions"><button type="submit" class="primary">Xem</button>
+    <a class="btn" id="mClear" href="/market?{{ dsq }}&amp;t={{ form.t }}">Xóa lọc ngày</a></div>
+</form>
+{{ errors_box(errors) }}
+{% if not errors %}
+<section class="panel" aria-labelledby="chartTitle">
+  {% if points %}
+  <div class="panel-head"><h2 id="chartTitle">{{ form.t }} · {{ ds.DatasetCode }} · {{ points[0].TradeDate|dt }} → {{ points[-1].TradeDate|dt }}</h2></div>
+  <p class="hint" id="chartHint">Close nguồn cuối phiên ({{ ds.PriceBasis }}); không phải giá điều chỉnh hay tổng lợi suất, không realtime.
+    {{ points|length }} phiên lịch{% if gaps %}, {{ gaps|length }} phiên thiếu giá (vạch gạch, không nối đường): {{ gaps|join(", ") }}{% else %}, không phiên nào thiếu giá{% endif %}.</p>
+  <div id="chart" class="chart" role="img" aria-label="Biểu đồ Close và Volume {{ form.t }}">
+    <noscript><div class="state">Bật JavaScript để xem biểu đồ; bảng OHLCV bên dưới chứa cùng số liệu.</div></noscript>
+  </div>
+  <script type="application/json" id="chartData">{{ chart_json|tojson }}</script>
+  {% elif form.t %}
+  <div class="panel-head"><h2 id="chartTitle">{{ form.t }}</h2></div>{{ empty("Không có phiên nào trong khoảng ngày đã chọn.") }}
+  {% else %}
+  <div class="panel-head"><h2 id="chartTitle">Biểu đồ</h2></div>{{ empty("Dataset chưa có giá để vẽ.") }}
+  {% endif %}
+</section>
+<section class="panel" aria-labelledby="priceTitle">
+  <div class="panel-head"><h2 id="priceTitle">Bảng OHLCV {{ form.t }}</h2><span class="hint">Bấm tiêu đề cột có ⇅ để sắp xếp</span></div>
+  {% if rows %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="priceTable">
+    <caption class="sr-only">Bảng OHLCV {{ form.t }}</caption>
+    <thead><tr>
+      {% for key, label, numc in [("ticker","Mã",False),("date","Phiên",False),(None,"Open",True),(None,"High",True),(None,"Low",True),("close","Close",True),("volume","Volume",True),(None,"Nạp lúc",False)] %}
+      {% if key %}<th scope="col" class="sortable{{ ' num' if numc }}" aria-sort="{{ ('ascending' if form.order == 'asc' else 'descending') if form.sort == key else 'none' }}">
+        <a class="th-sort" href="{{ sort_links[key] }}">{{ label }}<span aria-hidden="true">{{ (' ▲' if form.order == 'asc' else ' ▼') if form.sort == key else ' ⇅' }}</span></a></th>
+      {% else %}<th scope="col"{{ ' class=num' if numc }}>{{ label }}</th>{% endif %}
+      {% endfor %}</tr></thead>
+    <tbody>{% for r in rows %}<tr>
+      <th scope="row">{{ r.Ticker }}</th><td>{{ r.TradeDate|dt }}</td>
+      <td class="num">{{ r.OpenPrice|num(4) }}</td><td class="num">{{ r.HighPrice|num(4) }}</td><td class="num">{{ r.LowPrice|num(4) }}</td>
+      <td class="num" data-v="{{ r.ClosePrice }}">{{ r.ClosePrice|num(4) }}</td><td class="num" data-v="{{ r.Volume }}">{{ r.Volume|num(0) }}</td>
+      <td>{{ r.LoadedAt|ts }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {{ pager(pg, "Phân trang bảng giá") }}
+  {% else %}{{ empty("Không có dòng giá cho bộ lọc này.") }}{% endif %}
+</section>
+{% endif %}
+{% endblock %}

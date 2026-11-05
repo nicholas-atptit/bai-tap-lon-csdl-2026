@@ -32,7 +32,9 @@
    * không có nến D và chưa có nến nào sau D → **SKIPPED / DATA_NOT_YET_AVAILABLE** (dữ liệu trễ hoặc chưa rõ; chạy lại sau).
 5. Nếu provider nói không có phiên nhưng `dbo.TradingDay` đã có ngày đó → **FAILED / CALENDAR_MISMATCH** (cần người xem).
 
-## 5. Kiểm tra trước khi ghi (toàn bộ universe, cửa sổ [D−10, D])
+## 5. Kiểm tra trước khi ghi (toàn bộ universe, cửa sổ [D−10, min(D+1, hôm nay)])
+
+KBS coi tham số `end` là **không bao gồm** khi ngày lịch Việt Nam đã qua ngày đó (quan sát thật 06/11/2026 00:24: `end=2026-11-05` chỉ trả tới 04/11 cho 20/30 mã → PARTIAL giả). Vì vậy worker xin tới D+1 (không vượt hôm nay) rồi **bỏ mọi nến sau D** trước khi validate (kể cả nến tạm thời của phiên đang diễn ra). Test hồi quy: `test_exclusive_end_provider_and_provisional_next_day_row`.
 
 | Quy tắc | Mã lỗi |
 |---|---|
@@ -86,3 +88,14 @@ Mỗi mã: tối đa `MARKETLAB_PROVIDER_MAX_ATTEMPTS` (3) lần, backoff 1 s �
 ```
 
 `approve` là thao tác duy nhất ghi đè giá đã chốt, đi qua `usp_InsertDailyPrice @AllowUpdate=1`, có người duyệt và ghi chú. Lưu ý: ghi đè một phần chuỗi bằng giá đã điều chỉnh sẽ trộn basis — nên tạo dataset mới nếu muốn chuyển toàn bộ sang basis mới.
+
+## 10. Kênh kích hoạt
+
+| Kênh | `ops.EodRun.TriggerKind` | Bảo vệ |
+|---|---|---|
+| `scripts\Run-MarketLab-EOD.ps1` / `python -m marketlab_app.cli eod sync` | `CLI` | quyền người dùng Windows trên máy |
+| Task Scheduler (`-IfNeeded`) | `SCHEDULER` | cài Disabled; chỉ `-Enable` sau một lần chạy tay SUCCESS |
+| Form `POST /ops/eod` của ứng dụng web | `WEB` (ops schema v2, `sql/15_ops_schema_v2.sql`) | CSRF double-submit, Origin/Sec-Fetch-Site, token `.env`, khóa 5 lần sai/10 phút, ô xác nhận cho ghi thật, một job tại một thời điểm |
+| (lịch sử) endpoint REST `POST /api/ops/eod` đã gỡ | `API` | các run cũ #32, #37, #38 vẫn giữ nguyên trong nhật ký |
+
+Không có endpoint quản trị công khai; ứng dụng chỉ bind 127.0.0.1.

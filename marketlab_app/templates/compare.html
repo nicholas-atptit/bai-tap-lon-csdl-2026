@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "macros.html" import empty, errors_box %}
+{% block title %}So sánh mô hình{% endblock %}
+{% block main %}
+<h1 class="page-title">So sánh mô hình · {{ ds.DatasetCode }}</h1>
+{% if runs %}
+<form class="filters" method="get" action="/compare" novalidate>
+  <input type="hidden" name="ds" value="{{ ds.DatasetId }}">
+  <fieldset class="runs"><legend>Chọn 2–8 run cùng dataset &amp; cùng định nghĩa mục tiêu</legend>
+    {% for r in runs %}<label><input type="checkbox" name="runs" value="{{ r.RunId }}" {% if r.RunId in form.runs %}checked{% endif %}> #{{ r.RunId }} {{ r.ModelCode }} · {{ r.TargetCode }}</label>{% endfor %}
+  </fieldset>
+  <label for="cFrom">Ngày gốc từ <input type="date" id="cFrom" name="f" value="{{ form.f }}" required></label>
+  <label for="cTo">đến <input type="date" id="cTo" name="to" value="{{ form.to }}" required></label>
+  <label for="cAsOf">as_of <input type="date" id="cAsOf" name="as_of" value="{{ form.as_of }}" required></label>
+  <div class="actions"><button type="submit" class="primary">So sánh</button></div>
+</form>
+{% endif %}
+{{ errors_box(errors) }}
+<section class="panel" aria-labelledby="cmpTitle">
+  <div class="panel-head"><h2 id="cmpTitle">Kết quả trên tập quan sát giao (StockId, OriginDate, TargetDate)</h2></div>
+  {% if not runs %}{{ empty("Không có run nào để so sánh. " ~ inference_msg) }}
+  {% elif result %}
+  <p class="caption">Dataset {{ ds.DatasetCode }} · mục tiêu {{ targets }} · ngày gốc {{ form.f }} → {{ form.to }} · as_of {{ form.as_of }} ·
+    {{ result[0].CommonObservations|num(0) }} quan sát chung cho cả {{ result|length }} run (dbo.usp_CompareModels).</p>
+  <div class="table-wrap"><table id="compareTable">
+    <caption class="sr-only">So sánh run trên tập quan sát giao</caption>
+    <thead><tr><th scope="col" class="num">Run</th><th scope="col">Mô hình</th><th scope="col" class="num">Số quan sát giao</th><th scope="col" class="num">Accuracy</th>
+      <th scope="col" class="num">Brier</th><th scope="col" class="num">Log loss</th><th scope="col">Cửa sổ gốc thực tế</th></tr></thead>
+    <tbody>{% for x in result %}<tr data-run="{{ x.RunId }}">
+      <th scope="row" class="num">{{ x.RunId }}</th><td>{{ x.ModelCode }}</td><td class="num" data-v="{{ x.CommonObservations }}">{{ x.CommonObservations|num(0) }}</td>
+      <td class="num" data-v="{{ x.Accuracy }}">{{ x.Accuracy|pct }}</td><td class="num" data-v="{{ x.BrierScore }}">{{ x.BrierScore|num(4) }}</td>
+      <td class="num" data-v="{{ x.NaturalLogLoss }}">{{ x.NaturalLogLoss|num(4) }}</td><td>{{ x.FirstOrigin|dt }} → {{ x.LastOrigin|dt }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  <p class="hint">Mô tả trên cùng tập quan sát giao; khác biệt không tự chứng minh ưu thế thống kê.</p>
+  {% elif not submitted %}{{ empty("Chọn run, khoảng ngày gốc và as_of rồi bấm So sánh. Máy chủ gọi dbo.usp_CompareModels và chỉ chấm trên các quan sát mà mọi run đều có.") }}
+  {% endif %}
+</section>
+{% endblock %}

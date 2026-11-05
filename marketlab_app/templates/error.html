@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Lỗi {{ status }}{% endblock %}
+{% block main %}
+<section class="panel" aria-labelledby="errTitle">
+  <h2 id="errTitle">Không hiển thị được trang (HTTP {{ status }})</h2>
+  <div class="state error" role="alert"><strong>{{ code }}</strong>: {{ message }}
+    {% if hint %}<div class="hint">{{ hint }}</div>{% endif %}</div>
+  <p><a class="btn" href="{{ request.url }}">Thử lại</a> <a class="btn" href="/">Về Tổng quan</a></p>
+</section>
+{% endblock %}

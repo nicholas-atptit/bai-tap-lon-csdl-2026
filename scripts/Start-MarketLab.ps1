@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Start the MarketLab VN30 API + web UI on http://127.0.0.1:<port> (loopback only).
+  Start the MarketLab VN30 web application (server-rendered UI) on http://127.0.0.1:<port> (loopback only).
 .DESCRIPTION
   Checks .venv, dependencies, .env, ODBC driver, SQL Server/schema/mode (cli check) and that the port is free,
   then starts uvicorn and prints the URLs. -Mode/-Database override .env for THIS process only.
@@ -25,7 +25,7 @@ $py = Join-Path $Root '.venv\Scripts\python.exe'
 
 if (-not (Test-Path $py)) { throw ".venv missing. Run first: powershell -ExecutionPolicy Bypass -File scripts\Setup-MarketLab.ps1" }
 $ErrorActionPreference = 'Continue'
-& $py -c "import fastapi, uvicorn, pyodbc, swagger_ui" 2>$null
+& $py -c "import fastapi, uvicorn, pyodbc, jinja2" 2>$null
 if ($LASTEXITCODE -ne 0) { throw "Dependencies missing in .venv. Run: uv sync --frozen" }
 $ErrorActionPreference = 'Stop'
 if (-not (Test-Path (Join-Path $Root '.env'))) { Write-Warning ".env not found: using defaults (DEMO_OFFLINE, MarketLabVN30_Demo on '.'). Run scripts\Setup-MarketLab.ps1 to create it." }
@@ -56,13 +56,12 @@ $url = "http://127.0.0.1:$p"
 Write-Host ""
 Write-Host "MarketLab VN30 ($($cfg.mode), database $($cfg.sql_database))" -ForegroundColor Green
 Write-Host "  Web UI : $url/"
-Write-Host "  Swagger: $url/api/docs"
-Write-Host "  Health : $url/api/health   Ready: $url/api/ready"
+Write-Host "  Pages  : $url/  $url/market  $url/forecast  $url/compare  $url/ops   (liveness: $url/health)"
 Write-Host "  Bound to 127.0.0.1 only (not reachable from the LAN)."
 
 if ($Background) {
     New-Item -ItemType Directory -Force (Join-Path $Root 'var\logs') | Out-Null
-    $log = Join-Path $Root ("var\logs\api_{0}.log" -f (Get-Date -Format yyyyMMdd))
+    $log = Join-Path $Root ("var\logs\web_{0}.log" -f (Get-Date -Format yyyyMMdd))
     # No stream redirection: the child must not inherit this console's handles. The server logs to var\logs itself.
     $proc = Start-Process -FilePath $py -ArgumentList @('-X','utf8','-m','marketlab_app.cli','serve','--port',"$p") -WorkingDirectory $Root `
         -WindowStyle Hidden -PassThru
@@ -70,7 +69,7 @@ if ($Background) {
     $ok = $false
     for ($i = 0; $i -lt 40; $i++) {
         Start-Sleep -Milliseconds 500
-        try { if ((Invoke-RestMethod "$url/api/health" -TimeoutSec 2).status -eq 'ok') { $ok = $true; break } } catch { }
+        try { if ((Invoke-WebRequest "$url/health" -TimeoutSec 2 -UseBasicParsing).Content -like 'ok*') { $ok = $true; break } } catch { }
     }
     if (-not $ok) { throw "Server did not become healthy; see $log" }
     Write-Host "  Running in background, PID $($proc.Id). Stop: scripts\Stop-MarketLab.ps1 -Port $p"

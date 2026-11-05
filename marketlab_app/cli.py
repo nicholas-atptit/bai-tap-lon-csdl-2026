@@ -189,8 +189,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_check(settings)
     if args.cmd == "serve":
         import uvicorn
-        from .api import create_app
-        setup_logging(settings, "api")
+        from .web_app import create_app
+        setup_logging(settings, "web")
         # log_config=None: uvicorn loggers propagate to the root logger -> var/logs/api_<date>.log (+ stderr).
         # Request lines contain path + query only; the ops token travels in a header and is never logged.
         uvicorn.run(create_app(settings), host=settings.host, port=args.port or settings.port, log_level="info",

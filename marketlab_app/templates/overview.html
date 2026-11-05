@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge, card, empty %}
+{% block title %}Tổng quan{% endblock %}
+{% block main %}
+<h1 class="page-title">Tổng quan dataset {{ ds.DatasetCode }}</h1>
+<div class="grid cards">
+  {{ card("Giá mới nhất trong DB", ds.LastPriceDate|dt, fresh.message, badge(fresh.status), "last_price_date") }}
+  {{ card("Số mã có giá", ds.StocksWithPrices|num(0), ds.TradingDays|num(0) ~ " phiên lịch · " ~ ds.FirstTradingDay|dt ~ " → " ~ ds.LastTradingDay|dt, None, "stocks_with_prices") }}
+  {{ card("Số dòng giá (dbo.DailyPrice)", ds.PriceRows|num(0), "ObservedThrough " ~ ds.ObservedThrough|dt, None, "price_rows") }}
+  {% if eligible is none %}
+    {{ card("Dự báo đủ điều kiện", "—", "Dataset chưa có ModelRun: chưa cấu hình mô hình tạo dự báo, không có gì để chấm.", None, "eligible_predictions") }}
+  {% else %}
+    {{ card("Dự báo đủ điều kiện", eligible|num(0), "trên " ~ ds.Predictions|num(0) ~ " dự báo · " ~ ds.ModelRuns|num(0) ~ " run · as_of " ~ as_of, None, "eligible_predictions") }}
+  {% endif %}
+  {% if eod_status %}
+    {% set lr = eod_status.last_run %}
+    {{ card("Phiên đồng bộ thành công gần nhất", eod_status.last_successful_trade_date|dt,
+            ("Lần chạy gần nhất: #" ~ lr.EodRunId ~ " · " ~ lr.Status ~ (" (dry run)" if lr.IsDryRun else "") ~ " · phiên " ~ lr.SessionDate|dt) if lr else "Chưa có lần chạy",
+            badge("PENDING_REVIEW", "warning", eod_status.pending_reconciliation ~ " giá chờ đối soát") if eod_status.pending_reconciliation else None, "last_success") }}
+  {% else %}
+    {{ card("Đồng bộ EOD", "Không áp dụng", eod.reason) }}
+  {% endif %}
+</div>
+
+<section class="panel" aria-labelledby="provTitle">
+  <div class="panel-head"><h2 id="provTitle">Nguồn, đơn vị &amp; giới hạn của dataset</h2></div>
+  <dl class="facts">
+    <dt>Phạm vi dữ liệu</dt><dd>{{ scope }}</dd>
+    <dt>Dataset</dt><dd>{{ ds.DatasetCode }} ({{ ds.DataKind }})</dd>
+    <dt>Thị trường</dt><dd>{{ ds.MarketCode }} · {{ ds.CurrencyCode }}</dd>
+    <dt>Price basis</dt><dd>{{ ds.PriceBasis }}: giá đóng cửa nguồn như được lưu; không phải giá điều chỉnh tổng lợi suất</dd>
+    <dt>Đơn vị giá</dt><dd>{{ ds.PriceUnit }}</dd>
+    <dt>Nguồn / lineage</dt><dd>{{ ds.ProvenanceNote }}</dd>
+    <dt>Manifest</dt><dd>{{ ds.ManifestPath }}</dd>
+    <dt>Tính thời gian</dt><dd>EOD (cuối phiên), không phải realtime. Phiên ngày làm việc dự kiến gần nhất: {{ fresh.expected }} (không tính nghỉ lễ).</dd>
+  </dl>
+</section>
+
+<section class="panel" aria-labelledby="latestTitle">
+  <div class="panel-head"><h2 id="latestTitle">Giá gần nhất theo mã</h2>
+    <span class="hint">{{ ds.PriceBasis }} · EOD, không realtime · ObservedThrough {{ ds.ObservedThrough|dt }}</span></div>
+  {% if latest %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="latestTable">
+    <caption class="sr-only">Giá gần nhất của từng mã (dbo.vw_LatestStockPrice)</caption>
+    <thead><tr><th scope="col">Mã</th><th scope="col">Phiên</th><th scope="col" class="num">Close</th><th scope="col">Phiên trước</th>
+      <th scope="col" class="num">Thay đổi Close nguồn</th><th scope="col" class="num">Volume</th></tr></thead>
+    <tbody>{% for r in latest %}<tr data-ticker="{{ r.Ticker }}">
+      <th scope="row"><a href="/market?{{ dsq }}&amp;t={{ r.Ticker }}">{{ r.Ticker }}</a></th><td>{{ r.TradeDate|dt }}</td>
+      <td class="num" data-v="{{ r.ClosePrice }}">{{ r.ClosePrice|num(4) }}</td><td>{{ r.PreviousDate|dt }}</td>
+      <td class="num">{% if r.SourceCloseChangePct is none %}—{% else %}{{ r.SourceCloseChangePct|num(2) }}%{% endif %}</td>
+      <td class="num" data-v="{{ r.Volume }}">{{ r.Volume|num(0) }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}{{ empty("Dataset chưa có giá nào.") }}{% endif %}
+</section>
+{% endblock %}

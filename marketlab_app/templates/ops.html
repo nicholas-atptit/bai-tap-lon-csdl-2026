@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge, card, empty, pager %}
+{% block title %}Vận hành EOD{% endblock %}
+{% block main %}
+<h1 class="page-title">Vận hành dữ liệu cuối phiên · {{ ds.DatasetCode }}</h1>
+{% if eod.enabled and last %}
+<div class="grid cards">
+  {% set lr = last.last_run %}
+  {{ card("Ngày yêu cầu gần nhất", last.last_requested_date|dt, ("run #" ~ lr.EodRunId ~ (" · " ~ lr.ErrorCode if lr.ErrorCode else "") ~ (" · dry run" if lr.IsDryRun else "")) if lr else "chưa có run", badge(lr.Status) if lr else None, "last_requested") }}
+  {{ card("Phiên đồng bộ thành công gần nhất", last.last_successful_trade_date|dt, "Status = SUCCESS (không tính dry run)", None, "last_success") }}
+  {{ card("Dataset ObservedThrough", ds.ObservedThrough|dt, "Giá mới nhất trong DB: " ~ last_price_date|dt, None, "observed_through") }}
+  {{ card("Nến provider mới nhất đã thấy", last.last_provider_candle_date|dt, "Hôm nay (VN): " ~ today_vn, None, "provider_last") }}
+  {{ card("Giá đã chốt chờ đối soát", last.pending_reconciliation|num(0), "nguồn thay đổi giá đã lưu (KBS điều chỉnh hồi tố); không tự ghi đè",
+          badge("PENDING_REVIEW") if last.pending_reconciliation else badge("SUCCESS", "good", "Không có"), "pending_recon") }}
+</div>
+{% else %}
+<div class="grid cards">{{ card("Nhật ký EOD", "Không áp dụng", eod.reason) }}</div>
+{% endif %}
+
+<section class="panel" aria-labelledby="opsActTitle">
+  <div class="panel-head"><h2 id="opsActTitle">Đồng bộ một phiên (xác thực token, chống CSRF, có xác nhận)</h2></div>
+  {% if eod.enabled %}
+  <p class="caption" id="opsScope">Phạm vi ghi: database {{ database }} · dataset {{ ds.DatasetCode }} · nguồn {{ eod.config[0].SourceCode }} ·
+    universe {{ eod.config[0].IndexCode }} snapshot {{ eod.config[0].UniverseAsOf }} (không phải thành phần hiện hành). Dry run kiểm tra trong SQL Server rồi ROLLBACK.</p>
+  {% if action_error %}<div class="state error" role="alert" id="actionError">{{ action_error }}</div>{% endif %}
+  <form class="filters" method="post" action="/ops/eod" autocomplete="off" id="opsForm" data-database="{{ database }}" data-dataset="{{ ds.DatasetCode }}">
+    <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="ds" value="{{ ds.DatasetId }}">
+    <label for="oDate">Ngày phiên <input type="date" id="oDate" name="session_date" value="{{ form_date }}" required></label>
+    <label for="oToken">Mã vận hành (token) <input type="password" id="oToken" name="ops_token" autocomplete="off" placeholder="MARKETLAB_OPS_TOKEN" aria-describedby="tokenHelp" required></label>
+    <label class="check" for="oConfirm"><input type="checkbox" id="oConfirm" name="confirm_sync" value="yes"> Tôi xác nhận ghi thật vào {{ database }} (chỉ cần cho Sync)</label>
+    <div class="actions"><button type="submit" name="action" value="DRY_RUN" id="oDry">Dry run (không ghi)</button>
+      <button type="submit" name="action" value="SYNC" id="oSync" class="danger">Sync selected session</button></div>
+    <p class="hint" id="tokenHelp">Token đọc từ file .env trên máy chủ; ô mật khẩu không được lưu và luôn trống khi trang tải lại. Mỗi job chạy độc lập; chạy lại cùng dữ liệu không thêm dòng.</p>
+  </form>
+  {% else %}
+  <p class="caption" id="opsScope">Đồng bộ bị tắt ở chế độ {{ scope }}: {{ eod.reason }}.</p>
+  <form class="filters" aria-disabled="true"><button type="button" id="oDry" disabled>Dry run (không ghi)</button>
+    <button type="button" id="oSync" class="danger" disabled>Sync selected session</button></form>
+  {% endif %}
+</section>
+
+<section class="panel" aria-labelledby="opsLogTitle">
+  <div class="panel-head"><h2 id="opsLogTitle">Nhật ký EOD</h2>
+    {% if eod.enabled %}<form method="get" action="/ops" class="inline-group"><input type="hidden" name="ds" value="{{ ds.DatasetId }}">
+      <label class="inline" for="oStatus">Trạng thái <select id="oStatus" name="status">
+        {% for s in ["", "SUCCESS", "DRY_RUN_OK", "NO_SESSION", "SKIPPED", "PARTIAL", "FAILED"] %}<option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s or "Tất cả" }}</option>{% endfor %}
+      </select></label><button type="submit">Lọc</button><a class="btn" href="/ops?{{ dsq }}">Làm mới</a></form>{% endif %}</div>
+  {% if not eod.enabled %}{{ empty(scope ~ ": database này không được đồng bộ EOD nên không có nhật ký.") }}
+  {% elif runs %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="opsRuns">
+    <caption class="sr-only">Nhật ký EOD</caption>
+    <thead><tr><th scope="col" class="num">#</th><th scope="col">Phiên</th><th scope="col">Trạng thái</th><th scope="col">Mã</th><th scope="col">Kích hoạt</th>
+      <th scope="col" class="num">Yêu cầu</th><th scope="col" class="num">Nhận</th><th scope="col" class="num">Thêm</th><th scope="col" class="num">Không đổi</th>
+      <th scope="col" class="num">Từ chối</th><th scope="col">Bắt đầu</th><th scope="col" class="num">Thời gian</th></tr></thead>
+    <tbody>{% for x in runs %}<tr data-run="{{ x.EodRunId }}">
+      <th scope="row" class="num"><a href="/ops?{{ dsq }}&amp;run={{ x.EodRunId }}{% if status_filter %}&amp;status={{ status_filter }}{% endif %}#runDetail">{{ x.EodRunId }}</a></th>
+      <td>{{ x.SessionDate|dt }}</td><td>{{ badge(x.Status) }}{% if x.IsDryRun %} dry run{% endif %}</td><td>{{ x.ErrorCode or "—" }}</td><td>{{ x.TriggerKind }}</td>
+      <td class="num">{{ x.RequestedCount|num(0) }}</td><td class="num">{{ x.ReceivedCount|num(0) }}</td><td class="num">{{ x.InsertedCount|num(0) }}</td>
+      <td class="num">{{ x.UnchangedCount|num(0) }}</td><td class="num">{{ x.RejectedCount|num(0) }}</td><td>{{ x.StartedAtUtc|ts }}</td><td class="num">{{ x.DurationMs|ms }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {{ pager(ops_pager, "Phân trang nhật ký") }}
+  {% else %}{{ empty("Không có lần chạy nào khớp bộ lọc.") }}{% endif %}
+
+  {% if detail %}{% set pm = detail.ProviderMeta or {} %}
+  <div id="runDetail" class="run-detail">
+    <h3>Run #{{ detail.EodRunId }} · phiên {{ detail.SessionDate|dt }} · {{ badge(detail.Status) }}{% if detail.ErrorCode %} {{ detail.ErrorCode }}{% endif %}</h3>
+    <p>{{ detail.Message }}</p>
+    <p class="hint">Kích hoạt {{ detail.TriggerKind }}{% if detail.IsDryRun %} (dry run){% endif %} · bắt đầu {{ detail.StartedAtUtc|ts }} · kết thúc {{ detail.FinishedAtUtc|ts }} ·
+      ObservedThrough {{ detail.ObservedThroughBefore|dt }} → {{ detail.ObservedThroughAfter|dt }} · nguồn {{ (pm.provider or {}).package or "—" }} {{ (pm.provider or {}).package_version or "" }}
+      ({{ (pm.provider or {}).source or "—" }}) · lịch: {{ (pm.calendar or {}).decision or "—" }}</p>
+    {% if detail['items'] %}
+    <div class="table-wrap"><table><caption class="sr-only">Kết quả từng mã</caption>
+      <thead><tr><th scope="col">Mã</th><th scope="col">Kết quả</th><th scope="col">Chi tiết</th></tr></thead>
+      <tbody>{% for i in detail['items'] %}<tr><th scope="row">{{ i.Ticker }}</th><td>{{ badge(i.Outcome) }}</td><td>{{ i.Detail or "—" }}</td></tr>{% endfor %}</tbody></table></div>
+    {% else %}{{ empty("Không có chi tiết theo mã (run dừng trước khi tải dữ liệu: cuối tuần, ngày tương lai, lỗi cấu hình…).") }}{% endif %}
+    {% if detail.evaluation %}
+    <div class="table-wrap"><table><caption class="sr-only">Đánh giá lại sau EOD</caption>
+      <thead><tr><th scope="col">Đánh giá lại sau EOD: run</th><th scope="col">as_of</th><th scope="col" class="num">Đã chấm</th><th scope="col" class="num">Accuracy</th><th scope="col" class="num">Brier</th></tr></thead>
+      <tbody>{% for e in detail.evaluation %}<tr><th scope="row">{{ e.RunCode }}</th><td>{{ e.AsOfDate|dt }}</td><td class="num">{{ e.EligibleRows|num(0) }}</td>
+        <td class="num">{{ e.Accuracy|pct }}</td><td class="num">{{ e.BrierScore|num(4) }}</td></tr>{% endfor %}</tbody></table></div>
+    {% else %}<p class="hint">Không có snapshot đánh giá: dataset không có ModelRun hoặc run không SUCCESS.</p>{% endif %}
+  </div>
+  {% endif %}
+</section>
+
+<section class="panel" aria-labelledby="calTitle">
+  <div class="panel-head"><h2 id="calTitle">Kiểm tra lịch phiên / thiếu dòng giá</h2></div>
+  {% if calendar %}
+  <div class="table-wrap"><table id="calendarCheck"><caption class="sr-only">Kiểm tra lịch phiên</caption>
+    <thead><tr><th scope="col">Phiên</th><th scope="col" class="num">Dòng giá</th><th scope="col" class="num">Kỳ vọng</th><th scope="col" class="num">Thiếu</th><th scope="col">Sau ObservedThrough</th></tr></thead>
+    <tbody>{% for x in calendar %}<tr><th scope="row">{{ x.TradeDate|dt }}</th><td class="num">{{ x.PriceRows|num(0) }}</td><td class="num">{{ x.ExpectedRows|num(0) }}</td>
+      <td class="num">{% if x.MissingRows > 0 %}{{ badge("x", "info" if x.AfterObservedThrough else "serious", x.MissingRows ~ " thiếu") }}{% else %}0{% endif %}</td>
+      <td>{{ "có (lịch tương lai)" if x.AfterObservedThrough else "không" }}</td></tr>{% endfor %}</tbody></table></div>
+  <p class="hint">Universe kỳ vọng: {{ universe_source }}. Thiếu dòng chỉ được báo cáo, không tự điền.</p>
+  {% else %}{{ empty("Dataset chưa có lịch phiên.") }}{% endif %}
+</section>
+
+{% if eod.enabled %}
+<section class="panel" aria-labelledby="reconTitle">
+  <div class="panel-head"><h2 id="reconTitle">Đối soát giá đã chốt (cần người duyệt)</h2></div>
+  {% if recon %}
+  <div class="table-wrap"><table id="reconTable"><caption class="sr-only">Đối soát</caption>
+    <thead><tr><th scope="col" class="num">#</th><th scope="col">Mã</th><th scope="col">Phiên</th><th scope="col" class="num">Close đã lưu</th><th scope="col" class="num">Close nguồn mới</th><th scope="col">Phát hiện bởi</th><th scope="col">Trạng thái</th></tr></thead>
+    <tbody>{% for x in recon %}<tr><th scope="row" class="num">{{ x.ReconId }}</th><td>{{ x.Ticker }}</td><td>{{ x.TradeDate|dt }}</td><td class="num">{{ x.StoredClose|num(4) }}</td>
+      <td class="num">{{ x.ProviderClose|num(4) }}</td><td>{{ x.DetectedBy }}</td><td>{{ badge(x.Status) }}</td></tr>{% endfor %}</tbody></table></div>
+  {% else %}{{ empty("Không có giá đã chốt nào bị nguồn thay đổi.") }}{% endif %}
+  <p class="hint">Duyệt bằng CLI: python -m marketlab_app.cli eod reconcile approve|reject --id N --reviewer … --note … (không tự cập nhật giá lịch sử).</p>
+</section>
+{% endif %}
+{% endblock %}

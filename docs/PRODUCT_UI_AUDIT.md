@@ -30,3 +30,36 @@ Kết quả tự động "before": 40 màn hình; **0 console error, 0 request l
 | UI-17 | P2 | mọi trạng thái lỗi | Thông báo lỗi không có cách thử lại | — | Nút "Thử lại" trong error state | E2E retry khi API lỗi |
 
 Không phát hiện: console error, request 4xx/5xx ngoài dự kiến, tràn ngang trang, lộ token trong HTML/JS/network URL. Lỗi SQL/trigger: không phát hiện; không cần migration mới.
+
+## Issue phát hiện thêm trong lúc polish (trước khi đổi kiến trúc)
+
+| ID | Mức | Màn hình | Tái hiện | Nguyên nhân | Sửa | Test |
+|---|---|---|---|---|---|---|
+| UI-18 | P2 | tải trang đầu ở instance REAL | 2 lần quan sát `/api/stocks` 3,6–4,2 s ngay sau khi khởi động lại | Không xác định: 160 lần gọi HTTP + 60 lần kết nối trực tiếp + thử sau 75 s rảnh đều < 0,1 s | Thêm `Server-Timing` vào mọi response và log `slow request` khi > 1 s để bắt lại nếu tái diễn | `test_web.py::test_chart_breaks…` kiểm tra header `Server-Timing`. **Nguyên nhân: NOT DETERMINED** |
+| EOD-01 | **P1** | dry run qua UI trên dữ liệu thật (06/11 00:24) | Phiên 05/11 báo `PARTIAL/MISSING_TICKERS 20/30` dù 22:56 hôm trước đủ 30/30 | Sau nửa đêm giờ VN, KBS coi `end` là **không bao gồm**; pipeline xin cửa sổ `[D−10, D]` | Xin `[D−10, min(D+1, hôm nay)]` rồi bỏ nến sau D trước khi validate | `test_exclusive_end_provider_and_provisional_next_day_row` — đã chứng minh FAIL khi bỏ bản sửa, PASS khi có. Run #38 (dry run thật) sau sửa: DRY_RUN_OK 30/30 |
+| UI-19 | P2 | mọi trang | Dán deep link khác (chỉ đổi `#…`) vào cùng tab không áp dụng | SPA không nghe `hashchange` | (đã sửa ở bản SPA; bản cuối dùng query string phía server nên vấn đề không còn tồn tại) | `test_demo_journey_end_to_end` (reload giữ bộ lọc) |
+
+## Thay đổi kiến trúc theo yêu cầu: bỏ API Gateway / REST / Swagger
+
+Commit polish `c376eec` là bản cuối của kiến trúc "SPA + REST JSON + Swagger". Theo yêu cầu mới của chủ dự án, kiến trúc cuối là:
+
+```text
+Trình duyệt ──HTTP (HTML)──► Ứng dụng web Python (FastAPI làm framework ASGI + Jinja2) ──pyodbc──► SQL Server
+EOD Worker (CLI / Task Scheduler / form web có CSRF) ──► SQL Server (DB nghiệp vụ) + DB Ops
+```
+
+| Hạng mục | Trước | Sau |
+|---|---|---|
+| Lấy dữ liệu cho giao diện | Trình duyệt gọi 19 endpoint JSON `/api/*` | Máy chủ chạy truy vấn (cùng `queries.py`) và trả HTML hoàn chỉnh; CSP `connect-src 'none'` — trình duyệt không thể tự gọi dữ liệu |
+| Swagger/OpenAPI | `/api/docs`, `/api/openapi.json` | Gỡ bỏ (404); `openapi_url=None`; gỡ dependency `swagger-ui-py` (và `pyyaml`) |
+| Ghi EOD thủ công | `POST /api/ops/eod` JSON + header token | `POST /ops/eod` form HTML: CSRF double-submit (cookie `ml_csrf` HttpOnly SameSite=Strict + trường ẩn), token trong ô mật khẩu, ô xác nhận bắt buộc cho SYNC, kiểm Origin/Sec-Fetch-Site, khóa sau 5 lần sai, một job tại một thời điểm; kết quả qua trang `/ops/jobs/<id>` tự làm mới |
+| Trạng thái URL | hash `#tab=…` | query string thật (`/market?ds=1&t=ACB&f=…`) — refresh/bookmark ổn định, chạy cả khi tắt JavaScript (trừ biểu đồ) |
+| Liveness | `/api/health` JSON | `/health` text (chỉ để script khởi động kiểm tra; không phải API dữ liệu) |
+| Nhật ký | `TriggerKind='API'` | `TriggerKind='WEB'` — cần **ops schema v2** (`sql/15_ops_schema_v2.sql`, có rollback); đã backup DB ops (`MarketLabVN30_Ops_pre_v2_20261106.bak`, RESTORE VERIFYONLY hợp lệ) trước khi áp |
+| Giữ nguyên | — | 13 bảng, procedure/function/view/trigger, `queries.py`, `db.py`, toàn bộ `eod/*`, CLI, script PowerShell, Task Scheduler |
+
+Bỏ đi: `marketlab_app/api.py`, `web/index.html`, `web/app.js`, `tests/product/test_api.py`, `scripts/verify_api_vs_sql.py`, `scripts/ui_api_sql_journeys.py`, ảnh SPA cũ. Thêm: `marketlab_app/web_app.py`, `templates/*.html`, `web/enhance.js` (chỉ vẽ biểu đồ từ JSON nhúng, tự gửi form chọn dataset, hộp xác nhận), `tests/product/test_web.py`, `scripts/verify_web_vs_sql.py`.
+
+Lỗi phát hiện khi đổi kiến trúc: với `Referrer-Policy: no-referrer`, Chromium gửi `Origin: null` cho form POST cùng origin → bị chặn 403. Sửa bằng `Referrer-Policy: same-origin` (không nới kiểm tra Origin). Test: `test_real_mode_ops_form_and_job_page`.
+
+Audit lại sau đổi kiến trúc (`scripts/ui_audit.py --phase ssr`): 40/40 màn hình (2 chế độ × 4 viewport × 5 trang) không issue, 0 console error, 0 request lỗi, 0 lần trình duyệt tự lấy dữ liệu, `/api/docs`, `/api/openapi.json`, `/docs`, `/openapi.json` đều 404. Kết quả: `tests/product_evidence/ui_audit/ssr/audit.json`.

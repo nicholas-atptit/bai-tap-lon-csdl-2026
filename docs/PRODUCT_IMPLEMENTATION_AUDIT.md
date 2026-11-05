@@ -58,3 +58,7 @@ Những ràng buộc quan trọng phát hiện khi audit:
 | vnstock không có trên PyPI | Adapter subprocess + cấu hình interpreter |
 | Universe | Chỉ có snapshot 06/2026 (file HOSE period 1/2026, sha256 `a961eeae…`). Dùng snapshot này **làm universe cố định có ghi giới hạn**, không suy ra thành phần hiện tại |
 | Gate công bố allowlist | Ghi nhận FAIL dự kiến; cần người duyệt cập nhật allowlist khi merge |
+
+## 7. Cập nhật kiến trúc cuối (2026-11-06)
+
+Theo yêu cầu của chủ dự án, lớp API Gateway/REST JSON và Swagger đã được gỡ: giao diện là ứng dụng web Python render phía máy chủ (FastAPI + Jinja2) đọc SQL Server qua cùng lớp truy vấn `queries.py`; thao tác EOD thủ công là form có CSRF + token. Chi tiết, lý do và bằng chứng: [PRODUCT_UI_AUDIT.md](PRODUCT_UI_AUDIT.md), [PRODUCT_UI_QA.md](PRODUCT_UI_QA.md). Các nhận định môi trường ở trên (mục 1–6) vẫn giữ nguyên.

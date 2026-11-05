@@ -107,7 +107,8 @@ def apply_eod_extension(settings: Settings, name: str, workdir: Path) -> str:
 
 def deploy_ops_db(settings: Settings, name: str, workdir: Path) -> str:
     create_database(settings, name, "OPS")
-    return run_sqlcmd(settings, ROOT / "sql" / "14_ops_database.sql", name, log=workdir / f"ops_schema_{name}.log")
+    out = run_sqlcmd(settings, ROOT / "sql" / "14_ops_database.sql", name, log=workdir / f"ops_schema_{name}.log")
+    return out + run_sqlcmd(settings, ROOT / "sql" / "15_ops_schema_v2.sql", name, log=workdir / f"ops_schema_v2_{name}.log")
 
 
 def read_universe_csv(path: Path) -> tuple[list[dict], str]:

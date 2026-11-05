@@ -1,0 +1,81 @@
+{
+ "checked_at": "2026-11-06T00:46:43+07:00",
+ "base_url": "http://127.0.0.1:8000",
+ "mode": "DEMO_OFFLINE",
+ "database": "MarketLabVN30_Demo",
+ "passed": true,
+ "checks": [
+  {
+   "check": "mode label",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "overview: price rows",
+   "ui": "280",
+   "sql": "280",
+   "match": true
+  },
+  {
+   "check": "overview: stocks with prices",
+   "ui": "8",
+   "sql": "8",
+   "match": true
+  },
+  {
+   "check": "overview: last price date",
+   "ui": "2025-02-19",
+   "sql": "2025-02-19",
+   "match": true
+  },
+  {
+   "check": "overview: vw_LatestStockPrice (hash of close, volume)",
+   "ui": "b6ce77c5d1ba23d4",
+   "sql": "b6ce77c5d1ba23d4",
+   "match": true
+  },
+  {
+   "check": "market DEMO01: first page rows (hash)",
+   "ui": "3328ab2078f6db89",
+   "sql": "3328ab2078f6db89",
+   "match": true
+  },
+  {
+   "check": "market DEMO01: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO01: chart sessions with price",
+   "ui": 35,
+   "sql": 35,
+   "match": true
+  },
+  {
+   "check": "forecast: eligible rows per run at 2026-11-06",
+   "ui": [
+    [
+     1,
+     128
+    ],
+    [
+     2,
+     128
+    ]
+   ],
+   "sql": [
+    [
+     1,
+     128
+    ],
+    [
+     2,
+     128
+    ]
+   ],
+   "match": true
+  }
+ ]
+}

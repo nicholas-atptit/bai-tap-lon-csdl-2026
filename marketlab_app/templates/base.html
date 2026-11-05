@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% block head %}{% endblock %}
+<title>{% block title %}MarketLab VN30{% endblock %} · MarketLab VN30</title>
+<link rel="icon" href="/favicon.ico" type="image/svg+xml">
+<link rel="stylesheet" href="/static/styles.css">
+<script type="module" src="/static/enhance.js"></script>
+</head>
+<body data-scope="{{ scope or '' }}" data-page="{{ page or '' }}">
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<div class="nav-progress" id="navProgress" role="status" aria-live="polite" hidden>Đang tải trang…</div>
+<header class="topbar">
+  <a class="brand" href="/{% if ds is defined %}?{{ dsq }}{% endif %}">
+    <img class="logo" src="/favicon.ico" alt="" width="36" height="36">
+    <span><span class="brand-name">MarketLab VN30</span>
+      <span class="subtitle">Dữ liệu cuối phiên (EOD) &amp; đánh giá dự báo đã có · ứng dụng web cục bộ</span></span>
+  </a>
+  {% if scope %}<div class="scope {{ scope|lower|replace('_','-') }}" id="modeBadge" role="status">{{ scope_label }}</div>{% endif %}
+  {% if datasets is defined %}
+  <form class="dataset-picker" method="get" action="" id="datasetForm">
+    <label for="datasetSelect">Dataset</label>
+    <div class="inline-group">
+      <select id="datasetSelect" name="ds">
+        {% for d in datasets %}<option value="{{ d.DatasetId }}" {% if d.DatasetId == ds.DatasetId %}selected{% endif %}>{{ d.DatasetCode }} ({{ d.DataKind }})</option>{% endfor %}
+      </select>
+      <noscript><button type="submit">Chọn</button></noscript>
+    </div>
+  </form>
+  {% endif %}
+  {% if peers %}<nav class="peers" aria-label="Chuyển chế độ dữ liệu"><span>Chuyển chế độ:</span>
+    {% for p in peers %}<a href="{{ p.url }}/">{{ p.label }}</a>{% endfor %}</nav>{% endif %}
+</header>
+<p class="disclaimer">{{ disclaimer }}</p>
+{% if page %}
+<nav class="tabs-wrap" aria-label="Khu vực chức năng">
+  <ul class="tabs">
+    {% for key, href, label in [("overview", "/", "Tổng quan"), ("market", "/market", "Giá & biểu đồ"), ("forecast", "/forecast", "Dự báo & hiệu năng"), ("compare", "/compare", "So sánh mô hình"), ("ops", "/ops", "Vận hành EOD")] %}
+    <li><a href="{{ href }}?{{ dsq }}" data-tab="{{ key }}" {% if page == key %}aria-current="page"{% endif %}>{{ label }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+<main id="main" tabindex="-1">
+{% block main %}{% endblock %}
+</main>
+<footer class="footer">
+  {% if scope %}{{ scope }} · database {{ database }} trên SQL Server {{ server_label }} · ngày VN {{ today_vn }} · v{{ version }} ·
+  trang được dựng trên máy chủ Python từ SQL Server; trình duyệt không kết nối SQL Server.{% endif %}
+</footer>
+{% block body_end %}{% endblock %}
+</body>
+</html>
