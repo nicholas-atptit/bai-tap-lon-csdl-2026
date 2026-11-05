@@ -1,0 +1,72 @@
+{
+ "checked_at": "2026-11-06T00:32:08+07:00",
+ "base_url": "http://127.0.0.1:8000",
+ "database": "MarketLabVN30_Demo (SYNTHETIC)",
+ "passed": true,
+ "journeys": [
+  {
+   "journey": "J1 overview eligible predictions",
+   "scope": "as_of=2026-11-06",
+   "ui": 256.0,
+   "api": 256,
+   "sql": 256,
+   "match": true
+  },
+  {
+   "journey": "J2 prices DEMO03 2025-02-01..14 row count",
+   "scope": "ticker+date filter",
+   "ui": 10,
+   "api": 10,
+   "sql": 10,
+   "match": true
+  },
+  {
+   "journey": "J3 latest close in window (table first row)",
+   "scope": "2025-02-14",
+   "ui": 29.2475,
+   "api": 29.2475,
+   "sql": 29.2475,
+   "match": true
+  },
+  {
+   "journey": "J4 chart volume bars in window",
+   "scope": "2025-02-01..14",
+   "ui": 10,
+   "api": 10,
+   "sql": 10,
+   "match": true
+  },
+  {
+   "journey": "J5 run 1 accuracy as_of 2026-07-01",
+   "scope": "fn_EligiblePredictions vs usp_GetModelPerformance",
+   "ui": 0.5469,
+   "api": 0.546875,
+   "sql": 0.546875,
+   "match": true
+  },
+  {
+   "journey": "J6 run 1 eligible rows as_of 2026-07-01",
+   "scope": "",
+   "ui": 128.0,
+   "api": 128,
+   "sql": 128,
+   "match": true
+  },
+  {
+   "journey": "J7 compare runs 1,2 common observations (run 2)",
+   "scope": "usp_CompareModels",
+   "ui": 128.0,
+   "api": 128,
+   "sql": 128,
+   "match": true
+  },
+  {
+   "journey": "J8 compare run 2 accuracy",
+   "scope": "usp_CompareModels",
+   "ui": 0.2188,
+   "api": 0.21875,
+   "sql": 0.21875,
+   "match": true
+  }
+ ]
+}

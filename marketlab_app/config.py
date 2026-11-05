@@ -57,6 +57,7 @@ class Settings:
     eod_cutoff: str = "16:10"
     max_backfill_sessions: int = 40
     log_dir: Path = ROOT / "var" / "logs"
+    peers: tuple = ()          # ((label, url), ...) loopback links to the other mode instance(s)
 
     @property
     def is_demo(self) -> bool:
@@ -129,6 +130,14 @@ def load_settings(env: dict[str, str] | None = None, dotenv: Path | None = None)
         raise ConfigError("MARKETLAB_EOD_CUTOFF must be HH:MM")
     yes_no = lambda k, d: g(k, d).lower() if g(k, d).lower() in ("yes", "no", "strict", "optional", "mandatory") else d  # noqa: E731
     log_dir = g("MARKETLAB_LOG_DIR")
+    peers = []
+    for item in [x for x in g("MARKETLAB_PEERS").split(",") if x.strip()]:
+        if "=" not in item:
+            raise ConfigError("MARKETLAB_PEERS must be LABEL=http://127.0.0.1:PORT,...")
+        label, url = (x.strip() for x in item.split("=", 1))
+        if not re.fullmatch(r"[A-Z_]{3,30}", label) or not re.fullmatch(r"http://(127\.0\.0\.1|localhost):\d{4,5}/?", url):
+            raise ConfigError("MARKETLAB_PEERS accepts only LABEL=http://127.0.0.1:<port> (loopback) entries")
+        peers.append((label, url.rstrip("/")))
     return Settings(
         mode=mode,
         sql_server=g("MARKETLAB_SQL_SERVER", "."),
@@ -151,4 +160,5 @@ def load_settings(env: dict[str, str] | None = None, dotenv: Path | None = None)
         eod_cutoff=cutoff,
         max_backfill_sessions=_int(merged, "MARKETLAB_MAX_BACKFILL_SESSIONS", 40, 1, 400),
         log_dir=Path(log_dir) if log_dir else ROOT / "var" / "logs",
+        peers=tuple(peers),
     )

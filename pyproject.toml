@@ -8,7 +8,7 @@ dependencies = [
     "uvicorn==0.34.2",
     "pyodbc==5.2.0",
     "tzdata==2025.2",
-    "swagger-ui-bundle==1.1.0",
+    "swagger-ui-py==25.7.1",
 ]
 # The real EOD provider (vnstock, KBS source) is deliberately NOT a dependency of this
 # environment: vnstock is no longer on PyPI and is installed by the user from the vendor

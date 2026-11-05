@@ -1,5 +1,5 @@
 {
- "checked_at_utc": "2026-11-05T16:04:56.890932+00:00",
+ "checked_at_utc": "2026-11-05T17:29:24.259894+00:00",
  "base_url": "http://127.0.0.1:8000",
  "mode": "DEMO_OFFLINE",
  "database": "MarketLabVN30_Demo",
@@ -44,6 +44,12 @@
    "match": true
   },
   {
+   "check": "dataset 1: series DEMO01 calendar sessions without price",
+   "api": 0,
+   "sql": 0,
+   "match": true
+  },
+  {
    "check": "dataset 1: series DEMO01 rows",
    "api": 35,
    "sql": 35,
@@ -62,7 +68,7 @@
    "match": true
   },
   {
-   "check": "dataset 1: eligible rows per run at 2026-11-05",
+   "check": "dataset 1: eligible rows per run at 2026-11-06",
    "api": [
     [
      1,

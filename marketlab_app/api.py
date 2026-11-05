@@ -77,10 +77,10 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
     app = FastAPI(title="MarketLab VN30 Local API", version=__version__, docs_url=None, redoc_url=None,
                   openapi_url="/api/openapi.json",
                   description="Local gateway over the MarketLab VN30 SQL Server database. " + DISCLAIMER)
-    # Swagger UI served from local files (works offline; no CDN).
-    import swagger_ui_bundle
+    # Swagger UI 5.x served from local files (works offline; no CDN). Swagger UI 4.x cannot render OpenAPI 3.1.
+    import swagger_ui
     from fastapi.openapi.docs import get_swagger_ui_html
-    app.mount("/api/docs-assets", StaticFiles(directory=swagger_ui_bundle.swagger_ui_path), name="swagger-assets")
+    app.mount("/api/docs-assets", StaticFiles(directory=Path(swagger_ui.__file__).with_name("static")), name="swagger-assets")
 
     @app.get("/api/docs", include_in_schema=False)
     def docs():
@@ -112,7 +112,12 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
                 return JSONResponse({"error": {"code": "ORIGIN_NOT_ALLOWED", "message": "Cross-origin write refused"}}, 403)
             if request.headers.get("sec-fetch-site") not in (None, "same-origin", "none"):
                 return JSONResponse({"error": {"code": "CROSS_SITE_REFUSED", "message": "Cross-site write refused"}}, 403)
+        started = time.perf_counter()
         response = await call_next(request)
+        elapsed_ms = (time.perf_counter() - started) * 1000
+        response.headers["Server-Timing"] = f"app;dur={elapsed_ms:.1f}"
+        if elapsed_ms > 1000:
+            log.warning("slow request %.0f ms %s %s", elapsed_ms, request.method, request.url.path)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         response.headers["X-Frame-Options"] = "DENY"
@@ -229,9 +234,13 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
                 eod_cfg = ops.config()
             except (DatabaseUnavailable, SqlError):
                 eod_cfg = []
-        label = ("DEMO_OFFLINE · DỮ LIỆU MÔ PHỎNG (SYNTHETIC)" if settings.is_demo
-                 else "REAL_PRIVATE · DỮ LIỆU THẬT RIÊNG TƯ (không chia sẻ / không đẩy lên GitHub)")
-        return {"mode": settings.mode, "label": label, "database": settings.sql_database, "server": settings.sql_server,
+        scope = data_scope(bool(eod_cfg))
+        label = {"DEMO_OFFLINE": "DEMO_OFFLINE · DỮ LIỆU MÔ PHỎNG (SYNTHETIC)",
+                 "REAL_PRIVATE": "REAL_PRIVATE · DỮ LIỆU THẬT RIÊNG TƯ (EOD, không chia sẻ)",
+                 "RESEARCH_READ_ONLY": "RESEARCH_READ_ONLY · DỮ LIỆU NGHIÊN CỨU RIÊNG, CHỈ ĐỌC"}[scope]
+        return {"mode": settings.mode, "data_scope": scope, "label": label, "database": settings.sql_database,
+                "server": settings.sql_server, "server_label": "(local)" if settings.sql_server in (".", "(local)", "localhost") else settings.sql_server,
+                "peers": [{"label": lb, "url": u} for lb, u in settings.peers],
                 "disclaimer": DISCLAIMER, "inference": INFERENCE_STATUS, "today_vn": today_vn().isoformat(),
                 "eod": {"enabled": (not settings.is_demo) and ok_ops and bool(eod_cfg),
                         "reason": ("DEMO_OFFLINE: không đồng bộ dữ liệu thật vào CSDL mô phỏng" if settings.is_demo else
@@ -239,6 +248,40 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
                         "config": [{k: (str(v) if isinstance(v, dt.time) else v) for k, v in x.items()} for x in eod_cfg],
                         "token_configured": bool(settings.ops_token),
                         "provider_configured": bool(settings.provider_python)}}
+
+    def data_scope(eod_configured: bool) -> str:
+        """DEMO_OFFLINE; REAL_PRIVATE = real data with the EOD extension + ops config; else RESEARCH_READ_ONLY."""
+        if settings.is_demo:
+            return "DEMO_OFFLINE"
+        try:
+            with connect(settings) as c:
+                ext = queries.schema_status(c)["eod_extension"]
+        except (DatabaseUnavailable, SqlError):
+            ext = False
+        return "REAL_PRIVATE" if ext and eod_configured else "RESEARCH_READ_ONLY"
+
+    def freshness(ds: dict, eod: dict | None) -> dict:
+        """Compare the last stored price with the latest expected weekday session (Asia/Ho_Chi_Minh, cutoff).
+        Holidays are NOT known here, so BEHIND may be a holiday: the message says so."""
+        now = now_vn()
+        cutoff = dt.time(*(int(x) for x in settings.eod_cutoff.split(":")))
+        d = now.date() if now.time() >= cutoff else now.date() - dt.timedelta(days=1)
+        while d.weekday() >= 5:
+            d -= dt.timedelta(days=1)
+        last = ds["LastPriceDate"]
+        base = {"dataset_observed_through": ds["ObservedThrough"], "last_price_date": last, "today_vn": now.date().isoformat(),
+                "expected_latest_session": d.isoformat(), "kind": "EOD (cuối phiên), không phải realtime",
+                "last_successful_sync": (eod or {}).get("last_successful_trade_date"),
+                "last_provider_candle_date": (eod or {}).get("last_provider_candle_date")}
+        if ds["DataKind"] == "SYNTHETIC":
+            return {**base, "status": "SYNTHETIC_FIXED", "message": "Dữ liệu mô phỏng cố định, không cập nhật theo phiên"}
+        if not last:
+            return {**base, "status": "UNKNOWN", "message": "Dataset chưa có giá"}
+        if last >= d.isoformat():
+            return {**base, "status": "CURRENT", "message": f"Đã có giá phiên {last} (phiên ngày làm việc dự kiến gần nhất: {d})"}
+        gap = sum(1 for i in range((d - dt.date.fromisoformat(last)).days) if (dt.date.fromisoformat(last) + dt.timedelta(days=i + 1)).weekday() < 5)
+        return {**base, "status": "BEHIND", "behind_weekdays": gap,
+                "message": f"Giá mới nhất {last}, chậm {gap} ngày làm việc so với {d} (có thể do nghỉ lễ hoặc chưa đồng bộ)"}
 
     # ---- catalog -----------------------------------------------------------------------------------
     @app.get("/api/datasets", tags=["catalog"])
@@ -257,9 +300,9 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         eod = None
         if not settings.is_demo and ops.available()[0]:
             eod = ops.last_status(dataset_id)
-        return {"dataset": ds, "as_of": as_of.isoformat(), "eligible_predictions": eligible, "eod": eod,
-                "freshness": {"dataset_observed_through": ds["ObservedThrough"], "last_price_date": ds["LastPriceDate"],
-                              "today_vn": today_vn().isoformat(), "kind": "EOD (cuối phiên), không phải realtime"}}
+        return {"dataset": ds, "as_of": as_of.isoformat(),
+                "eligible_predictions": eligible if ds["ModelRuns"] else None,   # None = no model run, not "0 eligible"
+                "eod": eod, "freshness": freshness(ds, eod)}
 
     @app.get("/api/stocks", tags=["catalog"])
     def list_stocks(dataset_id: int = Query(..., ge=1), q: str | None = Query(None, max_length=20),
@@ -297,8 +340,11 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
             if queries.stock_id(c, dataset_id, t) is None:
                 raise ApiError(404, "TICKER_NOT_FOUND", f"{t} is not in dataset {dataset_id}")
             pts = queries.price_series(c, dataset_id, t, date_from, date_to, max_points)
-        return {"ticker": t, "points": pts, "price_unit": ds["PriceUnit"], "price_basis": ds["PriceBasis"],
-                "note": "Close nguồn cuối phiên; không phải giá điều chỉnh tổng lợi suất, không realtime"}
+        missing = [p["TradeDate"] for p in pts if p["InCalendarWithoutPrice"]]
+        return {"ticker": t, "dataset_id": dataset_id, "points": pts, "price_unit": ds["PriceUnit"], "price_basis": ds["PriceBasis"],
+                "sessions": len(pts), "sessions_without_price": missing,
+                "note": "Close nguồn cuối phiên (SOURCE_CLOSE); không phải giá điều chỉnh hay tổng lợi suất, không realtime. "
+                        "Phiên có trong lịch dataset nhưng thiếu giá được để trống, không nối đường."}
 
     @app.get("/api/prices/latest", tags=["prices"], summary="dbo.vw_LatestStockPrice per ticker")
     def latest(dataset_id: int = Query(..., ge=1)):

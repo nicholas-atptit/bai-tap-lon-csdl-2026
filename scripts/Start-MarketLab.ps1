@@ -25,7 +25,7 @@ $py = Join-Path $Root '.venv\Scripts\python.exe'
 
 if (-not (Test-Path $py)) { throw ".venv missing. Run first: powershell -ExecutionPolicy Bypass -File scripts\Setup-MarketLab.ps1" }
 $ErrorActionPreference = 'Continue'
-& $py -c "import fastapi, uvicorn, pyodbc, swagger_ui_bundle" 2>$null
+& $py -c "import fastapi, uvicorn, pyodbc, swagger_ui" 2>$null
 if ($LASTEXITCODE -ne 0) { throw "Dependencies missing in .venv. Run: uv sync --frozen" }
 $ErrorActionPreference = 'Stop'
 if (-not (Test-Path (Join-Path $Root '.env'))) { Write-Warning ".env not found: using defaults (DEMO_OFFLINE, MarketLabVN30_Demo on '.'). Run scripts\Setup-MarketLab.ps1 to create it." }
@@ -33,6 +33,9 @@ if (-not (Test-Path (Join-Path $Root '.env'))) { Write-Warning ".env not found: 
 if ($Mode) { $env:MARKETLAB_MODE = $Mode }
 if ($Database) { $env:MARKETLAB_SQL_DATABASE = $Database }
 if ($Port -gt 0) { $env:MARKETLAB_PORT = "$Port" }
+# Header links to the other mode instance (loopback only). Override with MARKETLAB_PEERS in .env.
+$dotenvPeers = Get-Content (Join-Path $Root '.env') -ErrorAction SilentlyContinue | Where-Object { $_ -match '^MARKETLAB_PEERS=\S+' }
+if (-not $env:MARKETLAB_PEERS -and -not $dotenvPeers) { $env:MARKETLAB_PEERS = 'DEMO_OFFLINE=http://127.0.0.1:8000,REAL_PRIVATE=http://127.0.0.1:8001' }
 if ($Mode -eq 'REAL_PRIVATE' -and -not $Database -and -not $env:MARKETLAB_SQL_DATABASE) {
     $dotenvDb = (Get-Content (Join-Path $Root '.env') -ErrorAction SilentlyContinue | Where-Object { $_ -match '^MARKETLAB_SQL_DATABASE=' })
     if (-not $dotenvDb -or $dotenvDb -match 'MarketLabVN30_Demo$') { throw "REAL_PRIVATE needs -Database (e.g. MarketLabVN30_Live); no automatic choice." }

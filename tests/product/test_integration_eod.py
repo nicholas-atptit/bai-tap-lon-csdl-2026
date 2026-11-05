@@ -256,3 +256,24 @@ def test_last_status_distinguishes_dates(it_env):
     assert st["last_run"]["Status"] == "FAILED"
     assert st["last_provider_candle_date"] >= "2026-10-13"
     assert st["pending_reconciliation"] == 2
+
+
+class ExclusiveEndProvider(FakeProvider):
+    """Mimics KBS after the Vietnam calendar day has passed `end`: candles dated `end` are not returned."""
+
+    def fetch(self, symbols, start, end):
+        res = super().fetch(symbols, start, end)
+        res.rows = {s: [r for r in rows if r["time"][:10] < end.isoformat()] for s, rows in res.rows.items()}
+        return res
+
+
+def test_exclusive_end_provider_and_provisional_next_day_row(it_env):
+    """Regression for the false PARTIAL seen on 2026-11-06 00:24 with real KBS data: the session must still be complete,
+    and a malformed provisional candle dated after the session must be ignored, not validated."""
+    s = it_env["settings"]
+    data = fake_series()
+    data["TST02"].append({**fake_candle("TST02", dt.date(2026, 10, 14)), "time": "2026-10-14T07:00:00", "high": "1"})
+    before = counts(s, it_env["db"])
+    r = svc(it_env, ExclusiveEndProvider(data)).sync_session(dt.date(2026, 10, 13))
+    assert (r.status, r.inserted, r.received) == ("SUCCESS", 5, 5), r.message
+    assert counts(s, it_env["db"])["prices"] == before["prices"] + 5

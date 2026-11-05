@@ -52,7 +52,10 @@ def main() -> int:
                   h([(x["Ticker"], x["TradeDate"], x["ClosePrice"], x["Volume"]) for x in sql_latest]))
             tick = sql_latest[0]["Ticker"] if sql_latest else None
             if tick:
-                ser = api.get("/api/prices/series", params={"dataset_id": ds, "ticker": tick, "max_points": 5000}).json()["points"]
+                body = api.get("/api/prices/series", params={"dataset_id": ds, "ticker": tick, "max_points": 5000}).json()
+                ser = [{k: v for k, v in p.items() if k != "InCalendarWithoutPrice"} for p in body["points"] if not p["InCalendarWithoutPrice"]]
+                gaps = query(c, "SELECT COUNT(*) AS n FROM dbo.TradingDay t JOIN dbo.Stock s ON s.Ticker=? CROSS APPLY (SELECT MIN(TradeDate) f, MAX(TradeDate) l FROM dbo.DailyPrice p WHERE p.DatasetId=? AND p.StockId=s.StockId) r WHERE t.DatasetId=? AND t.TradeDate BETWEEN r.f AND r.l AND NOT EXISTS(SELECT 1 FROM dbo.DailyPrice p WHERE p.DatasetId=t.DatasetId AND p.StockId=s.StockId AND p.TradeDate=t.TradeDate)", (tick, ds, ds))[0]["n"]
+                check(f"dataset {ds}: series {tick} calendar sessions without price", len(body["sessions_without_price"]), gaps)
                 sql_ser = query(c, "SELECT p.TradeDate, p.OpenPrice, p.HighPrice, p.LowPrice, p.ClosePrice, p.Volume FROM dbo.DailyPrice p JOIN dbo.Stock s ON s.StockId=p.StockId WHERE p.DatasetId=? AND s.Ticker=? ORDER BY p.TradeDate", (ds, tick))
                 check(f"dataset {ds}: series {tick} rows", len(ser), len(sql_ser))
                 check(f"dataset {ds}: series {tick} hash", h(ser), h(sql_ser))

@@ -1,0 +1,152 @@
+[
+ {
+  "file": "report/final/assets/screens/01_demo_overview_1440.png",
+  "route": "/#tab=overview",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:24+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/02_demo_market_chart_table_1440.png",
+  "route": "/#tab=market&t=DEMO03",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:25+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": "chart + tooltip, viewport crop"
+ },
+ {
+  "file": "report/final/assets/screens/03_demo_market_full_1440.png",
+  "route": "/#tab=market&t=DEMO03",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:25+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/04_demo_forecast_performance_1440.png",
+  "route": "/#tab=forecast&run=1&asof=2026-07-01",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:25+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/05_demo_model_comparison_1440.png",
+  "route": "/#tab=compare (run 1,2; as_of 2026-07-01)",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:26+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/06_demo_ops_disabled_1440.png",
+  "route": "/#tab=ops",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:26+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": "write buttons disabled in DEMO_OFFLINE"
+ },
+ {
+  "file": "report/final/assets/screens/07_demo_market_768x1024.png",
+  "route": "/#tab=market",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "768x1024",
+  "captured_at": "2026-11-06T00:27:28+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/07_demo_overview_390x844.png",
+  "route": "/#tab=overview",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "390x844",
+  "captured_at": "2026-11-06T00:27:29+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/07_demo_market_390x844.png",
+  "route": "/#tab=market",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "390x844",
+  "captured_at": "2026-11-06T00:27:31+07:00",
+  "classification": "SYNTHETIC",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/08_swagger_1440.png",
+  "route": "/api/docs",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:32+07:00",
+  "classification": "API_DOCS",
+  "redaction": "none",
+  "note": "no token/Authorization entered"
+ },
+ {
+  "file": "report/final/assets/screens/09_swagger_ops_eod_1440.png",
+  "route": "/api/docs (POST /api/ops/eod expanded)",
+  "data_mode": "DEMO_OFFLINE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:32+07:00",
+  "classification": "API_DOCS",
+  "redaction": "none",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/10_real_overview_redacted_1440.png",
+  "route": "/#tab=overview",
+  "data_mode": "REAL_PRIVATE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:33+07:00",
+  "classification": "REAL_PRIVATE",
+  "redaction": "price/volume cells blurred",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/11_real_ops_status_1440.png",
+  "route": "/#tab=ops",
+  "data_mode": "REAL_PRIVATE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:55+07:00",
+  "classification": "REAL_PRIVATE",
+  "redaction": "none needed (counts, dates, statuses only); JSON detail blurred",
+  "note": "UI dry run 2026-11-05 executed just before capture"
+ },
+ {
+  "file": "report/final/assets/screens/12_real_ops_run_detail_1440.png",
+  "route": "/#tab=ops (run detail)",
+  "data_mode": "REAL_PRIVATE",
+  "viewport": "1440x900",
+  "captured_at": "2026-11-06T00:27:55+07:00",
+  "classification": "REAL_PRIVATE",
+  "redaction": "none needed (per-ticker outcome only)",
+  "note": ""
+ },
+ {
+  "file": "report/final/assets/screens/13_real_ops_390.png",
+  "route": "/#tab=ops",
+  "data_mode": "REAL_PRIVATE",
+  "viewport": "390x844",
+  "captured_at": "2026-11-06T00:27:55+07:00",
+  "classification": "REAL_PRIVATE",
+  "redaction": "none needed",
+  "note": ""
+ }
+]

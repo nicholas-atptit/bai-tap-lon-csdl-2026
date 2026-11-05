@@ -173,3 +173,55 @@ def test_real_mode_without_provider_reports_missing_source(it_env):
         time.sleep(0.25)
     assert j["result"]["status"] == "FAILED" and j["result"]["error_code"] == "PROVIDER_NOT_CONFIGURED"
     assert c.get("/api/meta").json()["eod"]["provider_configured"] is False
+
+
+def test_data_scope_freshness_and_peers(demo, real):
+    _, c = demo
+    m = c.get("/api/meta").json()
+    assert m["data_scope"] == "DEMO_OFFLINE" and m["server_label"] == "(local)"
+    o = c.get("/api/overview?dataset_id=1").json()
+    assert o["freshness"]["status"] == "SYNTHETIC_FIXED" and o["eligible_predictions"] == 256
+    _, rc = real
+    rm = rc.get("/api/meta").json()
+    assert rm["data_scope"] == "REAL_PRIVATE" and rm["eod"]["enabled"]
+    f = rc.get("/api/overview?dataset_id=1").json()["freshness"]
+    assert f["status"] in ("CURRENT", "BEHIND") and f["expected_latest_session"] and "realtime" in f["kind"]
+
+
+def test_research_read_only_scope(require_sql):
+    s = load_settings(env={"MARKETLAB_MODE": "REAL_PRIVATE", "MARKETLAB_SQL_DATABASE": "MarketLabVN30_Research_20261027",
+                           "MARKETLAB_OPS_DATABASE": "MarketLabVN30_Ops"})
+    c = TestClient(create_app(s))
+    m = c.get("/api/meta")
+    if m.status_code != 200:
+        pytest.skip("research database not present on this machine")
+    assert m.json()["data_scope"] == "RESEARCH_READ_ONLY" and not m.json()["eod"]["enabled"]
+    assert "CHỈ ĐỌC" in m.json()["label"]
+
+
+def test_peers_accept_only_loopback():
+    from marketlab_app.config import ConfigError
+    s = load_settings(env={"MARKETLAB_PEERS": "DEMO_OFFLINE=http://127.0.0.1:8000,REAL_PRIVATE=http://localhost:8001/"})
+    assert s.peers == (("DEMO_OFFLINE", "http://127.0.0.1:8000"), ("REAL_PRIVATE", "http://localhost:8001"))
+    for bad in ("X=http://evil.example:8000", "REAL=https://127.0.0.1:8001", "REAL=http://192.168.1.5:8001", "nolabel"):
+        with pytest.raises(ConfigError):
+            load_settings(env={"MARKETLAB_PEERS": bad})
+
+
+def test_series_breaks_on_calendar_session_without_price(real, it_env):
+    """A session that exists in dbo.TradingDay but has no stored price for the ticker is returned with NULL prices
+    (InCalendarWithoutPrice) instead of being skipped, so the chart does not draw through it."""
+    s, c = real
+    svc = EodService(s, provider=FakeProvider(fake_series()), trigger="TEST", clock=CLOCK)
+    for d in (dt.date(2026, 10, 2), dt.date(2026, 10, 5)):
+        assert svc.sync_session(d).status == "SUCCESS"
+    with connect(s) as cn:   # isolated integration-test database only (MarketLabVN30_IT_*)
+        assert cn.getinfo(16).startswith("MarketLabVN30_IT_")    # SQL_DATABASE_NAME
+        cn.cursor().execute("DELETE dbo.DailyPrice WHERE DatasetId=1 AND StockId=3 AND TradeDate='2026-10-02'")
+    body = c.get("/api/prices/series?dataset_id=1&ticker=TST03").json()
+    assert [p["TradeDate"] for p in body["points"]] == ["2026-10-01", "2026-10-02", "2026-10-05"]
+    gap = body["points"][1]
+    assert gap["InCalendarWithoutPrice"] and gap["ClosePrice"] is None and body["sessions_without_price"] == ["2026-10-02"]
+    full = c.get("/api/prices/series?dataset_id=1&ticker=TST01").json()
+    assert full["sessions_without_price"] == [] and all(p["ClosePrice"] is not None for p in full["points"])
+    assert c.get("/api/prices/series?dataset_id=1&ticker=TST01").headers["server-timing"].startswith("app;dur=")

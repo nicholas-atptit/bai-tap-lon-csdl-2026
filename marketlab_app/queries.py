@@ -122,17 +122,27 @@ def prices(c, dataset_id: int, ticker: str | None, date_from, date_to, sort: str
 
 
 def price_series(c, dataset_id: int, ticker: str, date_from, date_to, max_points: int) -> list[dict]:
-    where, params = ["p.DatasetId=?", "s.Ticker=?"], [dataset_id, ticker.upper()]
+    """Every dbo.TradingDay session between the ticker's first and last stored price (and the filter window).
+    Sessions present in the dataset calendar but without a stored price come back with NULL prices
+    (InCalendarWithoutPrice=1) so charts break the line instead of drawing through a missing session."""
+    where, params = ["t.DatasetId=?"], [dataset_id]
     if date_from:
-        where.append("p.TradeDate>=?")
+        where.append("t.TradeDate>=?")
         params.append(date_from)
     if date_to:
-        where.append("p.TradeDate<=?")
+        where.append("t.TradeDate<=?")
         params.append(date_to)
-    return query(c, f"""SELECT TOP (?) x.* FROM (
-                          SELECT TOP (?) p.TradeDate, p.OpenPrice, p.HighPrice, p.LowPrice, p.ClosePrice, p.Volume
-                          FROM dbo.DailyPrice p JOIN dbo.Stock s ON s.StockId=p.StockId WHERE {' AND '.join(where)}
-                          ORDER BY p.TradeDate DESC) x ORDER BY x.TradeDate ASC""", [max_points, max_points] + params)
+    return query(c, f"""
+        WITH st AS (SELECT StockId FROM dbo.Stock s JOIN dbo.Dataset d ON d.MarketId=s.MarketId WHERE d.DatasetId=? AND s.Ticker=?),
+        rng AS (SELECT MIN(p.TradeDate) AS f, MAX(p.TradeDate) AS l FROM dbo.DailyPrice p JOIN st ON st.StockId=p.StockId WHERE p.DatasetId=?)
+        SELECT TOP (?) x.* FROM (
+          SELECT TOP (?) t.TradeDate, p.OpenPrice, p.HighPrice, p.LowPrice, p.ClosePrice, p.Volume,
+                 CONVERT(bit, CASE WHEN p.StockId IS NULL THEN 1 ELSE 0 END) AS InCalendarWithoutPrice
+          FROM dbo.TradingDay t CROSS JOIN rng
+          LEFT JOIN dbo.DailyPrice p ON p.DatasetId=t.DatasetId AND p.TradeDate=t.TradeDate AND p.StockId=(SELECT StockId FROM st)
+          WHERE {' AND '.join(where)} AND t.TradeDate BETWEEN rng.f AND rng.l
+          ORDER BY t.TradeDate DESC) x ORDER BY x.TradeDate ASC""",
+                 [dataset_id, ticker.upper(), dataset_id, max_points, max_points] + params)
 
 
 def latest_prices(c, dataset_id: int) -> list[dict]:

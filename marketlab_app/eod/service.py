@@ -33,6 +33,19 @@ REFERENCE_LOOKBACK_DAYS = 14
 REFERENCE_LOOKAHEAD_DAYS = 10
 
 
+def rows_up_to(raw_rows: list[dict], session: dt.date) -> list[dict]:
+    """Drop candles dated after the session (e.g. today's provisional row); unparseable rows are kept so validation rejects them."""
+    kept = []
+    for r in raw_rows:
+        try:
+            if parse_trade_date(r.get("time")) > session:
+                continue
+        except ValidationIssue:
+            pass
+        kept.append(r)
+    return kept
+
+
 class EodSetupError(RuntimeError):
     """Cannot even record a run (ops DB / config missing). Reported to the caller, exit code 2."""
 
@@ -245,7 +258,9 @@ class EodService:
         tickers = [u["Ticker"] for u in uni]
         stock_ids = {u["Ticker"]: u["StockId"] for u in uni}
         try:
-            res = provider.fetch(tickers, session - dt.timedelta(days=DRIFT_WINDOW_DAYS), session)
+            # KBS treats `end` as exclusive once the Vietnam calendar day has moved past it (observed 2026-11-06 00:24):
+            # ask one day beyond the session (never beyond today) and drop later candles below.
+            res = provider.fetch(tickers, session - dt.timedelta(days=DRIFT_WINDOW_DAYS), min(session + dt.timedelta(days=1), today))
         except ProviderError as exc:
             return self._finish(out, "FAILED", exc.code, exc.message)
 
@@ -260,7 +275,7 @@ class EodService:
                 items.append({"ticker": t, "stock_id": stock_ids[t], "outcome": "MISSING", "detail": f"provider error: {res.errors[t][:300]}"})
                 continue
             try:
-                series, n = normalize_series(t, res.rows.get(t, []))
+                series, n = normalize_series(t, rows_up_to(res.rows.get(t, []), session))
                 notes += n
             except ValidationIssue as exc:
                 rejected.append(t)
@@ -414,7 +429,7 @@ class EodService:
                     uni = queries.universe(c, cfg["DatasetId"], cfg["IndexCode"], dt.date.fromisoformat(str(cfg["UniverseAsOf"])))
                 prov.prefetch([cfg["CalendarReferenceSymbol"]], date_from - dt.timedelta(days=REFERENCE_LOOKBACK_DAYS),
                               min(date_to + dt.timedelta(days=REFERENCE_LOOKAHEAD_DAYS), today))
-                prov.prefetch([u["Ticker"] for u in uni], date_from - dt.timedelta(days=DRIFT_WINDOW_DAYS), min(date_to, today))
+                prov.prefetch([u["Ticker"] for u in uni], date_from - dt.timedelta(days=DRIFT_WINDOW_DAYS), min(date_to + dt.timedelta(days=1), today))
         except ProviderError as exc:
             log.warning("prefetch failed (%s); each session will record the provider error", exc.code)
         results = []
