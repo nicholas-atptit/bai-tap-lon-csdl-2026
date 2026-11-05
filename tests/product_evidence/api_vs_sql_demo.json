@@ -1,0 +1,113 @@
+{
+ "checked_at_utc": "2026-11-05T16:04:56.890932+00:00",
+ "base_url": "http://127.0.0.1:8000",
+ "mode": "DEMO_OFFLINE",
+ "database": "MarketLabVN30_Demo",
+ "passed": true,
+ "checks": [
+  {
+   "check": "mode",
+   "api": "DEMO_OFFLINE",
+   "sql": "DEMO_OFFLINE",
+   "match": true
+  },
+  {
+   "check": "database",
+   "api": "MarketLabVN30_Demo",
+   "sql": "MarketLabVN30_Demo",
+   "match": true
+  },
+  {
+   "check": "datasets (id, kind, observed, price rows)",
+   "api": [
+    [
+     1,
+     "SYNTHETIC",
+     "2025-02-19",
+     280
+    ]
+   ],
+   "sql": [
+    [
+     1,
+     "SYNTHETIC",
+     "2025-02-19",
+     280
+    ]
+   ],
+   "match": true
+  },
+  {
+   "check": "dataset 1: vw_LatestStockPrice hash",
+   "api": "658ac934c9af0997",
+   "sql": "658ac934c9af0997",
+   "match": true
+  },
+  {
+   "check": "dataset 1: series DEMO01 rows",
+   "api": 35,
+   "sql": 35,
+   "match": true
+  },
+  {
+   "check": "dataset 1: series DEMO01 hash",
+   "api": "ff2d51e83058485f",
+   "sql": "ff2d51e83058485f",
+   "match": true
+  },
+  {
+   "check": "dataset 1: price total",
+   "api": 280,
+   "sql": 280,
+   "match": true
+  },
+  {
+   "check": "dataset 1: eligible rows per run at 2026-11-05",
+   "api": [
+    [
+     1,
+     128
+    ],
+    [
+     2,
+     128
+    ]
+   ],
+   "sql": [
+    [
+     1,
+     128
+    ],
+    [
+     2,
+     128
+    ]
+   ],
+   "match": true
+  },
+  {
+   "check": "dataset 1: vw_ModelPerformance (as_of today) accuracy",
+   "api": [
+    [
+     1,
+     0.546875
+    ],
+    [
+     2,
+     0.21875
+    ]
+   ],
+   "sql": [
+    [
+     1,
+     0.546875
+    ],
+    [
+     2,
+     0.21875
+    ]
+   ],
+   "match": true
+  }
+ ]
+}

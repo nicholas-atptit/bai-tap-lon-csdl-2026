@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MarketLab VN30 — Local Dashboard</title>
+<link rel="icon" href="/favicon.ico" type="image/svg+xml">
+<link rel="stylesheet" href="/static/styles.css">
+<script type="module" src="/static/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">ML</span>
+    <div>
+      <h1>MarketLab VN30</h1>
+      <p class="subtitle">Dữ liệu cuối phiên (EOD) &amp; đánh giá dự báo đã có — chạy cục bộ</p>
+    </div>
+  </div>
+  <div class="mode" id="modeBadge" role="status">Đang tải chế độ…</div>
+  <label class="dataset-picker">Dataset
+    <select id="datasetSelect" aria-label="Chọn dataset"><option>…</option></select>
+  </label>
+</header>
+<div class="disclaimer" id="disclaimer"></div>
+<nav class="tabs" role="tablist" aria-label="Khu vực">
+  <button role="tab" data-tab="overview" aria-selected="true">Tổng quan</button>
+  <button role="tab" data-tab="market" aria-selected="false">Market Explorer</button>
+  <button role="tab" data-tab="forecast" aria-selected="false">Phân tích dự báo</button>
+  <button role="tab" data-tab="compare" aria-selected="false">So sánh mô hình</button>
+  <button role="tab" data-tab="ops" aria-selected="false">Vận hành dữ liệu</button>
+  <a class="tab-link" href="/api/docs" target="_blank" rel="noopener">API docs ↗</a>
+</nav>
+<main>
+  <!-- Overview -->
+  <section id="tab-overview" class="tab-panel" role="tabpanel">
+    <div class="grid cards" id="overviewCards"></div>
+    <div class="panel">
+      <div class="panel-head"><h2>Giá gần nhất theo mã</h2><span class="hint" id="latestHint"></span></div>
+      <div id="latestTable" class="table-wrap"></div>
+    </div>
+  </section>
+
+  <!-- Market explorer -->
+  <section id="tab-market" class="tab-panel" role="tabpanel" hidden>
+    <form class="filters" id="marketForm">
+      <label>Mã <input id="mTicker" list="tickerList" autocomplete="off" placeholder="VD: ACB" maxlength="20" required></label>
+      <datalist id="tickerList"></datalist>
+      <label>Từ ngày <input type="date" id="mFrom"></label>
+      <label>Đến ngày <input type="date" id="mTo"></label>
+      <button type="submit" class="primary">Xem</button>
+    </form>
+    <div class="panel">
+      <div class="panel-head"><h2 id="chartTitle">Biểu đồ giá đóng cửa và khối lượng</h2><span class="hint" id="chartHint"></span></div>
+      <div id="chart" class="chart"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Bảng OHLCV</h2><span class="hint">Bấm tiêu đề cột để sắp xếp</span></div>
+      <div id="priceTable" class="table-wrap"></div>
+      <div class="pager" id="pricePager"></div>
+    </div>
+  </section>
+
+  <!-- Forecast analysis -->
+  <section id="tab-forecast" class="tab-panel" role="tabpanel" hidden>
+    <div class="notice" id="inferenceNotice"></div>
+    <div class="panel">
+      <div class="panel-head"><h2>Lần chạy mô hình (ModelRun)</h2>
+        <label class="inline">Ngày tham chiếu (as_of) <input type="date" id="fAsOf"></label></div>
+      <div id="runTable" class="table-wrap"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2 id="predTitle">Dự báo</h2>
+        <div class="inline-group">
+          <label class="inline">Mã <input id="fTicker" maxlength="20" placeholder="tất cả"></label>
+          <label class="inline">Trạng thái
+            <select id="fStatus"><option value="">Tất cả</option><option value="eligible">Đủ điều kiện</option>
+              <option value="pending">Chưa trưởng thành</option><option value="missing_endpoint">Thiếu giá endpoint</option></select></label>
+          <button id="fApply" type="button">Lọc</button>
+        </div></div>
+      <div id="predTable" class="table-wrap"></div>
+      <div class="pager" id="predPager"></div>
+    </div>
+  </section>
+
+  <!-- Model comparison -->
+  <section id="tab-compare" class="tab-panel" role="tabpanel" hidden>
+    <form class="filters" id="compareForm">
+      <fieldset class="runs"><legend>Chọn 2–8 run (cùng dataset &amp; mục tiêu)</legend><div id="compareRuns"></div></fieldset>
+      <label>Ngày gốc từ <input type="date" id="cFrom" required></label>
+      <label>đến <input type="date" id="cTo" required></label>
+      <label>as_of <input type="date" id="cAsOf" required></label>
+      <button type="submit" class="primary">So sánh</button>
+    </form>
+    <div class="panel">
+      <div class="panel-head"><h2>Kết quả trên tập quan sát giao (StockId, OriginDate, TargetDate)</h2></div>
+      <div id="compareResult" class="table-wrap"></div>
+    </div>
+  </section>
+
+  <!-- Operations -->
+  <section id="tab-ops" class="tab-panel" role="tabpanel" hidden>
+    <div class="grid cards" id="opsCards"></div>
+    <div class="panel" id="opsActionPanel">
+      <div class="panel-head"><h2>Đồng bộ phiên (có bảo vệ)</h2></div>
+      <form class="filters" id="opsForm" autocomplete="off">
+        <label>Ngày phiên <input type="date" id="oDate" required></label>
+        <label>Mã vận hành (token) <input type="password" id="oToken" autocomplete="off" placeholder="MARKETLAB_OPS_TOKEN"></label>
+        <button type="button" id="oDry">Dry run</button>
+        <button type="button" id="oSync" class="danger">Sync selected session</button>
+      </form>
+      <div id="opsJob" class="job" aria-live="polite"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Nhật ký EOD</h2><button type="button" id="opsRefresh">Làm mới</button></div>
+      <div id="opsRuns" class="table-wrap"></div>
+      <div class="pager" id="opsPager"></div>
+      <div id="opsRunDetail"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Kiểm tra lịch phiên / thiếu dòng giá</h2></div>
+      <div id="calendarCheck" class="table-wrap"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Đối soát giá đã chốt (cần người duyệt)</h2></div>
+      <div id="reconTable" class="table-wrap"></div>
+    </div>
+  </section>
+</main>
+<footer class="footer" id="footer"></footer>
+<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+</body>
+</html>

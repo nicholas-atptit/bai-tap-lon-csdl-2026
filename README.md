@@ -163,3 +163,25 @@ Kết quả dự báo, phân tích và tài sản nghiên cứu được ghi nh�
 Dữ liệu **mô phỏng** trong bộ demo được tạo để phục vụ bài tập lớn, không phải bản ghi thị trường thu thập từ VNstock hoặc kết quả nghiên cứu thực tế. Nhóm được phân công và giảng viên chỉ sử dụng tài liệu được chia sẻ hợp pháp trong phạm vi bài tập/đánh giá; nghiên cứu khác hoặc việc khai thác tài sản hạn chế ngoài phạm vi được ủy quyền cần được cho phép trước bằng email hoặc văn bản từ chủ thể có thẩm quyền. Gửi yêu cầu mà chưa được chấp thuận không tạo sự cho phép.
 
 Xem [LICENSE.md](LICENSE.md) — **MarketLab VN30 — Restricted Research and Academic Use License (2026)**. Đây là giấy phép riêng hạn chế, không phải giấy phép nguồn mở được OSI công nhận. Quyền theo pháp luật, giấy phép có trước, điều kiện bên thứ ba và các quyền áp dụng theo GitHub vẫn được giữ nguyên.
+
+
+## 20. Sản phẩm chạy cục bộ (nhánh `feature/marketlab-working-product`)
+
+Phần mở rộng tùy chọn: API gateway FastAPI + giao diện web + đồng bộ EOD có bảo vệ, chạy trên Windows, bind `127.0.0.1`. Lõi SQL 13 bảng và đường chạy SSMS ở trên **không đổi**; dashboard chỉ đọc view/function/procedure sẵn có. Không tạo dự báo mới (không có model artifact).
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\Setup-MarketLab.ps1      # lần đầu: .venv (uv.lock), .env, token
+powershell -ExecutionPolicy Bypass -File scripts\Start-MarketLab.ps1      # DEMO_OFFLINE: http://127.0.0.1:8000/  ·  Swagger /api/docs
+powershell -ExecutionPolicy Bypass -File scripts\Start-MarketLab.ps1 -Mode REAL_PRIVATE -Database MarketLabVN30_Live -Port 8001
+powershell -ExecutionPolicy Bypass -File scripts\Run-MarketLab-EOD.ps1 -Date 2026-11-04 -DryRun
+uv run pytest tests/product                                               # 88 test: unit, integration, API, UI (Edge)
+```
+
+| Chế độ | Database | Nguồn dữ liệu | EOD |
+|---|---|---|---|
+| DEMO_OFFLINE | `MarketLabVN30_Demo` | SYNTHETIC, công khai | tắt |
+| REAL_PRIVATE | DB REAL_PRIVATE riêng (ví dụ `MarketLabVN30_Live`) | KBS qua vnstock, chỉ lưu cục bộ | CLI / nút có token / Task Scheduler (mặc định tắt) |
+
+Ví dụ: `GET /api/health` → `{"status":"ok","version":"0.1.0","mode":"DEMO_OFFLINE",…}`; lỗi có mã: `{"error":{"code":"INVALID_DATE_RANGE","message":"date_from must be <= date_to"}}`.
+
+Tài liệu: [runbook Windows](docs/PRODUCT_RUNBOOK_WINDOWS.md) · [hợp đồng dữ liệu EOD](docs/EOD_DATA_CONTRACT.md) · [audit triển khai](docs/PRODUCT_IMPLEMENTATION_AUDIT.md) · [bằng chứng kiểm thử](docs/PRODUCT_TEST_EVIDENCE.md) · [kịch bản demo](docs/PRODUCT_DEMO_SCRIPT.md). Migration: `sql/13_eod_extension.sql` (+ preflight, rollback), `sql/14_ops_database.sql` (+ rollback). Bản ghi REAL_PRIVATE, `.env`, log/screenshot dữ liệu thật không được commit.
