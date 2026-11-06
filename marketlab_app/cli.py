@@ -4,6 +4,7 @@
   eod backfill --from YYYY-MM-DD --to YYYY-MM-DD [--dry-run] [--max-sessions N] [--continue-on-error]
   eod status   [--dataset-id N] [--limit 10]
   eod reconcile list|approve|reject ...
+  backfill run|backup|status|report|hash ...   (see marketlab_app/backfill_cli.py)
   serve        [--port 8000]
 
 Exit codes: 0 SUCCESS / DRY_RUN_OK / NO_SESSION; 10 SKIPPED; 20 PARTIAL; 30 FAILED; 2 configuration/setup error.
@@ -63,6 +64,9 @@ def cmd_eod(args, settings: Settings) -> int:
             _print(r.to_dict())
             return r.exit_code
         if args.action == "backfill":
+            if dt.date.fromisoformat(args.date_from) < settings.history_start:
+                print(f"REFUSED: --from is before the history floor {settings.history_start} (MARKETLAB_HISTORY_START)", file=sys.stderr)
+                return 2
             res = svc.backfill(dt.date.fromisoformat(args.date_from), dt.date.fromisoformat(args.date_to), args.dataset_id,
                                args.dry_run, args.max_sessions, stop_on_error=not args.continue_on_error)
             _print({k: v for k, v in res.items() if k != "runs"} | {"runs": [
@@ -179,6 +183,8 @@ def main(argv: list[str] | None = None) -> int:
     sv = sub.add_parser("serve")
     sv.add_argument("--port", type=int)
     sub.add_parser("check", help="validate .env, ODBC driver, DB connectivity, schema and mode (no server)")
+    from .backfill_cli import add_parser as add_backfill_parser
+    add_backfill_parser(sub)
     args = ap.parse_args(argv)
     try:
         settings = load_settings()
@@ -196,6 +202,10 @@ def main(argv: list[str] | None = None) -> int:
         uvicorn.run(create_app(settings), host=settings.host, port=args.port or settings.port, log_level="info",
                     log_config=None, proxy_headers=False, server_header=False)
         return 0
+    if args.cmd == "backfill":
+        from .backfill_cli import cmd_backfill
+        setup_logging(settings, "backfill")
+        return cmd_backfill(args, settings)
     setup_logging(settings, "eod")
     return cmd_eod(args, settings)
 

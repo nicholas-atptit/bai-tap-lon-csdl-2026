@@ -128,6 +128,7 @@ def it_env(require_sql, tmp_path_factory):
     deploy.create_database(s, ops_db, "INTEGRATION_TEST")
     deploy.run_sqlcmd(s, ROOT / "sql" / "14_ops_database.sql", ops_db, log=work / f"{ops_db}.log")
     deploy.run_sqlcmd(s, ROOT / "sql" / "15_ops_schema_v2.sql", ops_db, log=work / f"{ops_db}_v2.log")
+    deploy.run_sqlcmd(s, ROOT / "sql" / "16_ops_schema_v3_backfill.sql", ops_db, log=work / f"{ops_db}_v3.log")
     deploy.register_eod_config(s, ops_db, db, 1, "VN30", dt.date(2026, 6, 30), "VN30", "test fixture")
     yield {"settings": s, "db": db, "ops_db": ops_db}
     if os.environ.get("MARKETLAB_KEEP_IT_DB") != "1":

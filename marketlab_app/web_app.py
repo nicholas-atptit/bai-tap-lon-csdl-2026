@@ -49,12 +49,22 @@ SQL_ERROR_MAP = {51016: (422, "INVALID_FILTER"), 51017: (404, "NOT_FOUND"), 5101
                  51019: (422, "RUNS_NOT_FOUND_OR_COUNT"), 51020: (409, "INCOMPATIBLE_RUNS"),
                  51021: (422, "NO_COMMON_MATURED_OBSERVATIONS")}
 STATUS_TEXT = {"CURRENT": "Đã cập nhật", "BEHIND": "Có thể chậm", "SYNTHETIC_FIXED": "Mô phỏng cố định", "UNKNOWN": "Chưa rõ",
-               "ELIGIBLE": "Đã chấm", "PENDING": "Chưa trưởng thành", "MISSING_ENDPOINT": "Thiếu giá endpoint"}
+               "ELIGIBLE": "Đã chấm", "PENDING": "Chưa trưởng thành", "MISSING_ENDPOINT": "Thiếu giá endpoint",
+               "COMPLETED": "Hoàn tất", "COMPLETED_WITH_GAPS": "Hoàn tất, còn thiếu", "INTERRUPTED": "Bị gián đoạn",
+               "FETCHING": "Đang tải nguồn", "APPLYING": "Đang ghi", "CREATED": "Mới tạo", "COMPLETE": "Đủ mã",
+               "DRY_RUN_PARTIAL": "Dry run, thiếu mã", "NO_HISTORY": "Chưa có lịch sử nguồn", "REJECTED_ROW": "Bị từ chối",
+               "FULL_COVERAGE": "Đủ dữ liệu", "PARTIAL_COVERAGE": "Còn thiếu"}
 STATUS_CLASS = {"SUCCESS": "good", "DRY_RUN_OK": "info", "NO_SESSION": "info", "SKIPPED": "warning", "PARTIAL": "serious",
                 "FAILED": "critical", "RUNNING": "info", "ELIGIBLE": "good", "PENDING": "warning", "MISSING_ENDPOINT": "serious",
                 "PENDING_REVIEW": "warning", "APPROVED_UPDATE": "good", "REJECTED": "critical", "INSERTED": "good",
                 "UNCHANGED": "info", "WOULD_INSERT": "info", "MISSING": "serious", "CONFLICT": "critical", "NOT_WRITTEN": "warning",
-                "CURRENT": "good", "BEHIND": "warning", "SYNTHETIC_FIXED": "info", "UNKNOWN": "serious"}
+                "CURRENT": "good", "BEHIND": "warning", "SYNTHETIC_FIXED": "info", "UNKNOWN": "serious",
+                "COMPLETED": "good", "COMPLETED_WITH_GAPS": "serious", "INTERRUPTED": "warning", "FETCHING": "info",
+                "APPLYING": "info", "CREATED": "info", "COMPLETE": "good", "DRY_RUN_PARTIAL": "info", "NO_HISTORY": "info",
+                "REJECTED_ROW": "serious", "FULL_COVERAGE": "good", "PARTIAL_COVERAGE": "serious"}
+MODE_SHORT = {"DEMO_OFFLINE": "DEMO", "REAL_PRIVATE": "LIVE", "RESEARCH_READ_ONLY": "RESEARCH"}
+RANGE_PRESETS = [("3T", 92), ("6T", 183), ("1N", 365), ("2N", 730), ("Tất cả", None)]
+EXPORT_LIMIT = 5000
 HINTS = {"DB_UNAVAILABLE": "SQL Server không truy cập được: kiểm tra dịch vụ MSSQLSERVER rồi tải lại trang.",
          "MODE_DATASET_MISMATCH": "Sửa MARKETLAB_MODE / MARKETLAB_SQL_DATABASE trong .env rồi khởi động lại bằng scripts\\Start-MarketLab.ps1.",
          "OPS_UNAVAILABLE": "Database ops chưa sẵn sàng (python -m marketlab_app.deploy ops-db)."}
@@ -141,7 +151,7 @@ class Guard:
             self.failures.append(time.monotonic())
 
 
-def create_app(settings: Settings, service_factory=None) -> FastAPI:
+def create_app(settings: Settings, service_factory=None, backfill_factory=None) -> FastAPI:
     app = FastAPI(title="MarketLab VN30", version=__version__, docs_url=None, redoc_url=None, openapi_url=None)
     templates = Jinja2Templates(directory=PKG / "templates")
     env = templates.env
@@ -158,6 +168,16 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
     from .eod.service import EodService, EodSetupError
     ops = OpsStore(settings)
     make_service = service_factory or (lambda: EodService(settings, trigger="WEB"))
+    # REAL_PRIVATE history floor (2023-01-01): every price query, chart, table and export starts at or after it
+    floor = None if settings.is_demo else settings.history_start
+    bjobs: dict[str, dict] = {}
+
+    def make_backfill(progress):
+        if backfill_factory:
+            return backfill_factory(progress)
+        from .eod.backfill import BackfillService
+        from .eod.backup import backup_for_backfill
+        return BackfillService(settings, trigger="WEB", progress=progress, backup_fn=lambda: backup_for_backfill(settings))
 
     # ---- middleware ------------------------------------------------------------------------------------------
     @app.middleware("http")
@@ -227,8 +247,14 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         eod = eod_info()
         ext = queries.schema_status(c)["eod_extension"] if not settings.is_demo else False
         scope = "DEMO_OFFLINE" if settings.is_demo else ("REAL_PRIVATE" if ext and eod["config"] else "RESEARCH_READ_ONLY")
+        uni = None
+        if eod["config"]:
+            cfg = eod["config"][0]
+            uni = (f"{ds['StocksWithPrices']} mã thuộc universe được cấu hình (tham chiếu {cfg['IndexCode']} {str(cfg['UniverseAsOf'])[:7]}); "
+                   "không phải thành phần VN30 lịch sử tại từng thời điểm")
         return {"request": request, "page": page, "datasets": datasets, "ds": ds, "dsq": f"ds={ds['DatasetId']}",
-                "scope": scope, "scope_label": SCOPE_LABEL[scope], "database": settings.sql_database,
+                "scope": scope, "scope_label": SCOPE_LABEL[scope], "mode_short": MODE_SHORT[scope], "database": settings.sql_database,
+                "floor": floor.isoformat() if floor else None, "universe_label": uni,
                 "server_label": "(local)" if settings.sql_server in (".", "(local)", "localhost") else settings.sql_server,
                 "today_vn": today_vn().isoformat(), "disclaimer": DISCLAIMER, "inference_msg": INFERENCE_MSG, "eod": eod,
                 "peers": [{"label": lb, "url": u} for lb, u in settings.peers if not u.endswith(f":{settings.port}")],
@@ -280,6 +306,22 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         return {**base, "status": "BEHIND",
                 "message": f"Giá mới nhất {last}, chậm {gap} ngày làm việc so với {d} (có thể do nghỉ lễ hoặc chưa đồng bộ)"}
 
+    def last_backfill_job() -> dict | None:
+        if settings.is_demo:
+            return None
+        try:
+            from .eod.backfill import jobs as list_jobs
+            rows = list_jobs(settings, limit=50)
+            if not rows:
+                return None
+            real = sorted((j for j in rows if not j["IsDryRun"] and j["Status"] in ("COMPLETED", "COMPLETED_WITH_GAPS")),
+                          key=lambda j: ((j["SessionsPlanned"] or 0), j["JobId"]), reverse=True)
+            main = dict(real[0] if real else rows[0])      # widest completed real job = the history load of record
+            main["LatestJobId"], main["LatestStatus"] = rows[0]["JobId"], rows[0]["Status"]
+            return main
+        except (DatabaseUnavailable, SqlError):
+            return None
+
     def pager(total: int, page: int, extra: dict) -> dict:
         pages = max(1, math.ceil(total / PAGE_SIZE))
         mk = lambda p: "?" + urlencode({**{k: v for k, v in extra.items() if v not in (None, "")}, "page": p})  # noqa: E731
@@ -300,11 +342,35 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
             as_of = today_vn()
             eligible = queries.eligible_count(c, d["DatasetId"], as_of) if d["ModelRuns"] else None
             latest = queries.latest_prices(c, d["DatasetId"])
+            cov = queries.coverage_summary(c, d["DatasetId"], floor)
         eod_status = ops.last_status(d["DatasetId"]) if ctx["eod"]["enabled"] else None
-        ctx.update(as_of=as_of.isoformat(), eligible=eligible, latest=latest, eod_status=eod_status, fresh=freshness(d, eod_status))
+        ctx.update(as_of=as_of.isoformat(), eligible=eligible, latest=latest, eod_status=eod_status, fresh=freshness(d, eod_status),
+                   cov=cov, last_backfill=last_backfill_job())
         return render("overview.html", ctx)
 
-    # ---- 2. prices & chart --------------------------------------------------------------------------------------
+    # ---- 2. OHLCV history & chart -------------------------------------------------------------------------------
+    def market_filters(c, d: dict, stocks: list[dict], t, f, to, sort, order) -> tuple[dict, list[str], dt.date | None, dt.date | None]:
+        form = {"t": (t or "").strip().upper(), "f": f or "", "to": to or "", "sort": sort, "order": order}
+        errors = []
+        if form["t"] and not TICKER_RE.match(form["t"]):
+            errors.append("Mã chỉ gồm 1–20 chữ cái/chữ số.")
+        elif form["t"] and form["t"] not in {s["Ticker"] for s in stocks}:
+            errors.append(f"{form['t']} không thuộc dataset {d['DatasetCode']}.")
+        try:
+            date_from, date_to = parse_date(f, "Từ ngày"), parse_date(to, "Đến ngày")
+        except PageError as exc:
+            errors.append(exc.message)
+            date_from = date_to = None
+        if floor and date_from and date_from < floor:
+            errors.append(f"Chế độ LIVE chỉ lưu và hiển thị giá từ {floor.isoformat()} trở đi; chọn Từ ngày ≥ {floor.isoformat()}.")
+        if floor and date_to and date_to < floor:
+            errors.append(f"Đến ngày phải ≥ {floor.isoformat()} (sàn lịch sử của chế độ LIVE).")
+        if date_from and date_to and date_from > date_to:
+            errors.append("Từ ngày phải nhỏ hơn hoặc bằng Đến ngày.")
+        if sort not in queries.PRICE_SORT or order not in ("asc", "desc"):
+            errors.append("Tham số sắp xếp không hợp lệ.")
+        return form, errors, date_from, date_to
+
     @app.get("/market", response_class=HTMLResponse)
     def market(request: Request, ds: str | None = None, t: str | None = None, f: str | None = None, to: str | None = None,
                sort: str = "date", order: str = "desc", page: str | None = None):
@@ -313,43 +379,104 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
             d = ctx["ds"]
             stocks, _ = queries.stocks(c, d["DatasetId"], None, 500, 0)
             ctx["stocks"] = stocks
-            form = {"t": (t or "").strip().upper(), "f": f or "", "to": to or "", "sort": sort, "order": order}
+            form, errors, date_from, date_to = market_filters(c, d, stocks, t, f, to, sort, order)
             ctx["form"] = form
-            errors = []
-            if form["t"] and not TICKER_RE.match(form["t"]):
-                errors.append("Mã chỉ gồm 1–20 chữ cái/chữ số.")
-            elif form["t"] and form["t"] not in {s["Ticker"] for s in stocks}:
-                errors.append(f"{form['t']} không thuộc dataset {d['DatasetCode']}.")
-            try:
-                date_from, date_to = parse_date(f, "Từ ngày"), parse_date(to, "Đến ngày")
-            except PageError as exc:
-                errors.append(exc.message)
-                date_from = date_to = None
-            if date_from and date_to and date_from > date_to:
-                errors.append("Từ ngày phải nhỏ hơn hoặc bằng Đến ngày.")
-            if sort not in queries.PRICE_SORT or order not in ("asc", "desc"):
-                errors.append("Tham số sắp xếp không hợp lệ.")
             pg = parse_int(page, "page", 1, 100000) or 1
             ctx["errors"] = errors
+            ctx["source"] = source_info(d)
             if errors:
                 return render("market.html", ctx, 422)
             if not form["t"]:
                 first = next((s for s in stocks if s["PriceRows"]), None)
                 form["t"] = first["Ticker"] if first else ""
+            eff = {}
             if form["t"]:
-                pts = queries.price_series(c, d["DatasetId"], form["t"], date_from, date_to, 5000)
-                items, total = queries.prices(c, d["DatasetId"], form["t"], date_from, date_to, sort, order == "desc", PAGE_SIZE, (pg - 1) * PAGE_SIZE)
-                ctx.update(points=pts, rows=items, gaps=[p["TradeDate"] for p in pts if p["InCalendarWithoutPrice"]],
-                           pg=pager(total, pg, {"ds": d["DatasetId"], **{k: v for k, v in form.items()}}),
+                rng = queries.ticker_range(c, d["DatasetId"], form["t"], floor)
+                last = dt.date.fromisoformat(rng["LastDate"]) if rng["LastDate"] else None
+                first_d = dt.date.fromisoformat(rng["FirstDate"]) if rng["FirstDate"] else None
+                defaulted = not (date_from or date_to)
+                if defaulted and last:      # default view: the last 12 months of stored sessions
+                    date_to, date_from = last, max(last - dt.timedelta(days=365), first_d)
+                q_from = max(date_from, floor) if (date_from and floor) else (date_from or floor)
+                pts = queries.price_series(c, d["DatasetId"], form["t"], q_from, date_to, 5000)
+                items, total = queries.prices(c, d["DatasetId"], form["t"], q_from, date_to, sort, order == "desc", PAGE_SIZE, (pg - 1) * PAGE_SIZE)
+                link = {"ds": d["DatasetId"], "t": form["t"], "sort": form["sort"], "order": form["order"]}
+                presets = []
+                for label, days in RANGE_PRESETS:
+                    if not last:
+                        break
+                    pf = max(last - dt.timedelta(days=days), first_d) if days else first_d
+                    href = "/market?" + urlencode({**link, "f": pf.isoformat(), "to": last.isoformat()})
+                    presets.append({"label": label, "href": href, "active": bool(date_from == pf and date_to == last)})
+                hits = [x for x in presets if x["active"]]
+                for x in hits[:-1]:      # short histories map several presets to one range: highlight only the widest
+                    x["active"] = False
+                if date_from or first_d:
+                    eff["f"] = (date_from or first_d).isoformat()
+                if date_to or last:
+                    eff["to"] = (date_to or last).isoformat()
+                ctx.update(points=pts, rows=items, gaps=[x["TradeDate"] for x in pts if x["InCalendarWithoutPrice"]], rng=rng, presets=presets,
+                           defaulted=defaulted, eff=eff,
+                           export_href="/market/export.csv?" + urlencode({"ds": d["DatasetId"], "t": form["t"], **eff}),
+                           pg=pager(total, pg, {"ds": d["DatasetId"], "t": form["t"], "f": form["f"] or eff.get("f"), "to": form["to"] or eff.get("to"),
+                                                "sort": form["sort"], "order": form["order"]}),
                            chart_json={"ticker": form["t"], "datasetCode": d["DatasetCode"], "unit": d["PriceUnit"],
                                        "unitShort": short_unit(d["PriceUnit"]), "basis": d["PriceBasis"], "points": pts})
             sort_links = {}
             for key in queries.PRICE_SORT:
                 nxt = "asc" if (sort == key and order == "desc") else "desc"
-                sort_links[key] = "?" + urlencode({k: v for k, v in {"ds": d["DatasetId"], "t": form["t"], "f": form["f"], "to": form["to"],
-                                                                      "sort": key, "order": nxt}.items() if v})
+                sort_links[key] = "?" + urlencode({k: v for k, v in {"ds": d["DatasetId"], "t": form["t"], "f": form["f"] or eff.get("f"),
+                                                                      "to": form["to"] or eff.get("to"), "sort": key, "order": nxt}.items() if v})
             ctx["sort_links"] = sort_links
         return render("market.html", ctx)
+
+    def source_info(d: dict) -> dict:
+        """Provenance line for the chart: dataset note + latest real backfill job (provider version and fetch time)."""
+        info = {"note": d["ProvenanceNote"], "basis": d["PriceBasis"], "unit": d["PriceUnit"], "job": None, "provider": None}
+        if not settings.is_demo:
+            try:
+                from .eod.backfill import job_detail, jobs as list_jobs
+                done = [j for j in list_jobs(settings, limit=20) if not j["IsDryRun"] and j["Status"] in ("COMPLETED", "COMPLETED_WITH_GAPS")]
+                if done:   # the job that loaded the widest window (a later partial rerun is not the main source)
+                    done.sort(key=lambda j: ((j["SessionsPlanned"] or 0), j["JobId"]), reverse=True)
+                    info["job"] = done[0]
+                    info["provider"] = (job_detail(settings, done[0]["JobId"]) or {}).get("ProviderMeta")
+            except (DatabaseUnavailable, SqlError):
+                pass
+        return info
+
+    @app.get("/market/export.csv")
+    def market_export(request: Request, ds: str | None = None, t: str | None = None, f: str | None = None, to: str | None = None):
+        """CSV download of one ticker and date range (max 5,000 rows), same filters/floor as the page; not a data API."""
+        import csv
+        import io
+        with connect(settings) as c:
+            ctx = base_context(request, c, "market", ds)
+            d = ctx["ds"]
+            stocks, _ = queries.stocks(c, d["DatasetId"], None, 500, 0)
+            form, errors, date_from, date_to = market_filters(c, d, stocks, t, f, to, "date", "asc")
+            if not form["t"] and not errors:
+                errors.append("Chọn mã cần xuất.")
+            if errors:
+                raise PageError(422, "INVALID_EXPORT", " ".join(errors))
+            rng = queries.ticker_range(c, d["DatasetId"], form["t"], floor)
+            lowest = floor or dt.date(1900, 1, 1)
+            q_from = max(date_from or lowest, lowest)
+            q_to = date_to or (dt.date.fromisoformat(rng["LastDate"]) if rng["LastDate"] else today_vn())
+            rows = queries.export_prices(c, d["DatasetId"], form["t"], q_from, q_to, EXPORT_LIMIT + 1)
+        if len(rows) > EXPORT_LIMIT:
+            raise PageError(422, "EXPORT_TOO_LARGE", f"Tối đa {EXPORT_LIMIT} dòng mỗi lần xuất; thu hẹp khoảng ngày.")
+        buf = io.StringIO()
+        w = csv.writer(buf, lineterminator="\n")
+        w.writerow(["Ticker", "TradeDate", "Open", "High", "Low", "Close", "Volume", "DatasetCode", "PriceBasis", "Scope"])
+        for r in rows:
+            w.writerow([r["Ticker"], r["TradeDate"], r["OpenPrice"], r["HighPrice"], r["LowPrice"], r["ClosePrice"], r["Volume"],
+                        d["DatasetCode"], d["PriceBasis"], ctx["mode_short"]])
+        name = f"marketlab_{ctx['mode_short'].lower()}_{form['t']}_{q_from}_{q_to}.csv"
+        notice = ("REAL_PRIVATE: du lieu rieng tu, quyen phan phoi nguon UNKNOWN - chi dung cuc bo, khong chia se"
+                  if not settings.is_demo else "DEMO_OFFLINE: du lieu mo phong (synthetic)")
+        return Response("\ufeff" + buf.getvalue(), media_type="text/csv; charset=utf-8",
+                        headers={"Content-Disposition": f'attachment; filename="{name}"', "X-MarketLab-Notice": notice})
 
     # ---- 3. forecasts & performance -----------------------------------------------------------------------------
     @app.get("/forecast", response_class=HTMLResponse)
@@ -431,7 +558,8 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
             return tok, False
         return secrets.token_urlsafe(32), True
 
-    def ops_context(request: Request, c, ds: str | None, status: str | None, page: str | None, run: str | None) -> dict:
+    def ops_context(request: Request, c, ds: str | None, status: str | None, page: str | None, run: str | None,
+                    trigger: str | None = None) -> dict:
         ctx = base_context(request, c, "ops", ds)
         d = ctx["ds"]
         ctx["calendar"] = None
@@ -446,9 +574,12 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         ctx["status_filter"] = status or ""
         if ctx["eod"]["enabled"]:
             pg = parse_int(page, "page", 1, 100000) or 1
-            items, total = ops.runs(d["DatasetId"], 15, (pg - 1) * 15, status or None)
+            include_bf = trigger == "all"
+            ctx["trigger_filter"] = "all" if include_bf else ""
+            items, total = ops.runs(d["DatasetId"], 15, (pg - 1) * 15, status or None, include_backfill=include_bf)
             pages = max(1, math.ceil(total / 15))
-            mk = lambda p: "?" + urlencode({k: v for k, v in {"ds": d["DatasetId"], "status": status, "page": p}.items() if v})  # noqa: E731
+            mk = lambda p: "?" + urlencode({k: v for k, v in {"ds": d["DatasetId"], "status": status, "trigger": "all" if include_bf else None,  # noqa: E731
+                                                              "page": p}.items() if v})
             ctx.update(last=ops.last_status(d["DatasetId"]), runs=items,
                        ops_pager={"total": total, "from": (pg - 1) * 15 + 1 if total else 0, "to": min(total, pg * 15),
                                   "prev": mk(pg - 1) if pg > 1 else None, "next": mk(pg + 1) if pg < pages else None},
@@ -465,16 +596,38 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
 
     def with_csrf_cookie(resp: HTMLResponse, token: str, new: bool) -> HTMLResponse:
         if new:
-            resp.set_cookie("ml_csrf", token, httponly=True, samesite="strict", path="/ops", max_age=8 * 3600)
+            resp.set_cookie("ml_csrf", token, httponly=True, samesite="strict", path="/", max_age=8 * 3600)
         return resp
 
     @app.get("/ops", response_class=HTMLResponse)
-    def ops_page(request: Request, ds: str | None = None, status: str | None = None, page: str | None = None, run: str | None = None):
+    def ops_page(request: Request, ds: str | None = None, status: str | None = None, page: str | None = None, run: str | None = None,
+                 trigger: str | None = None):
+        if trigger not in (None, "", "all"):
+            raise PageError(422, "INVALID_TRIGGER", "Bộ lọc nguồn kích hoạt không hợp lệ")
         with connect(settings) as c:
-            ctx = ops_context(request, c, ds, status, page, run)
+            ctx = ops_context(request, c, ds, status, page, run, trigger)
         token, new = csrf_for(request)
         ctx.update(csrf=token, form_date=today_vn().isoformat(), action_error=None)
         return with_csrf_cookie(render("ops.html", ctx), token, new)
+
+    def check_write(request: Request, form: dict) -> tuple[int, str] | None:
+        """Common gate of every server-side write action: CSRF, mode, token configured, lockout, token."""
+        cookie = request.cookies.get("ml_csrf", "")
+        if not cookie or not hmac.compare_digest(cookie.encode(), form.get("csrf", "").encode()):
+            return 403, "CSRF_FAILED: phiên biểu mẫu không hợp lệ hoặc đã hết hạn; tải lại trang rồi thử lại."
+        if settings.is_demo:
+            return 409, "MODE_DEMO_OFFLINE: không ghi dữ liệu thật vào CSDL mô phỏng."
+        if not settings.ops_token:
+            return 503, "OPS_TOKEN_NOT_CONFIGURED: chưa cấu hình MARKETLAB_OPS_TOKEN; thao tác ghi bị tắt."
+        if guard.locked():
+            return 429, "TOO_MANY_AUTH_FAILURES: đã nhập sai token quá 5 lần, chờ 10 phút."
+        if not hmac.compare_digest(form.get("ops_token", "").encode(), settings.ops_token.encode()):
+            guard.fail()
+            return 401, "INVALID_OPS_TOKEN: token sai hoặc thiếu (MARKETLAB_OPS_TOKEN trong .env trên máy chủ)."
+        return None
+
+    def any_job_running() -> bool:
+        return any(j["state"] == "RUNNING" for j in list(jobs.values()) + list(bjobs.values()))
 
     @app.post("/ops/eod", response_class=HTMLResponse)
     async def ops_eod(request: Request):
@@ -489,18 +642,9 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
             ctx.update(csrf=token, form_date=form.get("session_date") or today_vn().isoformat(), action_error=message)
             return with_csrf_cookie(render("ops.html", ctx, status), token, new)
 
-        cookie = request.cookies.get("ml_csrf", "")
-        if not cookie or not hmac.compare_digest(cookie.encode(), form.get("csrf", "").encode()):
-            return refuse(403, "CSRF_FAILED: phiên biểu mẫu không hợp lệ hoặc đã hết hạn; tải lại trang rồi thử lại.")
-        if settings.is_demo:
-            return refuse(409, "MODE_DEMO_OFFLINE: không đồng bộ dữ liệu thật vào CSDL mô phỏng.")
-        if not settings.ops_token:
-            return refuse(503, "OPS_TOKEN_NOT_CONFIGURED: chưa cấu hình MARKETLAB_OPS_TOKEN; thao tác ghi bị tắt.")
-        if guard.locked():
-            return refuse(429, "TOO_MANY_AUTH_FAILURES: đã nhập sai token quá 5 lần, chờ 10 phút.")
-        if not hmac.compare_digest(form.get("ops_token", "").encode(), settings.ops_token.encode()):
-            guard.fail()
-            return refuse(401, "INVALID_OPS_TOKEN: token sai hoặc thiếu (MARKETLAB_OPS_TOKEN trong .env trên máy chủ).")
+        bad = check_write(request, form)
+        if bad:
+            return refuse(*bad)
         action = form.get("action")
         if action not in ("DRY_RUN", "SYNC"):
             return refuse(422, "INVALID_ACTION: chọn Dry run hoặc Sync.")
@@ -511,8 +655,8 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         except ValueError:
             return refuse(422, "INVALID_DATE: ngày phiên phải có dạng YYYY-MM-DD.")
         with job_lock:
-            if any(j["state"] == "RUNNING" for j in jobs.values()):
-                return refuse(409, "JOB_ALREADY_RUNNING: một job EOD khác đang chạy.")
+            if any_job_running():
+                return refuse(409, "JOB_ALREADY_RUNNING: một job EOD/backfill khác đang chạy.")
             if time.monotonic() - guard.last_job_start < 5:
                 return refuse(429, "RATE_LIMITED: chờ vài giây giữa hai job.")
             guard.last_job_start = time.monotonic()
@@ -544,6 +688,131 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         ctx["job"] = jobs[job_id]
         return render("ops_job.html", ctx)
 
+    # ---- 6. historical backfill ------------------------------------------------------------------------------------
+    def backfill_context(request: Request, c, ds: str | None, job: str | None) -> dict:
+        ctx = base_context(request, c, "backfill", ds)
+        d = ctx["ds"]
+        ctx.update(bf_jobs=[], bf_job=None, bf_cov=None, bf_enabled=False, bf_reason=None)
+        if settings.is_demo:
+            ctx["bf_reason"] = "DEMO_OFFLINE dùng CSDL mô phỏng: không nạp dữ liệu thị trường thật vào chế độ này."
+        elif not ctx["eod"]["enabled"]:
+            ctx["bf_reason"] = ctx["eod"]["reason"]
+        else:
+            from .eod.backfill import job_detail, jobs as list_jobs
+            try:
+                ctx["bf_jobs"] = list_jobs(settings, limit=15)
+                ctx["bf_enabled"] = True
+            except SqlError as exc:
+                ctx["bf_reason"] = f"Ops database chưa có schema v3 (sql/16_ops_schema_v3_backfill.sql): SQL {exc.number}"
+            jid = parse_int(job, "job")
+            if ctx["bf_enabled"]:
+                if jid is None:
+                    real = sorted((j for j in ctx["bf_jobs"] if not j["IsDryRun"]),   # main job = widest real window, then newest
+                                  key=lambda j: ((j["SessionsPlanned"] or 0), j["JobId"]), reverse=True)
+                    jid = (real or ctx["bf_jobs"] or [{}])[0].get("JobId")
+                if jid:
+                    ctx["bf_job"] = job_detail(settings, jid)
+                    if ctx["bf_job"] is None:
+                        raise PageError(404, "BACKFILL_JOB_NOT_FOUND", f"Không có job backfill #{jid} cho database này")
+        ctx["ticker_cov"] = queries.ticker_coverage(c, d["DatasetId"], floor)
+        ctx["cov"] = queries.coverage_summary(c, d["DatasetId"], floor)
+        ctx["running"] = [j for j in bjobs.values() if j["state"] == "RUNNING"]
+        return ctx
+
+    @app.get("/backfill", response_class=HTMLResponse)
+    def backfill_page(request: Request, ds: str | None = None, job: str | None = None):
+        with connect(settings) as c:
+            ctx = backfill_context(request, c, ds, job)
+        token, new = csrf_for(request)
+        ctx.update(csrf=token, action_error=None, bf_form={"start": (floor or settings.history_start).isoformat(), "end": "latest", "tickers": ""})
+        return with_csrf_cookie(render("backfill.html", ctx), token, new)
+
+    @app.post("/backfill/run", response_class=HTMLResponse)
+    async def backfill_run(request: Request):
+        raw = (await request.body())[:4096].decode("utf-8", "replace")
+        form = {k: v[0] for k, v in parse_qs(raw, keep_blank_values=True).items()}
+        ds = form.get("ds")
+        bf_form = {"start": form.get("start_date", ""), "end": form.get("end_date", "latest") or "latest", "tickers": form.get("tickers", "")}
+
+        def refuse(status: int, message: str):
+            with connect(settings) as c:
+                ctx = backfill_context(request, c, ds, None)
+            token, new = csrf_for(request)
+            ctx.update(csrf=token, action_error=message, bf_form=bf_form)
+            return with_csrf_cookie(render("backfill.html", ctx, status), token, new)
+
+        bad = check_write(request, form)
+        if bad:
+            return refuse(*bad)
+        action = form.get("action")
+        if action not in ("DRY_RUN", "RUN", "RESUME", "RESUME_DRY"):
+            return refuse(422, "INVALID_ACTION: chọn Dry run, Backfill hoặc Tiếp tục job.")
+        if action in ("RUN", "RESUME") and form.get("confirm_write") != "yes":
+            return refuse(422, "CONFIRMATION_REQUIRED: tích ô xác nhận trước khi ghi thật (backup được tạo và xác minh tự động trước khi ghi).")
+        try:
+            start = dt.date.fromisoformat(bf_form["start"]) if bf_form["start"] else settings.history_start
+        except ValueError:
+            return refuse(422, "INVALID_DATE: Từ ngày phải có dạng YYYY-MM-DD.")
+        if start < settings.history_start:
+            return refuse(422, f"BEFORE_HISTORY_START: chỉ nạp dữ liệu từ {settings.history_start.isoformat()} trở đi.")
+        end = bf_form["end"].strip()
+        if end != "latest" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", end):
+            return refuse(422, "INVALID_DATE: Đến ngày là 'latest' hoặc YYYY-MM-DD.")
+        tickers = [x.strip().upper() for x in re.split(r"[,\s;]+", bf_form["tickers"]) if x.strip()]
+        if any(not TICKER_RE.match(x) for x in tickers) or len(tickers) > 60:
+            return refuse(422, "INVALID_TICKERS: danh sách mã cách nhau bằng dấu phẩy (tối đa 60 mã).")
+        if tickers:
+            with connect(settings) as c:
+                cfg = eod_info()["config"]
+                names = {u["Ticker"] for u in queries.universe(c, cfg[0]["DatasetId"], cfg[0]["IndexCode"],
+                                                                dt.date.fromisoformat(str(cfg[0]["UniverseAsOf"])))} if cfg else set()
+            unknown = [x for x in tickers if x not in names]
+            if unknown:
+                return refuse(422, f"INVALID_TICKERS: không thuộc universe được cấu hình: {', '.join(unknown[:10])}.")
+        with job_lock:
+            if any_job_running():
+                return refuse(409, "JOB_ALREADY_RUNNING: một job EOD/backfill khác đang chạy trong tiến trình này.")
+            if time.monotonic() - guard.last_job_start < 5:
+                return refuse(429, "RATE_LIMITED: chờ vài giây giữa hai job.")
+            guard.last_job_start = time.monotonic()
+            wid = uuid.uuid4().hex
+            bjobs[wid] = {"job_id": wid, "state": "RUNNING", "action": action, "dry_run": action in ("DRY_RUN", "RESUME_DRY"),
+                          "start": start.isoformat(), "end": end, "tickers": tickers, "ds": ds, "progress": [],
+                          "started": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "result": None, "error": None}
+
+        def progress(msg: str):
+            log_ = bjobs[wid]["progress"]
+            log_.append(f"{dt.datetime.now(dt.timezone.utc):%H:%M:%S} {msg}"[:300])
+            del log_[:-40]
+
+        def work():
+            from .eod.backfill import BackfillError
+            try:
+                svc = make_backfill(progress)
+                resume = action in ("RESUME", "RESUME_DRY")
+                res = svc.run(None if resume else start, end, tickers or None, bjobs[wid]["dry_run"], resume)
+                bjobs[wid].update(state="DONE", result=res)
+            except BackfillError as exc:
+                bjobs[wid].update(state="ERROR", error=f"{exc.code}: {exc.message}"[:600])
+            except Exception as exc:  # noqa: BLE001
+                log.exception("backfill job failed")
+                bjobs[wid].update(state="ERROR", error=f"INTERNAL_ERROR: {type(exc).__name__}")
+
+        threading.Thread(target=work, name=f"backfill-{wid[:8]}", daemon=True).start()
+        return RedirectResponse(f"/backfill/jobs/{wid}?ds={ds or ''}", status_code=303)
+
+    @app.get("/backfill/jobs/{wid}", response_class=HTMLResponse)
+    def backfill_job(request: Request, wid: str, ds: str | None = None):
+        if not re.fullmatch(r"[0-9a-f]{32}", wid) or wid not in bjobs:
+            raise PageError(404, "JOB_NOT_FOUND", "Không tìm thấy job (job web chỉ tồn tại trong tiến trình server hiện tại; xem bảng job trên trang Backfill)")
+        with connect(settings) as c:
+            ctx = base_context(request, c, "backfill", ds)
+        ctx["wjob"] = bjobs[wid]
+        if not settings.is_demo:
+            from .eod.backfill import jobs as list_jobs
+            ctx["db_job"] = (list_jobs(settings, limit=1) or [None])[0]
+        return render("backfill_job.html", ctx)
+
     # ---- static -------------------------------------------------------------------------------------------------
     app.mount("/static", StaticFiles(directory=PKG / "web"), name="static")
 
@@ -560,5 +829,6 @@ def create_app(settings: Settings, service_factory=None) -> FastAPI:
         return error_page(request, 405, "METHOD_NOT_ALLOWED", "Phương thức không được hỗ trợ")
 
     app.state.jobs = jobs
+    app.state.backfill_jobs = bjobs
     app.state.chart_json = json.dumps
     return app

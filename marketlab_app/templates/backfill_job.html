@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge %}
+{% block head %}{% if wjob.state == "RUNNING" %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
+{% block title %}Job backfill{% endblock %}
+{% block main %}
+<h1 class="page-title">Job backfill {{ wjob.job_id[:8] }} · {{ "dry run" if wjob.dry_run else "ghi thật" }} · {{ wjob.action }}</h1>
+<section class="panel" aria-labelledby="bjTitle" aria-live="polite">
+  <div class="panel-head"><h2 id="bjTitle">Trạng thái</h2></div>
+  <p class="hint">Yêu cầu: {{ wjob.start }} → {{ wjob.end }} · {{ (wjob.tickers|join(", ")) or "cả universe" }} · bắt đầu {{ wjob.started }} UTC</p>
+  {% if wjob.state == "RUNNING" %}
+    <div class="state loading" role="status" id="jobState">Đang chạy. Trang tự làm mới mỗi 3 giây; có thể rời trang, tiến độ được ghi trong DB Ops (ops.BackfillJob).</div>
+    {% if db_job %}<p>Job DB #{{ db_job.JobId }} · {{ badge(db_job.Status) }} · phiên {{ db_job.SessionsProcessed }}/{{ db_job.SessionsPlanned or "?" }} · gọi nguồn {{ db_job.FetchCalls }} lần</p>{% endif %}
+  {% elif wjob.state == "ERROR" %}
+    <div class="state error" role="alert" id="jobState">{{ wjob.error }}</div>
+  {% else %}{% set r = wjob.result %}
+    <div id="jobState" data-status="{{ r.status }}" data-job="{{ r.job_id }}">
+      <p>{{ badge(r.status) }} job #{{ r.job_id }} · {{ r.start_date }} → {{ r.end_date }} · {{ r.sessions_planned }} phiên ·
+        {% if r.dry_run %}sẽ thêm {{ r.rows_would_insert }}{% else %}thêm {{ r.rows_inserted }}{% endif %}, không đổi {{ r.rows_unchanged }},
+        thiếu {{ r.rows_missing }}, trước lịch sử nguồn {{ r.rows_no_history }}, từ chối {{ r.rows_rejected }}, xung đột {{ r.conflicts }}</p>
+      <p>{{ r.message }}</p>
+    </div>
+    <p><a class="btn primary" href="/backfill?{{ dsq }}&amp;job={{ r.job_id }}#bfDetail">Xem chi tiết job #{{ r.job_id }}</a></p>
+  {% endif %}
+  {% if wjob.progress %}<h3>Nhật ký tiến độ</h3><div class="log-lines" id="jobLog">{{ wjob.progress|join("\n") }}</div>{% endif %}
+  <p><a class="btn" href="/backfill?{{ dsq }}">← Về Backfill lịch sử</a></p>
+</section>
+{% endblock %}

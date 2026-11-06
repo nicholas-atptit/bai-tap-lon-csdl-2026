@@ -181,11 +181,21 @@ powershell -ExecutionPolicy Bypass -File scripts\Start-MarketLab.ps1      # http
 
 | Trang | Nội dung |
 |---|---|
-| `/` | Tổng quan dataset, độ mới dữ liệu, giá gần nhất (`vw_LatestStockPrice`) |
-| `/market` | Tra cứu mã, OHLCV có lọc/sắp xếp/phân trang, biểu đồ Close + Volume |
-| `/forecast` | ModelRun, Accuracy/Brier/log loss tại `as_of` (`fn_EligiblePredictions`), danh sách dự báo |
+| `/` | Dashboard: nhãn LIVE/DEMO, số mã, phiên có dữ liệu, phạm vi ngày thực tế, số OHLCV, phiên EOD gần nhất, tình trạng dữ liệu, backfill gần nhất |
+| `/market` | Tra cứu lịch sử OHLCV: tìm 30 mã, lọc ngày (LIVE ≥ 2023-01-01, mặc định 12 tháng, khoảng nhanh 3T/6T/1N/2N/Tất cả), biểu đồ Close + Volume có tooltip, chú giải, kéo để phóng to; bảng sắp xếp/phân trang; xuất CSV ≤ 5.000 dòng |
+| `/forecast` | ModelRun, Accuracy/Brier/log loss tại `as_of` (`fn_EligiblePredictions`), danh sách dự báo; rỗng thì giải thích, không vẽ giả |
 | `/compare` | `usp_CompareModels` trên tập quan sát giao |
-| `/ops` | Trạng thái và nhật ký EOD, kiểm tra lịch phiên, đối soát, form Dry run/Sync có bảo vệ |
+| `/ops` | Trạng thái và nhật ký EOD hằng ngày, kiểm tra lịch phiên, đối soát, form Dry run/Sync có bảo vệ |
+| `/backfill` | Backfill lịch sử: job, tiến độ, checkpoint mã × năm, phiên thiếu/không ghi, độ phủ theo mã, form Dry run/Backfill/Tiếp tục có token + CSRF + xác nhận |
+
+**Dữ liệu LIVE hiện có** (06/11/2026): 28.097 dòng OHLCV thật của 30 mã thuộc universe được cấu hình (tham chiếu VN30 06/2026), 956 phiên, 2023-01-03 → 2026-11-05. VPL chỉ có dữ liệu từ 2025-05-13 (nguồn không có lịch sử trước đó). Không có phiên thiếu nào khác. Chi tiết: [báo cáo coverage](docs/BACKFILL_COVERAGE_REPORT.md) · [runbook backfill](docs/BACKFILL_RUNBOOK.md) · [nghiệm thu web FINAL](docs/FINAL_WEB_ACCEPTANCE.md).
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\Backfill-MarketLab.ps1 -StartDate 2023-01-01 -EndDate latest -DryRun   # số lượng dự kiến
+powershell -ExecutionPolicy Bypass -File .\scripts\Backfill-MarketLab.ps1 -StartDate 2023-01-01 -EndDate latest           # backup + ghi
+powershell -ExecutionPolicy Bypass -File .\scripts\Backfill-MarketLab.ps1 -Resume                                         # tiếp tục
+powershell -ExecutionPolicy Bypass -File .\scripts\Run-MarketLab-EOD.ps1 -IfNeeded                                        # EOD hằng ngày sau 16:10
+```
 
 | Chế độ | Database | EOD |
 |---|---|---|
@@ -193,4 +203,4 @@ powershell -ExecutionPolicy Bypass -File scripts\Start-MarketLab.ps1      # http
 | REAL_PRIVATE | DB REAL_PRIVATE riêng, ví dụ `MarketLabVN30_Live` (`-Mode REAL_PRIVATE -Database … -Port 8001`) | PowerShell / Task Scheduler (mặc định tắt) / form web |
 | RESEARCH_READ_ONLY | DB nghiên cứu, chỉ đọc | tắt |
 
-Kiểm thử: `uv run pytest tests/product` (102 ca: unit, integration DB cô lập, web, E2E Edge). Tài liệu: [runbook Windows](docs/PRODUCT_RUNBOOK_WINDOWS.md) · [hợp đồng dữ liệu EOD](docs/EOD_DATA_CONTRACT.md) · [audit triển khai](docs/PRODUCT_IMPLEMENTATION_AUDIT.md) · [audit UI](docs/PRODUCT_UI_AUDIT.md) · [QA UI](docs/PRODUCT_UI_QA.md) · [bằng chứng kiểm thử](docs/PRODUCT_TEST_EVIDENCE.md) · [kịch bản demo](docs/PRODUCT_DEMO_SCRIPT.md). Migration: `sql/13_eod_extension.sql`, `sql/14_ops_database.sql`, `sql/15_ops_schema_v2.sql` (mỗi file có preflight/rollback). Bản ghi REAL_PRIVATE, `.env`, log/ảnh dữ liệu thật không được commit.
+Kiểm thử: `uv run pytest tests/product` (140 ca ngày 06/11/2026: unit, integration DB cô lập gồm backfill, web, E2E Edge). Tài liệu: [runbook Windows](docs/PRODUCT_RUNBOOK_WINDOWS.md) · [hợp đồng dữ liệu EOD](docs/EOD_DATA_CONTRACT.md) · [audit triển khai](docs/PRODUCT_IMPLEMENTATION_AUDIT.md) · [audit UI](docs/PRODUCT_UI_AUDIT.md) · [QA UI](docs/PRODUCT_UI_QA.md) · [bằng chứng kiểm thử](docs/PRODUCT_TEST_EVIDENCE.md) · [kịch bản demo](docs/PRODUCT_DEMO_SCRIPT.md). Migration: `sql/13_eod_extension.sql`, `sql/14_ops_database.sql`, `sql/15_ops_schema_v2.sql`, `sql/16_ops_schema_v3_backfill.sql` (chỉ DB Ops) (mỗi file có preflight/rollback). Bản ghi REAL_PRIVATE, `.env`, log/ảnh dữ liệu thật không được commit.

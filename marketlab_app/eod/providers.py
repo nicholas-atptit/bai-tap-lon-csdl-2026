@@ -90,6 +90,7 @@ class VnstockKbsProvider:
                 "symbols": len(symbols), "bridge_started_utc": payload.get("started_utc"),
                 "bridge_finished_utc": payload.get("finished_utc"), "called_utc": started.isoformat(),
                 "attempts": {s: e.get("attempts") for s, e in payload["results"].items() if e.get("attempts", 1) > 1},
+                "empty": {s: e["empty_reason"] for s, e in payload["results"].items() if e.get("empty_reason")},
                 "basis_note": "provider daily candles as returned; KBS applies retroactive adjustments (not total return)"}
         result = FetchResult(rows, errors, meta)
         self._cache[key] = result

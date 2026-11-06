@@ -1,5 +1,7 @@
 # Bằng chứng kiểm thử sản phẩm (bản cuối, ứng dụng web render phía máy chủ)
 
+> **Cập nhật 06/11/2026 (Web FINAL + backfill 2023 → nay):** bộ kiểm thử hiện hành là **140 ca, 140 passed**, gồm thêm `test_unit_backfill.py` (11), `test_integration_backfill.py` (17), `test_web_backfill.py` (7), bridge 8 ca và E2E 8 ca. Kết quả, đối chiếu UI↔SQL (DEMO 26/26, LIVE 38/38), audit UI 48/48 và số đo tốc độ ở [FINAL_WEB_ACCEPTANCE.md](FINAL_WEB_ACCEPTANCE.md). Các mục bên dưới là bằng chứng của phiên bản trước (102 ca), giữ lại để đối chiếu lịch sử.
+
 Máy: Windows 11 Pro 10.0.26300, SQL Server 2025 Standard Developer 17.0.1145.4 (`.`), ODBC Driver 18, Python 3.12.10, uv 0.10.10, Microsoft Edge (Playwright 1.52). Môi trường Python ghim trong `uv.lock`. Nhánh `feature/marketlab-working-product`.
 
 Bằng chứng công khai: `tests/product_evidence/` (log, JUnit XML, audit UI, đối chiếu DEMO) và `report/final/assets/screens/`. Bằng chứng có dữ liệu thật: `tests/product_evidence/private/` (**gitignored**) — tài liệu này chỉ chép số đếm, trạng thái, mã run, không chép giá.

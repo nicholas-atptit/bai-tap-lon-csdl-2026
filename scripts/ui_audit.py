@@ -18,8 +18,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VIEWPORTS = {"1440x900": (1440, 900), "1366x768": (1366, 768), "768x1024": (768, 1024), "390x844": (390, 844)}
-PAGES = {"overview": "/", "market": "/market", "forecast": "/forecast", "compare": "/compare", "ops": "/ops"}
+VIEWPORTS = {"1440x900": (1440, 900), "1280x800": (1280, 800), "768x1024": (768, 1024), "390x844": (390, 844)}
+PAGES = {"overview": "/", "market": "/market", "forecast": "/forecast", "compare": "/compare", "ops": "/ops", "backfill": "/backfill"}
 
 PROBE = """() => {
   const vw = document.documentElement.clientWidth;

@@ -44,7 +44,10 @@
     {% if eod.enabled %}<form method="get" action="/ops" class="inline-group"><input type="hidden" name="ds" value="{{ ds.DatasetId }}">
       <label class="inline" for="oStatus">Trạng thái <select id="oStatus" name="status">
         {% for s in ["", "SUCCESS", "DRY_RUN_OK", "NO_SESSION", "SKIPPED", "PARTIAL", "FAILED"] %}<option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s or "Tất cả" }}</option>{% endfor %}
-      </select></label><button type="submit">Lọc</button><a class="btn" href="/ops?{{ dsq }}">Làm mới</a></form>{% endif %}</div>
+      </select></label>
+      <label class="check" for="oTrigger"><input type="checkbox" id="oTrigger" name="trigger" value="all" {% if trigger_filter == "all" %}checked{% endif %}> Gồm cả phiên backfill lịch sử</label>
+      <button type="submit">Lọc</button><a class="btn" href="/ops?{{ dsq }}">Làm mới</a></form>{% endif %}</div>
+  {% if eod.enabled %}<p class="hint">Mặc định chỉ hiện các lần chạy EOD hằng ngày (CLI / WEB / SCHEDULER). Các phiên do backfill lịch sử ghi (kích hoạt BACKFILL) xem ở tab <a href="/backfill?{{ dsq }}">Backfill lịch sử</a>.</p>{% endif %}
   {% if not eod.enabled %}{{ empty(scope ~ ": database này không được đồng bộ EOD nên không có nhật ký.") }}
   {% elif runs %}
   <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>

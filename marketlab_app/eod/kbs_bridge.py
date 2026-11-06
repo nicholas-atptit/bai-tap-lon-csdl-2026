@@ -55,6 +55,10 @@ def main(req_path, resp_path):
                 entry["columns"] = [str(c) for c in (df.columns if df is not None else [])]
                 break
             except Exception as exc:  # noqa: BLE001
+                empty = empty_reason(exc)
+                if empty:   # the provider states it has no candle in the window (e.g. before listing): not an error
+                    entry["rows"], entry["error"], entry["empty_reason"] = [], None, empty
+                    break
                 entry["error"] = type(exc).__name__ + ": " + str(exc)[:300]
                 if attempt < attempts_max:
                     time.sleep(min(8.0, 1.0 * 2 ** (attempt - 1)))
@@ -63,6 +67,34 @@ def main(req_path, resp_path):
     resp["finished_utc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
     _write(resp_path, resp)
     return 0
+
+
+EMPTY_MARKERS = ("dữ liệu trống", "no data", "empty data")
+
+
+def root_cause(exc):
+    """Unwrap tenacity RetryError (vnstock retries internally) and chained causes."""
+    seen = 0
+    while seen < 10:
+        seen += 1
+        attempt = getattr(exc, "last_attempt", None)
+        if attempt is not None and hasattr(attempt, "exception") and attempt.exception() is not None:
+            exc = attempt.exception()
+            continue
+        if getattr(exc, "__cause__", None) is not None:
+            exc = exc.__cause__
+            continue
+        break
+    return exc
+
+
+def empty_reason(exc):
+    """Text of an explicit 'no data for this window' answer from the provider, else None (a real error)."""
+    root = root_cause(exc)
+    text = str(root)
+    if isinstance(root, ValueError) and any(m in text.lower() for m in EMPTY_MARKERS):
+        return text[:200]
+    return None
 
 
 def _cell(value):

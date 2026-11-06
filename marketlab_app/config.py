@@ -1,6 +1,7 @@
 """Settings from environment variables and an optional .env file (never committed)."""
 from __future__ import annotations
 
+import datetime as dt
 import os
 import re
 from dataclasses import dataclass, field
@@ -56,6 +57,11 @@ class Settings:
     provider_max_attempts: int = 3
     eod_cutoff: str = "16:10"
     max_backfill_sessions: int = 40
+    # REAL_PRIVATE history floor: no price with TradeDate < history_start is fetched, staged, written, queried or exported.
+    history_start: dt.date = dt.date(2023, 1, 1)
+    backfill_min_interval_seconds: float = 1.0      # polite pace between provider calls during historical backfill
+    backfill_fetch_passes: int = 3                  # finite job-level retries of failed (ticker, chunk) fetches
+    backfill_retry_base_seconds: float = 5.0        # exponential backoff base between those passes
     log_dir: Path = ROOT / "var" / "logs"
     peers: tuple = ()          # ((label, url), ...) loopback links to the other mode instance(s)
 
@@ -78,6 +84,7 @@ class Settings:
             "ops_token": "configured" if self.ops_token else "not configured",
             "provider_python": "configured" if self.provider_python else "not configured",
             "eod_cutoff": self.eod_cutoff,
+            "history_start": self.history_start.isoformat(),
         }
 
 
@@ -91,6 +98,36 @@ def _int(env: dict, key: str, default: int, lo: int, hi: int) -> int:
         raise ConfigError(f"{key} must be an integer") from exc
     if not lo <= value <= hi:
         raise ConfigError(f"{key} must be in [{lo}, {hi}]")
+    return value
+
+
+def _float(env: dict, key: str, default: float, lo: float, hi: float) -> float:
+    raw = env.get(key, "")
+    if raw == "":
+        return default
+    try:
+        value = float(raw)
+    except ValueError as exc:
+        raise ConfigError(f"{key} must be a number") from exc
+    if not lo <= value <= hi:
+        raise ConfigError(f"{key} must be in [{lo}, {hi}]")
+    return value
+
+
+HISTORY_FLOOR = dt.date(2023, 1, 1)
+
+
+def _history_start(env: dict) -> dt.date:
+    """MARKETLAB_HISTORY_START may only move the floor later than 2023-01-01, never earlier."""
+    raw = env.get("MARKETLAB_HISTORY_START", "").strip()
+    if not raw:
+        return HISTORY_FLOOR
+    try:
+        value = dt.date.fromisoformat(raw)
+    except ValueError as exc:
+        raise ConfigError("MARKETLAB_HISTORY_START must be YYYY-MM-DD") from exc
+    if value < HISTORY_FLOOR:
+        raise ConfigError(f"MARKETLAB_HISTORY_START cannot be earlier than {HISTORY_FLOOR}")
     return value
 
 
@@ -159,6 +196,11 @@ def load_settings(env: dict[str, str] | None = None, dotenv: Path | None = None)
         provider_max_attempts=_int(merged, "MARKETLAB_PROVIDER_MAX_ATTEMPTS", 3, 1, 6),
         eod_cutoff=cutoff,
         max_backfill_sessions=_int(merged, "MARKETLAB_MAX_BACKFILL_SESSIONS", 40, 1, 400),
+        provider_min_interval_seconds=_float(merged, "MARKETLAB_PROVIDER_MIN_INTERVAL_SECONDS", 0.4, 0.0, 10.0),
+        history_start=_history_start(merged),
+        backfill_min_interval_seconds=_float(merged, "MARKETLAB_BACKFILL_MIN_INTERVAL_SECONDS", 1.0, 0.0, 30.0),
+        backfill_fetch_passes=_int(merged, "MARKETLAB_BACKFILL_FETCH_PASSES", 3, 1, 6),
+        backfill_retry_base_seconds=_float(merged, "MARKETLAB_BACKFILL_RETRY_BASE_SECONDS", 5.0, 0.0, 120.0),
         log_dir=Path(log_dir) if log_dir else ROOT / "var" / "logs",
         peers=tuple(peers),
     )

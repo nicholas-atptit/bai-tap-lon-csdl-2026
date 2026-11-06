@@ -126,8 +126,11 @@ class OpsStore:
             return cur.rowcount
 
     # ---- reads ---------------------------------------------------------------------------------------
-    def runs(self, dataset_id: int | None, limit: int, offset: int, status: str | None = None) -> tuple[list[dict], int]:
+    def runs(self, dataset_id: int | None, limit: int, offset: int, status: str | None = None,
+             include_backfill: bool = False) -> tuple[list[dict], int]:
         where, params = ["DatabaseName=?"], [self.business_db]
+        if not include_backfill:
+            where.append("TriggerKind<>'BACKFILL'")
         if dataset_id is not None:
             where.append("DatasetId=?")
             params.append(dataset_id)
@@ -160,8 +163,9 @@ class OpsStore:
     def last_status(self, dataset_id: int) -> dict:
         with connect(self.settings, self.db) as c:
             q = lambda sql: (query(c, sql, (self.business_db, dataset_id)) or [{}])[0]  # noqa: E731
-            last = q("SELECT TOP 1 EodRunId,SessionDate,Status,IsDryRun,ErrorCode,Message,StartedAtUtc,FinishedAtUtc,InsertedCount,UnchangedCount,RequestedCount FROM ops.EodRun WHERE DatabaseName=? AND DatasetId=? ORDER BY EodRunId DESC")
-            last_real = q("SELECT TOP 1 EodRunId,SessionDate,Status,StartedAtUtc FROM ops.EodRun WHERE DatabaseName=? AND DatasetId=? AND IsDryRun=0 ORDER BY EodRunId DESC")
+            # daily EOD runs only: historical backfill sessions (TriggerKind BACKFILL) are reported on the backfill page
+            last = q("SELECT TOP 1 EodRunId,SessionDate,Status,IsDryRun,ErrorCode,Message,StartedAtUtc,FinishedAtUtc,InsertedCount,UnchangedCount,RequestedCount FROM ops.EodRun WHERE DatabaseName=? AND DatasetId=? AND TriggerKind<>'BACKFILL' ORDER BY EodRunId DESC")
+            last_real = q("SELECT TOP 1 EodRunId,SessionDate,Status,StartedAtUtc FROM ops.EodRun WHERE DatabaseName=? AND DatasetId=? AND IsDryRun=0 AND TriggerKind<>'BACKFILL' ORDER BY EodRunId DESC")
             success = q("SELECT MAX(SessionDate) AS d FROM ops.EodRun WHERE DatabaseName=? AND DatasetId=? AND Status='SUCCESS'")
             provider = q("SELECT MAX(ProviderLastCandleDate) AS d FROM ops.EodRun WHERE DatabaseName=? AND DatasetId=?")
             pending = q("SELECT COUNT(*) AS n FROM ops.PriceReconciliation WHERE DatabaseName=? AND DatasetId=? AND Status='PENDING_REVIEW'")

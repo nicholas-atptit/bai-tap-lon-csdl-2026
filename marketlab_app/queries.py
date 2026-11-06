@@ -291,3 +291,55 @@ def universe(c, dataset_id: int, index_code: str, as_of: dt.date) -> list[dict]:
                        JOIN dbo.Dataset d ON d.DatasetId=? AND d.MarketId=s.MarketId AND d.MarketId=x.MarketId
                        WHERE x.IndexCode=? AND ? BETWEEN m.ValidFrom AND m.ValidTo AND s.IsSynthetic=0
                        ORDER BY s.Ticker""", (dataset_id, index_code, as_of))
+
+
+def coverage_summary(c, dataset_id: int, date_from=None) -> dict:
+    """Stored-price coverage of the dataset calendar. A stock is expected on every dbo.TradingDay session from its first
+    stored price on (earlier sessions = before its history, not missing). Missing = expected - stored, which is exact
+    because usp_InsertDailyPrice refuses any price outside dbo.TradingDay (51011). Counts only; gaps are never filled."""
+    r = query(c, """
+        WITH st AS (SELECT s.StockId FROM dbo.Dataset d JOIN dbo.Stock s ON s.MarketId=d.MarketId
+                    AND s.IsSynthetic=CASE WHEN d.DataKind='SYNTHETIC' THEN 1 ELSE 0 END WHERE d.DatasetId=?),
+        f AS (SELECT st.StockId, MIN(p.TradeDate) AS FirstDate, COUNT(p.TradeDate) AS StoredRows
+              FROM st LEFT JOIN dbo.DailyPrice p ON p.DatasetId=? AND p.StockId=st.StockId AND p.TradeDate>=ISNULL(?, '1900-01-01')
+              GROUP BY st.StockId),
+        e AS (SELECT f.StockId, f.StoredRows,
+                     (SELECT COUNT(*) FROM dbo.TradingDay t WHERE t.DatasetId=? AND t.TradeDate>=ISNULL(f.FirstDate, '1900-01-01')
+                        AND t.TradeDate>=ISNULL(?, '1900-01-01')) AS Expected
+              FROM f)
+        SELECT COUNT(*) AS Stocks, SUM(CASE WHEN StoredRows>0 THEN 1 ELSE 0 END) AS StocksWithPrices,
+               SUM(CAST(Expected AS bigint)) AS ExpectedRows, SUM(CAST(Expected-StoredRows AS bigint)) AS MissingRows,
+               SUM(CASE WHEN Expected>StoredRows THEN 1 ELSE 0 END) AS StocksWithGaps,
+               (SELECT COUNT(DISTINCT TradeDate) FROM dbo.DailyPrice WHERE DatasetId=? AND TradeDate>=ISNULL(?, '1900-01-01')) AS SessionsWithPrices,
+               (SELECT MIN(TradeDate) FROM dbo.DailyPrice WHERE DatasetId=? AND TradeDate>=ISNULL(?, '1900-01-01')) AS FirstPriceDate
+        FROM e""", (dataset_id, dataset_id, date_from, dataset_id, date_from, dataset_id, date_from, dataset_id, date_from))
+    return r[0]
+
+
+def ticker_coverage(c, dataset_id: int, date_from=None) -> list[dict]:
+    """Per stock: stored rows, first/last stored date, sessions missing since its first stored price."""
+    return query(c, """
+        WITH st AS (SELECT s.StockId, s.Ticker FROM dbo.Dataset d JOIN dbo.Stock s ON s.MarketId=d.MarketId
+                    AND s.IsSynthetic=CASE WHEN d.DataKind='SYNTHETIC' THEN 1 ELSE 0 END WHERE d.DatasetId=?),
+        f AS (SELECT st.StockId, st.Ticker, MIN(p.TradeDate) AS FirstDate, MAX(p.TradeDate) AS LastDate, COUNT(p.TradeDate) AS Rows
+              FROM st LEFT JOIN dbo.DailyPrice p ON p.DatasetId=? AND p.StockId=st.StockId AND p.TradeDate>=ISNULL(?, '1900-01-01')
+              GROUP BY st.StockId, st.Ticker)
+        SELECT f.Ticker, f.StockId, f.FirstDate, f.LastDate, f.Rows,
+               (SELECT COUNT(*) FROM dbo.TradingDay t WHERE t.DatasetId=? AND t.TradeDate>=f.FirstDate) AS ExpectedSessions,
+               (SELECT COUNT(*) FROM dbo.TradingDay t WHERE t.DatasetId=? AND t.TradeDate>=f.FirstDate
+                  AND NOT EXISTS(SELECT 1 FROM dbo.DailyPrice p WHERE p.DatasetId=t.DatasetId AND p.StockId=f.StockId AND p.TradeDate=t.TradeDate)) AS MissingSessions,
+               (SELECT COUNT(*) FROM dbo.TradingDay t WHERE t.DatasetId=? AND t.TradeDate<f.FirstDate AND t.TradeDate>=ISNULL(?, '1900-01-01')) AS SessionsBeforeFirst
+        FROM f ORDER BY f.Ticker""", (dataset_id, dataset_id, date_from, dataset_id, dataset_id, dataset_id, date_from))
+
+
+def ticker_range(c, dataset_id: int, ticker: str, date_from=None) -> dict:
+    return query(c, """SELECT MIN(p.TradeDate) AS FirstDate, MAX(p.TradeDate) AS LastDate, COUNT_BIG(*) AS Rows
+                       FROM dbo.DailyPrice p JOIN dbo.Stock s ON s.StockId=p.StockId
+                       WHERE p.DatasetId=? AND s.Ticker=? AND p.TradeDate>=ISNULL(?, '1900-01-01')""", (dataset_id, ticker.upper(), date_from))[0]
+
+
+def export_prices(c, dataset_id: int, ticker: str, date_from, date_to, limit: int) -> list[dict]:
+    return query(c, """SELECT TOP (?) s.Ticker, p.TradeDate, p.OpenPrice, p.HighPrice, p.LowPrice, p.ClosePrice, p.Volume
+                       FROM dbo.DailyPrice p JOIN dbo.Stock s ON s.StockId=p.StockId
+                       WHERE p.DatasetId=? AND s.Ticker=? AND p.TradeDate BETWEEN ? AND ? ORDER BY p.TradeDate""",
+                 (limit, dataset_id, ticker.upper(), date_from, date_to))

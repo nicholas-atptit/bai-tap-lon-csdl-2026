@@ -164,10 +164,35 @@ export function priceVolumeChart(container, points, opts) {
     cross.setAttribute("visibility", "hidden"); marker.setAttribute("visibility", "hidden");
     if (active >= 0) barEls[active].classList.remove("active");
   }
-  hit.addEventListener("pointermove", (ev) => {
+  // drag horizontally to zoom into a sub-range (client-side only: the page already holds the points)
+  const zoombox = svgEl("rect", { y: m.t, height: vTop + hVol - m.t, class: "zoombox", visibility: "hidden" }, svg);
+  svg.insertBefore(zoombox, hit);
+  let dragFrom = null;
+  const idxAt = (clientX) => {
     const rect = svg.getBoundingClientRect();
-    const sx = ((ev.clientX - rect.left) / rect.width) * width;
-    show(Math.max(0, Math.min(n - 1, Math.floor((sx - m.l) / band))), ev.clientX, ev.clientY);
+    const sx = ((clientX - rect.left) / rect.width) * width;
+    return Math.max(0, Math.min(n - 1, Math.floor((sx - m.l) / band)));
+  };
+  hit.addEventListener("pointerdown", (ev) => {
+    if (!opts.onZoom || ev.button !== 0 || ev.pointerType === "touch") return;
+    dragFrom = idxAt(ev.clientX);
+    hit.setPointerCapture?.(ev.pointerId);
+  });
+  hit.addEventListener("pointermove", (ev) => {
+    const i = idxAt(ev.clientX);
+    if (dragFrom !== null && Math.abs(i - dragFrom) >= 1) {
+      const a = Math.min(i, dragFrom), b = Math.max(i, dragFrom);
+      zoombox.setAttribute("x", x(a) - band / 2); zoombox.setAttribute("width", band * (b - a + 1));
+      zoombox.setAttribute("visibility", "visible");
+    }
+    show(i, ev.clientX, ev.clientY);
+  });
+  hit.addEventListener("pointerup", (ev) => {
+    if (dragFrom === null) return;
+    const i = idxAt(ev.clientX), a = Math.min(i, dragFrom), b = Math.max(i, dragFrom);
+    dragFrom = null;
+    zoombox.setAttribute("visibility", "hidden");
+    if (b - a >= 4) { hide(); opts.onZoom(a, b); }
   });
   hit.addEventListener("pointerleave", hide);
   hit.addEventListener("blur", hide);

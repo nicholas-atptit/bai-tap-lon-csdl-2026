@@ -56,7 +56,7 @@ $url = "http://127.0.0.1:$p"
 Write-Host ""
 Write-Host "MarketLab VN30 ($($cfg.mode), database $($cfg.sql_database))" -ForegroundColor Green
 Write-Host "  Web UI : $url/"
-Write-Host "  Pages  : $url/  $url/market  $url/forecast  $url/compare  $url/ops   (liveness: $url/health)"
+Write-Host "  Pages  : $url/  $url/market  $url/forecast  $url/compare  $url/ops  $url/backfill   (liveness: $url/health)"
 Write-Host "  Bound to 127.0.0.1 only (not reachable from the LAN)."
 
 if ($Background) {

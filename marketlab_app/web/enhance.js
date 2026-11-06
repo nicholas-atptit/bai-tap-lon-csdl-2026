@@ -5,13 +5,48 @@ import { priceVolumeChart } from "./charts.js";
 
 const $ = (id) => document.getElementById(id);
 
+let zoom = null;   // [first, last] index into the embedded points, or null for the full range
+
 function drawChart() {
   const holder = $("chart"), data = $("chartData");
   if (!holder || !data) return;
   const d = JSON.parse(data.textContent);
   if (!d.points || !d.points.length) return;
-  priceVolumeChart(holder, d.points, { ticker: d.ticker, datasetCode: d.datasetCode, unit: d.unit, unitShort: d.unitShort,
-    basis: d.basis, tooltip: $("tooltip") });
+  const pts = zoom ? d.points.slice(zoom[0], zoom[1] + 1) : d.points;
+  const offset = zoom ? zoom[0] : 0;
+  priceVolumeChart(holder, pts, { ticker: d.ticker, datasetCode: d.datasetCode, unit: d.unit, unitShort: d.unitShort,
+    basis: d.basis, tooltip: $("tooltip"),
+    onZoom: (a, b) => { zoom = [offset + a, offset + b]; drawChart(); } });
+  const state = $("zoomState"), reset = $("zoomReset");
+  if (state) {
+    state.textContent = zoom
+      ? `Đang phóng to: ${String(pts[0].TradeDate).slice(0, 10)} → ${String(pts[pts.length - 1].TradeDate).slice(0, 10)} (${pts.length} phiên)`
+      : "Kéo chuột ngang trên biểu đồ để phóng to · ←/→ đọc từng phiên";
+  }
+  if (reset) reset.hidden = !zoom;
+}
+
+function wireBackfillForm() {
+  const f = $("backfillForm");
+  if (!f) return;
+  f.addEventListener("submit", (e) => {
+    const action = e.submitter?.value;
+    const write = action === "RUN" || action === "RESUME";
+    if (write && !$("bConfirm").checked) { e.preventDefault(); alert("Tích ô xác nhận trước khi ghi thật."); return; }
+    const where = `${f.dataset.database} / ${f.dataset.dataset}`;
+    const range = action.startsWith("RESUME") ? "job chưa hoàn tất gần nhất" : `${$("bStart").value} → ${$("bEnd").value || "latest"}`;
+    const q = write
+      ? `GHI THẬT dữ liệu lịch sử (${range}) vào ${where}?
+Backup + xác minh trước khi ghi; mỗi phiên một transaction; giá đã lưu khác nguồn chỉ vào hàng đợi đối soát.`
+      : `DRY RUN (${range}) cho ${where}?
+Kiểm tra trong SQL Server rồi ROLLBACK, không ghi dữ liệu nghiệp vụ.`;
+    if (!window.confirm(q)) { e.preventDefault(); return; }
+    f.querySelectorAll("button[type=submit]").forEach((b) => { b.disabled = true; });
+    const keep = document.createElement("input");
+    keep.type = "hidden"; keep.name = "action"; keep.value = action;
+    f.appendChild(keep);
+    busy();
+  });
 }
 
 function busy() {
@@ -30,7 +65,7 @@ function wire() {
   if (sel) sel.addEventListener("change", () => { busy(); sel.form.requestSubmit(); });
 
   document.querySelectorAll("form").forEach((f) => {
-    if (f.id === "opsForm") return;
+    if (f.id === "opsForm" || f.id === "backfillForm") return;
     f.addEventListener("submit", busy);
   });
   document.addEventListener("click", (e) => {
@@ -62,8 +97,14 @@ function wire() {
     });
   }
   // never keep the token around (also after back/forward cache restores)
-  window.addEventListener("pageshow", () => { const t = $("oToken"); if (t) t.value = ""; $("navProgress") && ($("navProgress").hidden = true); });
+  window.addEventListener("pageshow", () => {
+    for (const id of ["oToken", "bToken"]) { const t = $(id); if (t) t.value = ""; }
+    if ($("navProgress")) $("navProgress").hidden = true;
+  });
 
+  const reset = $("zoomReset");
+  if (reset) reset.addEventListener("click", () => { zoom = null; drawChart(); });
+  wireBackfillForm();
   drawChart();
   let timer;
   window.addEventListener("resize", () => { clearTimeout(timer); timer = setTimeout(drawChart, 200); });

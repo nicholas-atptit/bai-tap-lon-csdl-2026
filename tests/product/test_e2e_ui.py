@@ -15,8 +15,8 @@ from conftest import ROOT
 pytestmark = [pytest.mark.e2e, pytest.mark.integration]
 SHOTS = ROOT / "tests" / "product_evidence" / "screenshots"
 TOKEN = "t" * 40
-VIEWPORTS = {"1440x900": (1440, 900), "1366x768": (1366, 768), "768x1024": (768, 1024), "390x844": (390, 844)}
-PAGES = ["/", "/market", "/forecast", "/compare", "/ops"]
+VIEWPORTS = {"1440x900": (1440, 900), "1280x800": (1280, 800), "768x1024": (768, 1024), "390x844": (390, 844)}
+PAGES = ["/", "/market", "/forecast", "/compare", "/ops", "/backfill"]
 
 
 def start_server(port: int, env_extra: dict) -> subprocess.Popen:
@@ -89,6 +89,15 @@ def test_demo_journey_end_to_end(demo_server, browser):
     page.wait_for_selector("#tooltip:not([hidden])")
     tip = page.inner_text("#tooltip")
     assert "DEMO03" in tip and "SOURCE_CLOSE" in tip and "SYNTHETIC_DEMO_V1" in tip
+    # drag-to-zoom on the chart (client-side, from the points embedded in the page), then reset
+    page.mouse.move(box["x"] + box["width"] * 0.25, box["y"] + 120)
+    page.mouse.down()
+    page.mouse.move(box["x"] + box["width"] * 0.55, box["y"] + 120, steps=8)
+    page.mouse.up()
+    page.wait_for_selector("#zoomReset:not([hidden])")
+    assert "Đang phóng to" in page.inner_text("#zoomState")
+    page.click("#zoomReset")
+    page.wait_for_selector("#zoomReset[hidden]", state="attached")
     page.click("#priceTable th:has-text('Close') a")
     page.wait_for_selector("#priceTable th[aria-sort='descending']:has-text('Close')")
     page.click("#priceTable th:has-text('Close') a")
@@ -131,6 +140,9 @@ def test_demo_journey_end_to_end(demo_server, browser):
     page.click('a[data-tab="ops"]')
     page.wait_for_selector("#calendarCheck tbody tr")
     assert page.is_disabled("#oSync") and page.is_disabled("#oDry") and "DEMO_OFFLINE" in page.inner_text("#opsScope")
+    page.click('a[data-tab="backfill"]')
+    page.wait_for_selector("#tickerCoverage tbody tr")
+    assert page.is_disabled("#bRun") and page.is_disabled("#bDry") and "DEMO_OFFLINE" in page.inner_text("#bfScope")
     no_nan(page)
     assert page.errors == [], page.errors
     assert page.fetches == [], f"browser fetched data itself: {page.fetches}"
@@ -192,6 +204,44 @@ def test_real_mode_ops_form_and_job_page(it_env, browser):
         page.wait_for_selector("text=Không có lần chạy nào khớp bộ lọc")
         no_nan(page)
         page.screenshot(path=str(SHOTS / "it_fixture_ops_missing_provider.png"), full_page=True)
+        assert page.errors == [], page.errors
+        assert page.fetches == []
+    finally:
+        srv.terminate()
+
+
+def test_real_mode_backfill_page_history_floor_and_provider_error(it_env, browser):
+    """REAL_PRIVATE fixture: LIVE badge, 2023-01-01 floor on the history page, backfill form (CSRF + token +
+    confirmation) whose dry run reports the missing provider honestly instead of inventing data."""
+    SHOTS.mkdir(parents=True, exist_ok=True)
+    srv = start_server(8767, {"MARKETLAB_MODE": "REAL_PRIVATE", "MARKETLAB_SQL_DATABASE": it_env["db"],
+                              "MARKETLAB_OPS_DATABASE": it_env["ops_db"]})
+    try:
+        page = new_page(browser)
+        page.on("dialog", lambda d: d.accept())
+        page.goto("http://127.0.0.1:8767/market?ds=1&t=TST01")
+        assert page.get_attribute("#modeBadge", "data-mode") == "LIVE" and page.get_attribute("#mFrom", "min") == "2023-01-01"
+        page.fill("#mFrom", "2022-06-01")
+        page.click("#marketForm button[type=submit]")
+        page.wait_for_selector(".state.error:has-text('2023-01-01')")
+        assert page.locator("#chart").count() == 0
+        page.errors.clear()   # the 422 page load is logged by the browser on purpose
+        page.goto("http://127.0.0.1:8767/backfill?ds=1")
+        assert "IT_FAKE_ADAPTER" in page.inner_text("#bfScope") and page.get_attribute("#bStart", "min") == "2023-01-01"
+        page.click("#bRun")                                  # no confirmation tick -> blocked in the browser, nothing posted
+        assert "/backfill/jobs/" not in page.url
+        page.fill("#bStart", "2026-09-01")
+        page.fill("#bEnd", "2026-09-30")
+        page.fill("#bToken", TOKEN)
+        page.click("#bDry")
+        page.wait_for_selector("#jobState.error, #jobState[data-status]", timeout=30000)
+        assert "PROVIDER_NOT_CONFIGURED" in page.inner_text("main") and TOKEN not in page.content()
+        page.click("text=Về Backfill lịch sử")
+        page.wait_for_selector("#bfJobsTitle")
+        # configuration error fails fast: no job row, no retries, no business row
+        assert page.locator("#bfJobs").count() == 0 and "Chưa có job backfill nào" in page.inner_text("main")
+        no_nan(page)
+        page.screenshot(path=str(SHOTS / "it_fixture_backfill_provider_missing.png"), full_page=True)
         assert page.errors == [], page.errors
         assert page.fetches == []
     finally:

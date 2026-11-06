@@ -74,3 +74,30 @@ def test_bridge_cell_formatting_is_exact():
     assert kbs_bridge._cell(Num(21.56)) == "21.56"
     assert kbs_bridge._cell(dt.datetime(2026, 11, 4, 7)) == "2026-11-04T07:00:00"
     assert kbs_bridge._cell(12) == "12"
+
+
+def test_explicit_empty_answer_is_not_an_error():
+    class Attempt:
+        def __init__(self, exc):
+            self.exc = exc
+
+        def exception(self):
+            return self.exc
+
+    class RetryError(Exception):
+        def __init__(self, inner):
+            super().__init__("RetryError[<Future>]")
+            self.last_attempt = Attempt(inner)
+    assert kbs_bridge.empty_reason(RetryError(ValueError("Dữ liệu trống cho mã VPL với interval 1D."))) == "Dữ liệu trống cho mã VPL với interval 1D."
+    assert kbs_bridge.empty_reason(RetryError(ConnectionError("reset by peer"))) is None
+    assert kbs_bridge.empty_reason(ValueError("could not convert string to float")) is None
+
+
+def test_empty_symbols_are_reported_in_meta(monkeypatch, tmp_path):
+    p = _with_bridge(monkeypatch, tmp_path, """
+        import json, sys
+        json.dump({"ok": True, "results": {"NEW": {"rows": [], "error": None, "attempts": 1, "empty_reason": "Dữ liệu trống cho mã NEW"}}},
+                  open(sys.argv[2], "w", encoding="utf-8"), ensure_ascii=False)
+    """)
+    res = p.fetch(["NEW"], dt.date(2024, 1, 1), dt.date(2024, 12, 31))
+    assert res.rows["NEW"] == [] and res.errors == {} and res.meta["empty"] == {"NEW": "Dữ liệu trống cho mã NEW"}

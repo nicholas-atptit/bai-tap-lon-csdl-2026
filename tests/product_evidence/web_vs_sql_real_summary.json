@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-11-06T11:18:52+07:00",
+ "base_url": "http://127.0.0.1:8001",
+ "mode": "REAL_PRIVATE",
+ "database": "MarketLabVN30_Live",
+ "passed": true,
+ "note": "Summary only: UI/SQL values (hashes, counts) stay in tests/product_evidence/private (gitignored).",
+ "checks": [
+  {
+   "check": "mode label",
+   "match": true
+  },
+  {
+   "check": "overview: price rows",
+   "match": true
+  },
+  {
+   "check": "overview: stocks with prices",
+   "match": true
+  },
+  {
+   "check": "overview: last price date",
+   "match": true
+  },
+  {
+   "check": "overview: vw_LatestStockPrice (hash of close, volume)",
+   "match": true
+  },
+  {
+   "check": "overview: sessions with prices",
+   "match": true
+  },
+  {
+   "check": "overview: date range",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-01-03..2026-11-05: first page rows (hash)",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-01-03..2026-11-05: total rows in pager",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-01-03..2026-11-05: chart sessions with price",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-01-03..2026-11-05: no chart point before 2023-01-01",
+   "match": true
+  },
+  {
+   "check": "market CTG 2023-03-20..2025-09-05: first page rows (hash)",
+   "match": true
+  },
+  {
+   "check": "market CTG 2023-03-20..2025-09-05: total rows in pager",
+   "match": true
+  },
+  {
+   "check": "market CTG 2023-03-20..2025-09-05: chart sessions with price",
+   "match": true
+  },
+  {
+   "check": "market CTG 2023-03-20..2025-09-05: no chart point before 2023-01-01",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-07-24..2023-12-19: first page rows (hash)",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-07-24..2023-12-19: total rows in pager",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-07-24..2023-12-19: chart sessions with price",
+   "match": true
+  },
+  {
+   "check": "market ACB 2023-07-24..2023-12-19: no chart point before 2023-01-01",
+   "match": true
+  },
+  {
+   "check": "market MBB 2025-07-21..2026-07-06: first page rows (hash)",
+   "match": true
+  },
+  {
+   "check": "market MBB 2025-07-21..2026-07-06: total rows in pager",
+   "match": true
+  },
+  {
+   "check": "market MBB 2025-07-21..2026-07-06: chart sessions with price",
+   "match": true
+  },
+  {
+   "check": "market MBB 2025-07-21..2026-07-06: no chart point before 2023-01-01",
+   "match": true
+  },
+  {
+   "check": "market VPL 2024-02-28..2024-09-05: first page rows (hash)",
+   "match": true
+  },
+  {
+   "check": "market VPL 2024-02-28..2024-09-05: total rows in pager",
+   "match": true
+  },
+  {
+   "check": "market VPL 2024-02-28..2024-09-05: chart sessions with price",
+   "match": true
+  },
+  {
+   "check": "market VPL 2024-02-28..2024-09-05: no chart point before 2023-01-01",
+   "match": true
+  },
+  {
+   "check": "market TPB 2023-01-18..2025-10-07: first page rows (hash)",
+   "match": true
+  },
+  {
+   "check": "market TPB 2023-01-18..2025-10-07: total rows in pager",
+   "match": true
+  },
+  {
+   "check": "market TPB 2023-01-18..2025-10-07: chart sessions with price",
+   "match": true
+  },
+  {
+   "check": "market TPB 2023-01-18..2025-10-07: no chart point before 2023-01-01",
+   "match": true
+  },
+  {
+   "check": "LIVE floor: /market with f=2022-06-01 refused (422, no chart)",
+   "match": true
+  },
+  {
+   "check": "LIVE floor: export with f=2022-06-01 refused (422)",
+   "match": true
+  },
+  {
+   "check": "export ACB: rows = SQL rows, none before floor",
+   "match": true
+  },
+  {
+   "check": "backfill page: rows per ticker (all tickers)",
+   "match": true
+  },
+  {
+   "check": "forecast: eligible rows per run at 2026-11-06",
+   "match": true
+  },
+  {
+   "check": "ops: last successful trade date",
+   "match": true
+  },
+  {
+   "check": "ops: run count in pager",
+   "match": true
+  }
+ ]
+}

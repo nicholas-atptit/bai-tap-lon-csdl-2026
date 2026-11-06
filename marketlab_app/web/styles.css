@@ -54,10 +54,15 @@ a { color: var(--info); }
 .th-sort { color: inherit; text-decoration: none; font-weight: 600; }
 .logo { width: 36px; height: 36px; border-radius: 8px; }
 .subtitle { margin: 2px 0 0; font-size: 12px; color: #c9d6e8; }
-.scope { padding: 6px 12px; border-radius: 999px; font-weight: 600; font-size: 12px; background: #fff; color: var(--text-primary); border: 1px solid transparent; }
-.scope::before { margin-right: 6px; font-weight: 700; }
+.scope { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; font-weight: 600; font-size: 12px; background: #fff; color: var(--text-primary); border: 1px solid transparent; max-width: 100%; }
+.scope::before { margin-left: 6px; font-weight: 700; }
+.scope .mode-tag { order: -1; padding: 3px 10px; border-radius: 999px; font-size: 14px; letter-spacing: .8px; color: #fff; }
+.scope.demo-offline .mode-tag { background: var(--warning); }
+.scope.real-private .mode-tag { background: var(--critical); }
+.scope.research-read-only .mode-tag { background: #4b2f9a; }
+.scope .mode-text { overflow-wrap: anywhere; }
 .scope.demo-offline { background: var(--warning-bg); color: var(--warning); border-color: #e3c06a; }
-.scope.demo-offline::before { content: "◆"; }
+.scope.demo-offline::before { content: "◆"; order: 0; }
 .scope.real-private { background: var(--critical-bg); color: var(--critical); border-color: #e9a19c; }
 .scope.real-private::before { content: "●"; }
 .scope.research-read-only { background: #ece6fb; color: #4b2f9a; border-color: #b9a6ee; }
@@ -199,3 +204,32 @@ tr.clickable:hover > *, tr.selected > * { background: #eaf2fc; }
   .subtitle { display: none; }
   .grid.cards .card:first-child { grid-column: 1 / -1; }
 }
+
+/* ---- OHLCV history, backfill ------------------------------------------------------------------------------ */
+.presets { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -4px 0 12px; font-size: 12px; color: var(--text-secondary); }
+.presets a { padding: 4px 10px; border: 1px solid #c9ced6; border-radius: 999px; text-decoration: none; color: var(--text-primary); background: #fff; }
+.presets a[aria-current="true"] { background: var(--series-1); border-color: var(--series-1); color: #fff; font-weight: 600; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); margin: 2px 0 6px; align-items: center; }
+.legend .sw { display: inline-block; width: 18px; height: 10px; margin-right: 6px; vertical-align: -1px; border-radius: 2px; }
+.legend .sw.line { height: 2px; background: var(--series-1); vertical-align: 3px; }
+.legend .sw.bar { background: var(--series-1-soft); }
+.legend .sw.gap { border: 1px dashed var(--serious); background: transparent; }
+.legend .zoom-state { margin-left: auto; }
+.chart .zoombox { fill: var(--series-1); fill-opacity: .12; stroke: var(--series-1); stroke-width: 1; }
+.source-line { font-size: 12px; color: var(--text-secondary); margin: 6px 0 0; }
+.bar-progress { display: block; width: 100%; height: 8px; margin: 6px 0; border: 0; border-radius: 999px; background: var(--grid); accent-color: var(--series-1); }
+.bar-progress::-webkit-progress-bar { background: var(--grid); border-radius: 999px; }
+.bar-progress::-webkit-progress-value { background: var(--series-1); border-radius: 999px; }
+.bar-progress::-moz-progress-bar { background: var(--series-1); border-radius: 999px; }
+td.wrap { white-space: normal; min-width: 260px; }
+.mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12px; }
+.log-lines { background: var(--surface-2); padding: 8px 10px; border-radius: 8px; font-size: 12px; max-height: 240px; overflow: auto; white-space: pre-wrap; margin: 6px 0; }
+.two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+@media (max-width: 760px) {
+  .scope .mode-text { font-size: 10.5px; }
+  .legend .zoom-state { margin-left: 0; }
+}
+.mode-pill { display: inline-block; vertical-align: 3px; margin-left: 6px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .8px; color: #fff; }
+.mode-pill.live { background: var(--critical); }
+.mode-pill.demo { background: var(--warning); }
+.mode-pill.research { background: #4b2f9a; }
