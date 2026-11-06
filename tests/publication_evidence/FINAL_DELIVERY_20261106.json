@@ -1,0 +1,76 @@
+{
+  "verified_utc": "2026-11-06T07:10:37.188929+00:00",
+  "source_head": "7b8265352f6fb7c9fee0abb3f1c6be520cc492df",
+  "remote_base": "c1273b909bebed54aa1c4ca8907549ea6d447225",
+  "reports": [
+    {
+      "path": "report/final/MarketLabVN30_FINAL_CHUAN_HOA_SSMS.docx",
+      "bytes": 3121831,
+      "sha256": "fa7ff1a6d08b5bd5d35d31fb7861566083fa97a7e299813918cb3410ed1e1a61",
+      "unchanged_from": "7b82653"
+    },
+    {
+      "path": "report/final/MarketLabVN30_FINAL_CHUAN_HOA_SSMS.pdf",
+      "bytes": 3398263,
+      "sha256": "89fe2f6d54edd2546471d5132706b7e12e15e8be4a5903fb6c98b123268d4aed",
+      "unchanged_from": "7b82653"
+    }
+  ],
+  "pdf": {
+    "pages": 54,
+    "all_pages_A4": true,
+    "ssms_screenshots": 12,
+    "web_function_pages": 6,
+    "toc_and_caption_links_checked": 129,
+    "page_link_mismatches": 0,
+    "tracked_changes": 0,
+    "comments": 0
+  },
+  "live_aggregate_readback": {
+    "ohlcv_rows": 28097,
+    "tickers": 30,
+    "sessions": 956,
+    "first_date": "2023-01-03",
+    "last_date": "2026-11-05",
+    "vpl_sessions": 373,
+    "vpl_first_date": "2025-05-13",
+    "vpl_source_unavailable_sessions": 583
+  },
+  "validation": {
+    "product_tests": {
+      "command": "uv run pytest tests/product",
+      "passed": 140,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "seconds": 93.29
+    },
+    "sql_regression": {
+      "command": "python scripts/run_public_regression.py",
+      "sql_cases_passed": 44,
+      "queries_passed": 16,
+      "live_demo_runs": 2,
+      "all_13_tables_unchanged": true,
+      "evidence_directory": "tests/runs/public_20261106T070434557562Z"
+    }
+  },
+  "publication_review": {
+    "unpublished_commits": [
+      "7b8265352f6fb7c9fee0abb3f1c6be520cc492df",
+      "0d5cac9e606f6c70cf5a62d039e90815b32fbd17",
+      "762c7845ea383e88ccd3cb6f717de78ba7977bfb",
+      "99e1b251899f89f93f59036ca9f1d50764fd054c",
+      "701d0c54a3dc3e0cea4dcbd46aae4bfbb34c69f4",
+      "c376eec8d9058349c012cef191bef23890b2e9e1",
+      "da7b27b768133981267398323943f5cffa6419c9"
+    ],
+    "unique_git_blobs_reviewed_including_base": 492,
+    "unique_images_reviewed": 174,
+    "secret_pattern_findings": 0,
+    "local_secret_value_matches": 0,
+    "restricted_database_or_market_data_files_found": 0,
+    "office_embeddings_found": 0,
+    "notes": "Reviewed Git publication candidates and unpublished history, Office XML, PDF text and metadata, and image contact sheets. Real price cells and chart labels are redacted; SQL price examples are synthetic DEMO. Aggregate counts are not a redistribution license. Author and course identities are part of the requested report. This is a bounded audit, not an absolute guarantee."
+  },
+  "remote_publication": "Not attested by this pre-push receipt; verify remote branch SHA and downloaded artifact hashes after push."
+}
