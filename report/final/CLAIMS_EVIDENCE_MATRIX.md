@@ -38,3 +38,24 @@ Nguồn mã: nhánh `feature/marketlab-working-product`, ứng dụng web ở co
 | 32 | `check_publication.py` FAIL không có nghĩa 102 ca thất bại | gate allowlist khác phạm vi kiểm thử | repo | PASS (giải thích) |
 | 33 | Đẩy nhánh / mở pull request | lệnh push bị từ chối quyền trong phiên làm việc | GitHub | BLOCKED |
 | 34 | Ảnh SSMS GUI | chưa chụp; báo cáo dùng output sqlcmd | — | NOT DONE (checklist Phụ lục A.1) |
+
+## Bổ sung bản v2 (06/11/2026): backfill 2023 → nay và Web FINAL — mã ở commit `762c784`
+
+| # | Tuyên bố trong báo cáo v2 | Lệnh / artefact kiểm chứng | Phạm vi | Kết quả |
+|---|---|---|---|---|
+| 35 | 28.097 dòng OHLCV thật, 30 mã, 956 phiên, 03/01/2023 → 05/11/2026 | `SELECT COUNT(*), MIN(TradeDate), MAX(TradeDate), COUNT(DISTINCT TradeDate) FROM dbo.DailyPrice`; `docs/BACKFILL_COVERAGE_REPORT.md` | Live | PASS |
+| 36 | Backfill thêm 27.317 dòng, 780 không đổi, 0 xung đột, 0 dòng bị từ chối | `ops.BackfillJob` #4 (`de6eb8c9-…`); `Backfill-MarketLab.ps1 -Status` | Live/Ops | PASS |
+| 37 | 0 mã-phiên thiếu; VPL 583 phiên trước 13/05/2025 là NO_HISTORY (nguồn trả "Dữ liệu trống") | coverage report mục 4; `ops.BackfillFetch.Message` của VPL 2023–2024 | Live | PASS (giới hạn nguồn) |
+| 38 | Không có dòng nào trước 01/01/2023 | coverage report mục 3 (`rows_before_floor` = 0, TradingDay = 0); test sàn lịch sử | Live + test | PASS |
+| 39 | 780 dòng có sẵn không đổi (SHA-256 giá trị và LoadedAt trước = sau) | `backfill hash --start-date 2026-10-01 --end-date 2026-11-05`; `var/reports/hash_before_backfill.json` (local) | Live | PASS |
+| 40 | Chạy lại cửa sổ 01–06/2023: 0 dòng mới, hash không đổi | job #5; coverage report mục 5 | Live | PASS |
+| 41 | Backup đã xác minh trước khi ghi | `var/backups/backup_manifest_20261106T110006.json` (local): VERIFYONLY PASS, restore thử khớp | Live/Ops | PASS |
+| 42 | Lịch phiên dùng nến VN30 hoặc nến của ≥ 50% mã (VN30 2025 thiếu 04/04 ở một lần gọi) | so sánh staging job #1 và #2 (`only_job1 VN30 2025-04-04`, 0 khác biệt giá trị); `test_calendar_uses_stock_majority…` | Ops + test | PASS |
+| 43 | EOD hằng ngày vẫn chạy sau backfill | `Run-MarketLab-EOD.ps1 -Date 2026-11-05` → SUCCESS 0 thêm/30 không đổi; `-Date 2026-11-06` → SKIPPED BEFORE_CUTOFF | Live | PASS |
+| 44 | 140/140 ca kiểm thử (thay cho 102) | `tests/product_evidence/logs/pytest_final_web.log`, `.xml` | test | PASS |
+| 45 | UI ↔ SQL: DEMO 26/26, LIVE 38/38 (6 mã/khoảng ngày ngẫu nhiên, seed 20261106) | `tests/product_evidence/web_vs_sql_demo.json`, `web_vs_sql_real_summary.json` | Demo/Live | PASS |
+| 46 | Audit UI 48/48 màn hình (2 chế độ × 4 khung 1440/1280/768/390 × 6 trang) | `scripts/ui_audit.py --phase final_web` | Demo/Live | PASS |
+| 47 | Tốc độ: trang lịch sử OHLCV trung vị 22–27 ms, tổng quan 43 ms | `tests/product_evidence/web_perf_real.json` | Live | PASS |
+| 48 | Lịch tự động 16:10 | task `\MarketLab\MarketLab VN30 EOD` vẫn Disabled | — | NOT VERIFIED |
+| 49 | EOD phiên 06/11/2026 | chưa tới 16:10 lúc kiểm chứng | Live | NOT VERIFIED |
+| 50 | Đẩy nhánh / pull request | chưa đẩy: `check_publication.py` FAIL (allowlist chưa duyệt tệp mới), chờ chủ repository duyệt | GitHub | BLOCKED |

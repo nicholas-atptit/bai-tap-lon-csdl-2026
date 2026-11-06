@@ -27,7 +27,9 @@ TEMPLATE = ROOT / "report" / "team" / "MarketLabVN30_BaoCao_CHI_TIET_GIU_FORM_GO
 OUT = ROOT / "report" / "final" / "MarketLabVN30_FINAL.docx"
 SCREENS = ROOT / "report" / "final" / "assets" / "screens"
 MANIFEST = {m["file"].split("/")[-1]: m for m in json.loads((SCREENS / "screens_manifest.json").read_text(encoding="utf-8"))}
-SHA = "701d0c5"            # web application commit described by this report (final commit SHA is in QA_REPORT.md)
+WEB_FINAL = ROOT / "report" / "final" / "assets" / "web_final"
+WEB_MANIFEST = {m["file"].split("/")[-1]: m for m in json.loads((WEB_FINAL / "manifest.json").read_text(encoding="utf-8"))}
+SHA = "762c784"            # web application commit described by this report (final commit SHA is in QA_REPORT.md)
 
 shutil.copyfile(TEMPLATE, OUT)
 doc = Document(str(OUT))
@@ -234,6 +236,8 @@ class Cursor:
 
 REDACTION_VI = {
     "none": "không",
+    "none (synthetic data)": "không (dữ liệu mô phỏng)",
+    "price/volume cells, chart and tooltip blurred": "làm mờ ô giá, khối lượng, biểu đồ và tooltip",
     "price/volume cells blurred": "làm mờ ô giá và khối lượng",
     "chart and price/volume cells blurred": "làm mờ biểu đồ, ô giá và khối lượng",
     "none needed (counts and statuses only)": "không cần (chỉ có số đếm và trạng thái)",
@@ -270,8 +274,9 @@ def source_note(cur: Cursor, text: str):
 
 def screen(cur: Cursor, fname: str, caption: str, width_cm: float = 15.5):
     """Real screenshot + short caption (goes to the list of figures) + a source line: route, mode, viewport, time, redaction."""
-    m = MANIFEST[fname]
-    img, cropped = crop_top(SCREENS / fname, MAX_DESKTOP_PX) if m["viewport"].startswith("1440") else (SCREENS / fname, False)
+    folder = WEB_FINAL if fname in WEB_MANIFEST else SCREENS
+    m = WEB_MANIFEST.get(fname) or MANIFEST[fname]
+    img, cropped = crop_top(folder / fname, MAX_DESKTOP_PX) if m["viewport"].startswith("1440") else (folder / fname, False)
     cur.image(img, width_cm, max_height_cm=17.5)
     cur.cap_fig(f"{caption}.", keep_next=True)
     when = m["captured_at"].replace("T", " ")[:16]
@@ -344,8 +349,8 @@ set_text(p, "So với bản báo cáo đầu tiên, phiên bản này trình bà
             "(EOD) có kiểm tra trước khi ghi, transaction toàn vẹn và nhật ký vận hành.")
 _, p = find("Phần SQL Server và các số liệu")
 set_text(p, "Mọi số liệu trong báo cáo được lấy từ mã nguồn, log và cơ sở dữ liệu trên máy của nhóm, kèm ngày chạy. Các kết quả được "
-            "phân thành ba loại: đã chạy và kiểm chứng (ví dụ 44 ca kiểm thử SQL, 102 ca kiểm thử tự động của phần mở rộng, 780 dòng giá "
-            "thật được đồng bộ); chưa kiểm chứng (ví dụ lịch tự động 16:10 của Windows Task Scheduler); và chưa triển khai (mô hình tạo "
+            "phân thành ba loại: đã chạy và kiểm chứng (ví dụ 44 ca kiểm thử SQL, 140 ca kiểm thử tự động của phần mở rộng, 28.097 dòng giá "
+            "OHLCV thật từ 03/01/2023 đến 05/11/2026 được nạp); chưa kiểm chứng (ví dụ lịch tự động 16:10 của Windows Task Scheduler); và chưa triển khai (mô hình tạo "
             "dự báo mới). Dữ liệu mô phỏng, dữ liệu nghiên cứu riêng và dữ liệu đồng bộ thật được tách thành các cơ sở dữ liệu khác nhau "
             "và được ghi nhãn rõ trên giao diện lẫn trong báo cáo.")
 
@@ -415,8 +420,8 @@ for t in doc.tables:
 for row in t3.rows:
     c0 = row.cells[0].text.strip()
     if c0 == "Đồng bộ cuối phiên":
-        set_text(row.cells[1].paragraphs[0], "DB MarketLabVN30_Live: 780 giá OHLCV thật của 30 mã, 26 phiên 01/10–05/11/2026 (đồng bộ 05/11/2026)")
-        set_text(row.cells[2].paragraphs[0], "Nguồn KBS/vnstock 3.5.1; dữ liệu riêng tư, không đưa lên GitHub; chạy lại không thêm dòng")
+        set_text(row.cells[1].paragraphs[0], "DB MarketLabVN30_Live: 28.097 giá OHLCV thật của 30 mã, 956 phiên 03/01/2023–05/11/2026 (backfill lịch sử 06/11/2026 + EOD hằng ngày)")
+        set_text(row.cells[2].paragraphs[0], "Nguồn KBS/vnstock 3.5.1; sàn lịch sử 01/01/2023; dữ liệu riêng tư, không đưa lên GitHub; chạy lại không thêm dòng")
     if c0 == "Dự báo mới mỗi ngày":
         set_text(row.cells[1].paragraphs[0], "Không có model artifact hay inference pipeline")
         set_text(row.cells[2].paragraphs[0], "Chưa triển khai; hệ thống chỉ quản lý và chấm các dự báo đã có")
@@ -427,7 +432,7 @@ cur.para("Ứng dụng web phục vụ một database tại một thời điểm
 cur.cap_table("Bảng 3a. Ba phạm vi dữ liệu và cách hệ thống xử lý")
 cur.table(["Phạm vi", "Database", "Nội dung", "Đồng bộ EOD", "Nhãn trên giao diện"], [
     ["DEMO_OFFLINE", "MarketLabVN30_Demo", "8 mã mô phỏng, 280 giá, 258 dự báo", "Tắt", "Vàng – DỮ LIỆU MÔ PHỎNG"],
-    ["REAL_PRIVATE", "MarketLabVN30_Live", "30 mã snapshot VN30 06/2026, 780 giá KBS", "Có (PowerShell, Task Scheduler, form web)", "Đỏ – DỮ LIỆU THẬT RIÊNG TƯ"],
+    ["REAL_PRIVATE", "MarketLabVN30_Live", "30 mã thuộc universe cấu hình (tham chiếu VN30 06/2026), 28.097 giá KBS từ 03/01/2023", "Có (PowerShell, Task Scheduler, form web)", "Đỏ – DỮ LIỆU THẬT RIÊNG TƯ"],
     ["RESEARCH_READ_ONLY", "MarketLabVN30_Research_20261027", "30 mã, 1.200 giá, 1.200 dự báo nghiên cứu", "Tắt (chưa migrate)", "Tím – CHỈ ĐỌC"],
 ], [4.1, 4.1, 3.7, 2.4, 2.4])
 cur.para("Quy tắc thời gian: ngày phiên luôn là ngày lịch Asia/Ho_Chi_Minh, không suy từ ngày UTC; giá là dữ liệu cuối phiên, không phải "
@@ -466,7 +471,7 @@ cur.code(["Version     | Edition                             | DatabaseName     
           "ObjectType: SQL_STORED_PROCEDURE 4 | SQL_SCALAR_FUNCTION 2 | SQL_INLINE_TABLE_VALUED_FUNCTION 1",
           "            VIEW 4 | SQL_TRIGGER 10"])
 cur.cap_table("Bảng 18b. Số dòng 13 bảng nghiệp vụ trong hai database (truy vấn sys.partitions ngày 06/11/2026)")
-counts = [("Market", 1, 1), ("Industry", 2, 0), ("Stock", 8, 30), ("Dataset", 1, 1), ("TradingDay", 42, 26), ("DailyPrice", 280, 780),
+counts = [("Market", 1, 1), ("Industry", 2, 0), ("Stock", 8, 30), ("Dataset", 1, 1), ("TradingDay", 42, 956), ("DailyPrice", 280, 28097),
           ("StockIndex", 1, 1), ("IndexMembership", 8, 30), ("ForecastModel", 2, 0), ("TargetDefinition", 1, 0), ("ModelRun", 2, 0),
           ("ForecastOrigin", 34, 0), ("Prediction", 258, 0)]
 cur.table(["Bảng", "MarketLabVN30_Demo (SYNTHETIC)", "MarketLabVN30_Live (REAL_PRIVATE)"], [[a, str(b), str(c)] for a, b, c in counts],
@@ -616,18 +621,21 @@ cur.heading("4.5. Kiểm thử tự động phần mở rộng", 2)
 cur.para("Phần mở rộng có bộ kiểm thử Python chạy bằng lệnh uv run pytest tests/product. Kiểm thử tích hợp tạo database cô lập tên "
          "MarketLabVN30_IT_* (gắn nhãn INTEGRATION_TEST và chỉ xóa đúng các database này sau khi chạy) và dùng một bộ cung cấp dữ liệu "
          "giả chỉ trong kiểm thử; bằng chứng với nguồn thật được trình bày riêng ở mục 5.5.")
-cur.cap_table("Bảng 22a. Kết quả bộ kiểm thử phần mở rộng ngày 06/11/2026 (102 ca, 55,5 giây)")
+cur.cap_table("Bảng 22a. Kết quả bộ kiểm thử phần mở rộng ngày 06/11/2026 (140 ca, 89,8 giây)")
 cur.table(["Nhóm", "Tệp", "Số ca", "Nội dung chính", "Kết quả"], [
     ["Unit", "test_unit_normalize_calendar.py", "30", "Chuẩn hóa OHLCV, độ chính xác decimal(19,6), múi giờ VN, phiên/cuối tuần/nghỉ lễ", "PASS"],
-    ["Unit", "test_unit_provider_bridge.py", "6", "Subprocess nguồn: timeout, lỗi import, lỗi từng mã", "PASS"],
+    ["Unit", "test_unit_provider_bridge.py", "8", "Subprocess nguồn: timeout, lỗi import, lỗi từng mã, câu trả lời “dữ liệu trống”", "PASS"],
+    ["Unit", "test_unit_backfill.py", "11", "Chia chunk theo năm, phiên hoàn chỉnh mới nhất theo giờ VN, MISSING/NO_HISTORY, sàn 2023", "PASS"],
     ["Integration EOD", "test_integration_eod.py", "23", "PARTIAL/FAILED không ghi; rollback giữa lô; khóa bận; idempotent; đối soát; dry run; backfill", "PASS"],
     ["Integration SQL", "test_integration_sql_regression.py", "5", "44 ca gốc + 16 truy vấn sau migration; rollback; preflight", "PASS"],
+    ["Integration backfill", "test_integration_backfill.py", "17", "Sàn 2023, dry run, PARTIAL trung thực, chạy lại idempotent, xung đột vào đối soát, resume, nguồn sập, rollback một phiên, khóa, backup", "PASS"],
     ["Web (server-side)", "test_web.py", "31", "Route, validation, CSRF/token/khóa, job EOD, HTTP 503, đối chiếu HTML ↔ SQL", "PASS"],
-    ["E2E trình duyệt", "test_e2e_ui.py", "7", "Microsoft Edge: 5 trang, bàn phím, 4 viewport, form EOD", "PASS"],
+    ["Web backfill", "test_web_backfill.py", "7", "Trang /backfill, form có bảo vệ, sàn 2023 trên trang và CSV, nhật ký EOD tách phiên backfill", "PASS"],
+    ["E2E trình duyệt", "test_e2e_ui.py", "8", "Microsoft Edge: 6 trang, phóng to biểu đồ, bàn phím, 4 viewport, form EOD và backfill", "PASS"],
 ], [2.6, 4.6, 1.3, 6.4, 1.5])
 cur.para("Ngoài ra: 11 unit test gốc của repo OK; gate công bố scripts/check_publication.py vẫn FAIL vì danh sách cho phép công bố "
-         "(allowlist) chưa đăng ký các tệp mới – đây là quy trình duyệt trước khi công bố, khác phạm vi với 102 ca kiểm thử và không có "
-         "nghĩa các ca đó thất bại. Các con số 88 và 100 ở những phiên bản trước không còn dùng cho bản cuối.")
+         "(allowlist) chưa đăng ký các tệp mới – đây là quy trình duyệt trước khi công bố, khác phạm vi với 140 ca kiểm thử và không có "
+         "nghĩa các ca đó thất bại. Các con số 88, 100 và 102 ở những phiên bản trước không còn dùng cho bản cuối.")
 
 # ===============================================================================================================
 # Chapter 5 – rewritten
@@ -640,7 +648,7 @@ cur.heading("5.1. Mục tiêu và kiến trúc triển khai", 2)
 cur.para("Mục tiêu của phần mở rộng là đưa cơ sở dữ liệu từ mức trình diễn bằng SSMS sang một ứng dụng dùng được hằng ngày trên máy "
          "Windows: tra cứu giá, xem dự báo và chỉ tiêu, so sánh mô hình và cập nhật giá sau mỗi phiên, trong khi toàn bộ quy tắc nghiệp vụ "
          "vẫn nằm ở SQL Server. Kiến trúc cuối gồm hai luồng độc lập: Trình duyệt → Ứng dụng web Python → SQL Server; và EOD Worker → SQL "
-         "Server + database Ops.")
+         "Server + database Ops. Backfill lịch sử (mục 5.5.7) dùng chính luồng EOD Worker, không tạo đường nạp dữ liệu thứ hai.")
 cur.image(ROOT / "report" / "final" / "assets" / "architecture_final.png", 15.5)
 cur.cap_fig("Hình 3. Kiến trúc cuối của MarketLab VN30 (sơ đồ thiết kế của nhóm).")
 cur.para("So với bản thiết kế trước, lớp local API Gateway (REST JSON và Swagger) đã được gỡ bỏ theo quyết định của nhóm. Máy chủ chạy "
@@ -660,73 +668,94 @@ cur.table(["Thành phần", "Công nghệ / phiên bản", "Vai trò"], [
 ], [2.8, 6.2, 7.6])
 cur.cap_table("Bảng 24. Cấu trúc mã nguồn chính trên nhánh feature/marketlab-working-product")
 cur.table(["Đường dẫn", "Nội dung"], [
-    ["marketlab_app/web_app.py", "Ứng dụng web: route, kiểm tra đầu vào, bảo mật, CSRF, job EOD"],
-    ["marketlab_app/templates/*.html", "8 template Jinja2: base, macros, 5 trang, trang job, trang lỗi"],
+    ["marketlab_app/web_app.py", "Ứng dụng web: route, kiểm tra đầu vào, bảo mật, CSRF, job EOD và backfill, xuất CSV"],
+    ["marketlab_app/templates/*.html", "10 template Jinja2: base, macros, 6 trang, 2 trang job, trang lỗi"],
     ["marketlab_app/queries.py, db.py", "Truy vấn tham số hóa tới view/function/procedure; ánh xạ lỗi SQL"],
-    ["marketlab_app/eod/", "service.py (điều phối), normalize.py, calendar.py, providers.py, kbs_bridge.py, opsstore.py"],
+    ["marketlab_app/eod/", "service.py (điều phối), backfill.py, backup.py, coverage.py, normalize.py, calendar.py, providers.py, kbs_bridge.py, opsstore.py"],
     ["marketlab_app/web/", "styles.css, charts.js, enhance.js"],
-    ["sql/13_*.sql, 14_*.sql, 15_*.sql", "Migration EOD, database Ops, preflight, rollback"],
-    ["scripts/*.ps1", "Setup, Start, Stop, Run-MarketLab-EOD, Install-MarketLab-EODTask"],
-    ["tests/product/", "102 ca kiểm thử"],
+    ["sql/13_*.sql – 16_*.sql", "Migration EOD, database Ops (v1–v3: backfill), preflight, rollback"],
+    ["scripts/*.ps1", "Setup, Start, Stop, Run-MarketLab-EOD, Backfill-MarketLab, Install-MarketLab-EODTask"],
+    ["tests/product/", "140 ca kiểm thử"],
 ], [5.4, 11.2])
 
 cur.heading("5.3. Giao diện ứng dụng web", 2)
-cur.para("Giao diện có năm khu vực, chuyển qua thanh điều hướng bằng liên kết thật; trạng thái bộ lọc nằm trên địa chỉ trang nên tải lại "
+cur.para("Giao diện có sáu khu vực (Tổng quan, Lịch sử OHLCV, Dự báo & hiệu năng, So sánh mô hình, Vận hành EOD, Backfill lịch sử), chuyển qua thanh điều hướng bằng liên kết thật; trạng thái bộ lọc nằm trên địa chỉ trang nên tải lại "
          "hay đánh dấu trang không làm mất bộ lọc. Đầu trang luôn hiện nhãn phạm vi dữ liệu, ô chọn dataset và liên kết chuyển sang instance "
-         "chế độ khác. Tất cả ảnh dưới đây được chụp tự động bằng Microsoft Edge từ ứng dụng đang chạy sau khi hoàn thiện; ảnh REAL đã làm "
-         "mờ ô giá và biểu đồ giá.")
+         "chế độ khác; nhãn LIVE (đỏ) hoặc DEMO (vàng) nằm cả ở đầu trang lẫn cạnh tiêu đề. Tất cả ảnh dưới đây được chụp tự động bằng "
+         "Microsoft Edge từ ứng dụng đang chạy ngày 06/11/2026; ảnh LIVE đã làm mờ ô giá, khối lượng, biểu đồ và tooltip.")
 cur.heading("5.3.1. Tổng quan", 3)
-cur.para("Trang tổng quan hiển thị ngày giá mới nhất trong database kèm trạng thái độ mới (Đã cập nhật / Có thể chậm / Mô phỏng cố định – "
-         "luôn có chữ, không chỉ dùng màu), số mã có giá, số dòng DailyPrice, số dự báo đủ điều kiện tại hôm nay và phiên đồng bộ thành "
-         "công gần nhất. Khối “Nguồn, đơn vị & giới hạn” trình bày PriceBasis, PriceUnit và ghi chú nguồn của dataset. Khi dataset chưa có "
+cur.para("Trang tổng quan hiển thị số mã có giá, số phiên có dữ liệu, phạm vi ngày thực tế (MIN → MAX TradeDate), số dòng DailyPrice, "
+         "ngày giá mới nhất kèm trạng thái độ mới (Đã cập nhật / Có thể chậm / Mô phỏng cố định – luôn có chữ, không chỉ dùng màu), tình "
+         "trạng dữ liệu (số mã-phiên thiếu so với lịch phiên kể từ nến đầu tiên của từng mã), phiên đồng bộ thành công gần nhất, job "
+         "backfill chính, số dự báo đủ điều kiện và số giá chờ đối soát. Với LIVE, dòng universe ghi rõ “30 mã thuộc universe được cấu "
+         "hình (tham chiếu VN30 06/2026)”, không phải thành phần VN30 lịch sử. Khối “Nguồn, đơn vị & giới hạn” trình bày PriceBasis, PriceUnit và ghi chú nguồn của dataset. Khi dataset chưa có "
          "ModelRun (database Live), thẻ dự báo hiển thị “—” kèm giải thích thay vì số 0.")
-screen(cur, "01_demo_overview_1440.png", "Hình 4. Trang Tổng quan với dữ liệu mô phỏng")
-screen(cur, "10_real_overview_redacted_1440.png", "Hình 5. Trang Tổng quan với dữ liệu thật riêng tư")
-cur.heading("5.3.2. Giá và biểu đồ", 3)
-cur.para("Người dùng nhập mã (có gợi ý từ danh sách mã của dataset), khoảng ngày rồi bấm Xem. Biểu đồ gồm hai khung dùng chung trục thời "
-         "gian: Close (đường) và Volume (cột), mỗi khung một trục giá trị; tiêu đề ghi mã, dataset và khoảng ngày; chú giải ghi PriceBasis "
-         "SOURCE_CLOSE, đơn vị và nhắc rằng đây là dữ liệu cuối phiên. Phiên có trong lịch dataset nhưng thiếu giá được để trống và đánh "
-         "dấu, không nối đường. Bảng OHLCV bên dưới chứa cùng số liệu, sắp xếp theo cột và phân trang 50 dòng.")
-screen(cur, "02_demo_market_chart_1440.png", "Hình 6. Biểu đồ Close/Volume và chú giải khi rê chuột")
-screen(cur, "03_demo_market_filtered_sorted_1440.png", "Hình 7. Bảng OHLCV lọc DEMO03 01–14/02/2025, sắp xếp Close tăng dần")
+screen(cur, "02_demo_dashboard_1440.png", "Hình 4. Trang Tổng quan với dữ liệu mô phỏng")
+screen(cur, "01_live_dashboard_1440.png", "Hình 5. Trang Tổng quan với dữ liệu thật riêng tư sau backfill")
+cur.heading("5.3.2. Tra cứu lịch sử OHLCV", 3)
+cur.para("Người dùng nhập mã (gợi ý 30 mã kèm số phiên có giá), khoảng ngày rồi bấm Xem; ở LIVE ô ngày có giới hạn dưới 01/01/2023 và máy "
+         "chủ từ chối (HTTP 422) mọi khoảng bắt đầu trước mốc đó trước khi truy vấn. Không chọn ngày thì trang hiện 12 tháng gần nhất đã "
+         "lưu; các nút khoảng nhanh 3T, 6T, 1N, 2N, Tất cả đổi khoảng ngày bằng liên kết. Biểu đồ gồm hai khung dùng chung trục thời gian: "
+         "Close (đường) và Volume (cột), mỗi khung một trục giá trị; chú giải ghi PriceBasis SOURCE_CLOSE và đơn vị; kéo chuột ngang để "
+         "phóng to một đoạn, tooltip và phím mũi tên đọc từng phiên. Phiên có trong lịch dataset nhưng thiếu giá được để trống và đánh "
+         "dấu, không nối đường. Dòng nguồn ghi KBS qua vnstock, job backfill và thời điểm tải. Bảng OHLCV bên dưới chứa cùng số liệu, "
+         "sắp xếp theo cột, phân trang 50 dòng và có nút xuất CSV (tối đa 5.000 dòng, cùng bộ lọc và sàn ngày).")
+screen(cur, "05_demo_ohlcv_zoom_tooltip_1440.png", "Hình 6. Biểu đồ Close/Volume đã phóng to và tooltip OHLCV")
+screen(cur, "03_live_ohlcv_2023_all_1440.png", "Hình 7. Lịch sử OHLCV thật của FPT 03/01/2023–05/11/2026 (956 phiên)")
 cur.heading("5.3.3. Dự báo và hiệu năng", 3)
 cur.para("Trang liệt kê các ModelRun với mô hình, mục tiêu, horizon và ngưỡng; với ngày tham chiếu as_of do người dùng chọn, máy chủ gọi "
          "dbo.fn_EligiblePredictions(as_of) và tính Accuracy, Brier, log loss bằng đúng công thức của vw_ModelPerformance. Mỗi run có số dự "
          "báo đã chấm, chưa trưởng thành và thiếu giá endpoint. Bảng dự báo hiển thị OriginDate, TargetDate, ProbabilityPositive, nhãn dự "
          "đoán, nhãn thực (“—” khi chưa chấm, không phải 0) và trạng thái tại as_of. Khung thông báo nhắc rằng hệ thống chưa cấu hình mô "
          "hình tạo dự báo mới và kết quả không phải khuyến nghị đầu tư.")
-screen(cur, "04_demo_forecast_performance_1440.png", "Hình 8. Trang Dự báo và hiệu năng tại as_of 01/07/2026")
+screen(cur, "12_demo_forecast_1440.png", "Hình 8. Trang Dự báo và hiệu năng tại as_of 01/07/2026")
 cur.heading("5.3.4. So sánh mô hình", 3)
 cur.para("Người dùng chọn 2–8 run, khoảng ngày gốc và as_of; máy chủ gọi dbo.usp_CompareModels nên chỉ so trên giao các bộ (StockId, "
          "OriginDate, TargetDate) đủ điều kiện của mọi run, và chỉ chấp nhận run cùng dataset, cùng định nghĩa mục tiêu. Log loss được tính "
          "thêm trên đúng tập giao đó. Tiêu đề kết quả ghi dataset, mục tiêu, cửa sổ ngày, as_of và số quan sát chung.")
-screen(cur, "05_demo_model_comparison_1440.png", "Hình 9. So sánh run 1 và 2 trên 128 quan sát chung")
+screen(cur, "11_demo_compare_1440.png", "Hình 9. So sánh run 1 và 2 trên 128 quan sát chung")
+cur.para("Database LIVE chưa có ModelRun, nên hai trang Dự báo và So sánh ở LIVE chỉ hiển thị trạng thái rỗng kèm giải thích “Chưa cấu hình "
+         "mô hình tạo dự báo mới”, không vẽ biểu đồ hay điểm số giả; chỉ tiêu của dataset khác không được diễn giải thành chỉ tiêu của dữ "
+         "liệu LIVE.")
 cur.heading("5.3.5. Vận hành dữ liệu cuối phiên", 3)
 cur.para("Trang vận hành phân biệt bốn mốc ngày: ngày được yêu cầu gần nhất, phiên đồng bộ thành công gần nhất, ObservedThrough của "
          "dataset và nến mới nhất nguồn đã trả. Nhật ký EOD có lọc theo trạng thái, phân trang và chi tiết từng run (kết quả từng mã, nguồn, "
          "quyết định lịch phiên, ObservedThrough trước/sau, đánh giá lại). Bảng kiểm tra lịch phiên so số dòng giá mỗi phiên với universe kỳ "
          "vọng; bảng đối soát liệt kê giá đã chốt bị nguồn thay đổi. Biểu mẫu Dry run / Sync ghi rõ phạm vi ghi; ở DEMO_OFFLINE và "
-         "RESEARCH_READ_ONLY các nút bị khóa.")
-screen(cur, "14_real_ops_status_1440.png", "Hình 10. Trạng thái và nhật ký đồng bộ cuối phiên")
+         "RESEARCH_READ_ONLY các nút bị khóa. Nhật ký mặc định chỉ gồm các lần chạy EOD hằng ngày; 956 phiên do backfill ghi được xem ở "
+         "trang riêng hoặc khi tích “Gồm cả phiên backfill lịch sử”. Hình 11–12 chụp trước khi bổ sung tab Backfill (giao diện năm tab), "
+         "luồng biểu mẫu và trang kết quả không đổi.")
+screen(cur, "08_live_eod_ops_1440.png", "Hình 10. Trạng thái và nhật ký đồng bộ cuối phiên")
 screen(cur, "12_real_eod_job_result_1440.png", "Hình 11. Kết quả dry run thực hiện qua biểu mẫu web", 14.5)
 screen(cur, "13_real_ops_run_detail_1440.png", "Hình 12. Chi tiết một lần đồng bộ (kết quả từng mã)", 14.5)
-cur.heading("5.3.6. Hiển thị trên thiết bị nhỏ và trạng thái lỗi", 3)
-cur.para("Giao diện được kiểm tra ở bốn kích thước 1440×900, 1366×768, 768×1024 và 390×844: không tràn ngang trang; bảng rộng cuộn trong "
+cur.heading("5.3.6. Backfill lịch sử", 3)
+cur.para("Trang Backfill lịch sử hiển thị job chính (cửa sổ, trạng thái, tiến độ phiên, số dòng thêm mới và không đổi, mã-phiên thiếu "
+         "hoặc trước lịch sử nguồn, dòng bị từ chối, xung đột, backup đã xác minh), danh sách mọi job (kể cả dry run), kết quả theo trạng "
+         "thái phiên, các phiên cần chú ý, bảng tải nguồn theo mã với checkpoint mã × năm và bảng độ phủ theo mã truy vấn trực tiếp "
+         "DailyPrice × TradingDay. Biểu mẫu Dry run / Backfill thật / Tiếp tục job dở dang yêu cầu token, CSRF, ô xác nhận và hộp thoại "
+         "xác nhận; chỉ một job chạy tại một thời điểm.")
+screen(cur, "07_live_backfill_1440.png", "Hình 12a. Trang Backfill lịch sử trên MarketLabVN30_Live")
+cur.heading("5.3.7. Hiển thị trên thiết bị nhỏ và trạng thái lỗi", 3)
+cur.para("Giao diện được kiểm tra ở bốn kích thước 1440×900, 1280×800, 768×1024 và 390×844: không tràn ngang trang; bảng rộng cuộn trong "
          "khung với cột đầu cố định và gợi ý “Vuốt ngang”; thẻ chỉ tiêu hai cột trên điện thoại. Bộ lọc sai được kiểm tra ở máy chủ và trả "
          "trang có thông báo (HTTP 422); mất kết nối SQL Server trả trang HTTP 503 có nút Thử lại.")
-screen(cur, "08_demo_overview_390x844.png", "Hình 13. Trang Tổng quan trên điện thoại", 5.6)
-screen(cur, "07_demo_validation_error_1440.png", "Hình 14. Thông báo bộ lọc không hợp lệ do máy chủ kiểm tra", 14.5)
+screen(cur, "13_live_ohlcv_390.png", "Hình 13. Trang Lịch sử OHLCV trên điện thoại", 5.6)
+screen(cur, "06_live_history_floor_422_1440.png", "Hình 14. Từ chối khoảng ngày trước 01/01/2023 ở chế độ LIVE", 14.5)
 
 cur.heading("5.4. Xử lý phía máy chủ và bảo mật", 2)
 cur.cap_table("Bảng 25. Các route của ứng dụng web (không có REST JSON cho giao diện)")
 cur.table(["Route", "Phương thức", "Tham số chính", "Truy vấn SQL / xử lý", "Mã HTTP"], [
     ["/", "GET", "ds", "Dataset, fn_EligiblePredictions(hôm nay), vw_LatestStockPrice, ops.EodRun", "200, 404, 503"],
-    ["/market", "GET", "ds, t, f, to, sort, order, page", "DailyPrice (tham số hóa), lịch TradingDay cho biểu đồ", "200, 422, 503"],
+    ["/market", "GET", "ds, t, f, to, sort, order, page", "DailyPrice (tham số hóa, LIVE ≥ 01/01/2023), lịch TradingDay cho biểu đồ", "200, 422, 503"],
+    ["/market/export.csv", "GET", "ds, t, f, to", "Cùng bộ lọc và sàn ngày, ≤ 5.000 dòng, tải tệp CSV", "200, 422"],
     ["/forecast", "GET", "ds, as_of, run, t, status, page", "ModelRun, fn_EligiblePredictions(as_of), Prediction", "200, 404, 422"],
     ["/compare", "GET", "ds, runs (2–8), f, to, as_of", "dbo.usp_CompareModels + log loss trên tập giao", "200, 409, 422"],
     ["/ops", "GET", "ds, status, page, run", "ops.EodRun, EodRunItem, PriceReconciliation, kiểm tra lịch", "200, 404, 422"],
     ["/ops/eod", "POST (form)", "csrf, ops_token, session_date, action, confirm_sync", "Khởi chạy EOD Worker (nền)", "303, 401, 403, 409, 422, 429"],
     ["/ops/jobs/{id}", "GET", "—", "Trạng thái job, tự làm mới 2 giây", "200, 404"],
+    ["/backfill", "GET", "ds, job", "ops.BackfillJob/Fetch/Session/Reject; độ phủ DailyPrice × TradingDay", "200, 404"],
+    ["/backfill/run", "POST (form)", "csrf, ops_token, start_date, end_date, tickers, action, confirm_write", "Khởi chạy backfill (nền)", "303, 401, 403, 409, 422, 429"],
+    ["/backfill/jobs/{id}", "GET", "—", "Tiến độ job backfill, tự làm mới 3 giây", "200, 404"],
     ["/health", "GET", "—", "Văn bản “ok” cho script khởi động (không phải API dữ liệu)", "200"],
 ], [2.4, 2.0, 4.0, 6.0, 2.3])
 cur.para("Mọi tham số được kiểm tra kiểu và miền (mã 1–20 ký tự chữ/số, ngày ISO, khoảng ngày hợp lệ, trang ≥ 1, cột sắp xếp trong danh "
@@ -751,7 +780,7 @@ cur.table(["Rủi ro", "Biện pháp", "Kiểm thử"], [
     ["Lộ bí mật", "Token chỉ ở .env máy chủ; ô mật khẩu không được điền lại; không có trong HTML, URL, log", "kiểm tra nội dung trang"],
     ["Chế độ sai database", "Từ chối phục vụ khi loại dataset không khớp chế độ (503)", "test_mode_mismatch_is_refused"],
 ], [3.6, 7.6, 5.4])
-screen(cur, "09_api_docs_removed_404.png", "Hình 15. Route /api/docs đã gỡ trả trang 404 của ứng dụng", 14.0)
+screen(cur, "16_api_docs_404.png", "Hình 15. Route /api/docs đã gỡ trả trang 404 của ứng dụng", 14.0)
 
 cur.heading("5.5. Quy trình cập nhật dữ liệu cuối phiên (EOD) đã triển khai", 2)
 cur.para("Worker chạy độc lập với ứng dụng web và được kích hoạt bằng PowerShell (scripts/Run-MarketLab-EOD.ps1), Windows Task Scheduler "
@@ -803,9 +832,47 @@ cur.table(["Run", "Phiên", "Kích hoạt", "Kết quả", "Nhận/Yêu cầu", 
     ["38", "05/11/2026", "Dry run sau khi sửa", "DRY_RUN_OK", "30/30", "0", "30"],
     ["39", "05/11/2026", "Biểu mẫu web (WEB)", "DRY_RUN_OK", "30/30", "0", "30"],
 ], [1.4, 2.8, 3.4, 3.8, 1.9, 2.0, 1.6])
-cur.para("Kết quả cuối: 780 dòng giá của 30 mã trên 26 phiên, ObservedThrough 05/11/2026, 780 dòng lineage; các lần chạy lại và dry run "
-         "không làm thay đổi số dòng. Giá ACB ngày 04/11/2026 trong database trùng khớp nến lấy độc lập bằng vnstock 4.0.9 trước khi đồng "
+cur.para("Kết quả của giai đoạn đồng bộ ban đầu: 780 dòng giá của 30 mã trên 26 phiên, ObservedThrough 05/11/2026, 780 dòng lineage; "
+         "các lần chạy lại và dry run không làm thay đổi số dòng (mục 5.5.7 mở rộng lịch sử về 2023). Giá ACB ngày 04/11/2026 trong database trùng khớp nến lấy độc lập bằng vnstock 4.0.9 trước khi đồng "
          "bộ. Run #37 cho thấy cơ chế an toàn hoạt động: dữ liệu nguồn thiếu nên lần chạy báo PARTIAL và không ghi, thay vì báo SUCCESS.")
+cur.heading("5.5.7. Backfill lịch sử 01/01/2023 → phiên hoàn chỉnh mới nhất", 3)
+cur.para("Để có dữ liệu lịch sử đủ dài, nhóm mở rộng chính EOD Worker thành tác vụ backfill: nguồn KBS → kiểm tra từng nến bằng cùng quy "
+         "tắc → bảng staging ops.BackfillStaging trong database Ops (checkpoint theo mã × năm) → ops.usp_EodApplySession, mỗi phiên một "
+         "transaction. Sàn lịch sử 01/01/2023 được áp ở cấu hình, dòng lệnh, staging, trang web và tệp CSV. EndDate “latest” là nến chỉ "
+         "số VN30 cuối cùng không muộn hơn hôm nay sau 16:10 (hoặc hôm qua). Một ngày là phiên khi có nến VN30 hoặc có nến của ít nhất "
+         "một nửa số mã, nên thứ Bảy, Chủ nhật và ngày lễ không bị tính là thiếu. Phiên trước ObservedThrough được ghi cho các mã có nến "
+         "hợp lệ và đánh dấu PARTIAL nếu thiếu mã (không bao giờ tính là đủ 30/30); phiên sau ObservedThrough vẫn theo quy tắc toàn bộ "
+         "hoặc không ghi. Cùng khóa cùng giá trị → không đổi; cùng khóa khác giá trị → đưa vào hàng đợi đối soát, giá đã lưu không bị ghi "
+         "đè. Trước khi ghi thật, hệ thống tự backup COPY_ONLY database Live và Ops với CHECKSUM, RESTORE VERIFYONLY và khôi phục thử vào "
+         "database tạm để so số dòng. Database nghiệp vụ không đổi lược đồ; chỉ database Ops thêm bảng (sql/16_ops_schema_v3_backfill.sql).")
+cur.cap_table("Bảng 28a. Dry run và backfill thật trên MarketLabVN30_Live ngày 06/11/2026 (trích ops.BackfillJob; chỉ số đếm)")
+cur.table(["Job", "Loại", "Cửa sổ", "Phiên", "Thêm (dự kiến)", "Không đổi", "Thiếu", "Trước lịch sử nguồn", "Xung đột"], [
+    ["1", "Dry run", "2023-01-01 → 2026-11-05", "956", "27.317", "780", "583", "0", "0"],
+    ["2", "Dry run (sau sửa bridge)", "2023-01-01 → 2026-11-05", "955", "27.288", "780", "0", "582", "0"],
+    ["3", "Dry run (lịch hợp)", "2023-01-01 → 2026-11-05", "956", "27.317", "780", "0", "583", "0"],
+    ["4", "Ghi thật", "2023-01-01 → 2026-11-05", "956", "27.317", "780", "0", "583", "0"],
+    ["5", "Chạy lại để kiểm chứng", "2023-01-01 → 2023-06-30", "121", "0", "3.509", "0", "121", "0"],
+], [1.0, 2.9, 3.3, 1.5, 1.9, 1.7, 1.3, 1.9, 1.5])
+cur.para("Ba lần dry run cho thấy cơ chế kiểm tra hoạt động với dữ liệu thật. Lần 1: VPL năm 2023–2024 bị nguồn trả lỗi “Dữ liệu trống” "
+         "nên bị xếp nhầm là thiếu; bridge được sửa để nhận diện câu trả lời rỗng tường minh của nguồn, khác với lỗi mạng. Lần 2: chuỗi "
+         "chỉ số VN30 năm 2025 trả 248 thay vì 249 nến (thiếu 04/04/2025) dù cả 30 mã có nến ngày đó, nên lịch phiên được đổi thành hợp "
+         "của nến tham chiếu và nến của đa số mã. Lần 3 khớp lần ghi thật.")
+cur.cap_table("Bảng 28b. Kết quả kiểm tra sau backfill (SQL Server, 06/11/2026)")
+cur.table(["Kiểm tra", "Kết quả"], [
+    ["Tổng dòng OHLCV / phiên", "28.097 dòng (780 có sẵn + 27.317 mới); 956 phiên; 03/01/2023 → 05/11/2026"],
+    ["Theo năm (phiên / dòng)", "2023: 249 / 7.221 · 2024: 250 / 7.250 · 2025: 249 / 7.386 · 2026: 208 / 6.240"],
+    ["Thiếu theo mã", "0 mã-phiên thiếu; VPL có dữ liệu từ 13/05/2025, 583 phiên trước đó là “trước lịch sử nguồn”"],
+    ["Dòng trước 01/01/2023; khóa trùng; vi phạm OHLC", "0; 0; 0"],
+    ["Dòng thiếu lineage; TradingDay cuối tuần", "0; 0"],
+    ["780 dòng có sẵn", "SHA-256 giá trị và LoadedAt trước = sau backfill"],
+    ["Chạy lại cửa sổ 01–06/2023", "0 dòng mới, 3.509 không đổi, SHA-256 trước = sau"],
+    ["Biến động Close liên tiếp lớn nhất", "7,06% (biên độ HOSE ±7%); không có bước nhảy > 7,5%"],
+    ["Số bảng nghiệp vụ; ObservedThrough", "13; 05/11/2026 (không đổi)"],
+], [6.0, 10.6])
+cur.para("Độ phủ được báo trung thực là PARTIAL_COVERAGE vì VPL không có lịch sử trước 13/05/2025 ở nguồn; hệ thống không nội suy hay dựng "
+         "nến cho khoảng đó. Báo cáo chi tiết theo mã nằm ở docs/BACKFILL_COVERAGE_REPORT.md (chỉ có số đếm, ngày và hash). Sau backfill, "
+         "worker EOD hằng ngày tiếp tục hoạt động: phiên 05/11/2026 chạy lại SUCCESS với 0 dòng mới, phiên 06/11/2026 trước 16:10 trả "
+         "SKIPPED BEFORE_CUTOFF.")
 cur.heading("5.6. Thay đổi SQL và database vận hành", 2)
 cur.para("Các thay đổi SQL được trình bày ở mục 2.5 (database Ops) và 3.6 (migration, trigger, thủ tục). Bảng dưới đây mô tả cột của "
          "ops.EodRun, bảng trung tâm của nhật ký.")
@@ -815,7 +882,7 @@ cur.table(["Thuộc tính", "Kiểu", "Ý nghĩa"], [
     ["RunRef / BatchRef", "VARCHAR(36)", "Mã tham chiếu (UNIQUE) và mã lô backfill"],
     ["DatabaseName, DatasetId", "SYSNAME, INT", "Database và dataset được đồng bộ"],
     ["SessionDate", "DATE", "Ngày phiên (Asia/Ho_Chi_Minh)"],
-    ["TriggerKind", "VARCHAR(20) CHECK", "CLI, SCHEDULER, WEB, TEST (API cho các run lịch sử)"],
+    ["TriggerKind", "VARCHAR(20) CHECK", "CLI, SCHEDULER, WEB, TEST, BACKFILL (API cho các run lịch sử)"],
     ["IsDryRun, Status", "BIT, VARCHAR(20) CHECK", "RUNNING, SUCCESS, DRY_RUN_OK, NO_SESSION, SKIPPED, PARTIAL, FAILED"],
     ["Requested/Received/Inserted/Unchanged/RejectedCount", "INT ≥ 0", "Số mã yêu cầu, nhận, thêm, không đổi, từ chối"],
     ["StartedAtUtc, FinishedAtUtc", "DATETIME2(3)", "Thời điểm UTC; RUNNING khi chưa kết thúc"],
@@ -832,18 +899,20 @@ cur.code(["powershell -ExecutionPolicy Bypass -File scripts\\Setup-MarketLab.ps1
           "#   -> http://127.0.0.1:8000/   (DEMO_OFFLINE)",
           "powershell -ExecutionPolicy Bypass -File scripts\\Start-MarketLab.ps1 -Mode REAL_PRIVATE -Database MarketLabVN30_Live -Port 8001",
           "powershell -ExecutionPolicy Bypass -File scripts\\Run-MarketLab-EOD.ps1 -Date 2026-11-05 -DryRun",
+          "powershell -ExecutionPolicy Bypass -File scripts\\Backfill-MarketLab.ps1 -StartDate 2023-01-01 -EndDate latest -DryRun",
+          "powershell -ExecutionPolicy Bypass -File scripts\\Backfill-MarketLab.ps1 -Resume",
           "powershell -ExecutionPolicy Bypass -File scripts\\Stop-MarketLab.ps1 -Port 8000"])
 cur.para("Script Install-MarketLab-EODTask.ps1 cài task Windows Task Scheduler ở trạng thái tắt, chạy thứ Hai–thứ Sáu lúc 16:10, 17:30 và "
          "19:30 giờ Việt Nam với tùy chọn -IfNeeded (bỏ qua phiên đã SUCCESS); chỉ bật được bằng -Enable khi đã có một lần chạy thủ công "
          "SUCCESS. Nhóm đã cài task ở trạng thái tắt và chạy thử một lần qua Task Scheduler (-RunNow): kết quả ALREADY_SUCCEEDED, mã thoát 0. "
          "Việc lịch tự chạy đúng 16:10 chưa được kiểm chứng (NOT VERIFIED) vì task chưa được bật.")
 cur.heading("5.8. Kiểm thử và nghiệm thu phần mở rộng", 2)
-cur.para("Ngoài bộ 102 ca ở mục 4.5, giao diện được kiểm tra bằng công cụ tự động mở từng trang trong Microsoft Edge ở hai chế độ và bốn "
+cur.para("Ngoài bộ 140 ca ở mục 4.5, giao diện được kiểm tra bằng công cụ tự động mở từng trang trong Microsoft Edge ở hai chế độ và bốn "
          "kích thước, và số liệu hiển thị được đối chiếu trực tiếp với SQL.")
 cur.cap_table("Bảng 30. Kiểm tra giao diện tự động (scripts/ui_audit.py, 06/11/2026)")
 cur.table(["Kích thước", "Số màn hình", "Tràn ngang", "Lỗi console", "Request lỗi", "Trình duyệt tự gọi dữ liệu", "Kết quả"], [
-    ["1440×900", "10", "0", "0", "0", "0", "PASS"], ["1366×768", "10", "0", "0", "0", "0", "PASS"],
-    ["768×1024", "10", "0", "0", "0", "0", "PASS"], ["390×844", "10", "0", "0", "0", "0", "PASS"],
+    ["1440×900", "12", "0", "0", "0", "0", "PASS"], ["1280×800", "12", "0", "0", "0", "0", "PASS"],
+    ["768×1024", "12", "0", "0", "0", "0", "PASS"], ["390×844", "12", "0", "0", "0", "0", "PASS"],
 ], [2.4, 2.0, 2.0, 2.0, 2.2, 3.6, 2.2])
 cur.cap_table("Bảng 31. Đối chiếu số liệu trên trang với truy vấn SQL")
 cur.table(["Hành trình", "Trang", "Đối chiếu SQL", "Kết quả"], [
@@ -852,7 +921,10 @@ cur.table(["Hành trình", "Trang", "Đối chiếu SQL", "Kết quả"], [
     ["Biểu đồ", "/market", "Số điểm có giá = số dòng SQL; basis SOURCE_CLOSE", "Khớp"],
     ["Hiệu năng run 1", "/forecast?run=1&as_of=2026-07-01", "usp_GetModelPerformance → 128 dòng, Accuracy 0,546875", "Khớp"],
     ["So sánh run 1, 2", "/compare?runs=1&runs=2", "usp_CompareModels → 128 quan sát chung", "Khớp"],
-    ["Trạng thái EOD (REAL)", "/ops", "ops.EodRun: phiên SUCCESS gần nhất, số run", "Khớp (11/11 kiểm tra)"],
+    ["Trạng thái EOD (REAL)", "/ops", "ops.EodRun: phiên SUCCESS gần nhất, số run EOD hằng ngày", "Khớp"],
+    ["Mã và khoảng ngày ngẫu nhiên (REAL)", "/market × 6", "6 cặp mã/khoảng chọn bằng seed 20261106: hash trang 1, tổng dòng, số điểm biểu đồ", "Khớp"],
+    ["Sàn 2023 (REAL)", "/market, /market/export.csv", "f = 2022-06-01 → 422; CSV = SQL, không dòng nào trước 2023", "Khớp"],
+    ["Độ phủ (REAL)", "/backfill", "Số dòng của 30 mã = COUNT theo mã", "Khớp (LIVE 38/38, DEMO 26/26)"],
     ["Dry run qua form (REAL)", "POST /ops/eod", "ops.EodRun #39 WEB DRY_RUN_OK; DailyPrice vẫn 780", "Khớp"],
 ], [3.4, 4.0, 7.0, 2.2])
 cur.heading("5.9. Kết quả hoàn thiện giao diện", 2)
@@ -884,7 +956,7 @@ cur.table(["Phút", "Thao tác", "Điểm cần nói"], [
     ["1:30", "Giá & biểu đồ: DEMO03, rê chuột, sắp xếp, lọc, F5", "Hai khung Close/Volume; EOD không realtime; bộ lọc trên URL"],
     ["2:15", "Dự báo: lọc “Chưa trưởng thành”", "fn_EligiblePredictions(as_of); “—” không phải 0; không có inference"],
     ["3:00", "So sánh run 1, 2", "usp_CompareModels: 128 quan sát chung"],
-    ["3:30", "Chuyển sang REAL_PRIVATE", "30 mã snapshot 06/2026; 780 giá KBS"],
+    ["3:30", "Chuyển sang LIVE: Tổng quan, Lịch sử OHLCV FPT “Tất cả”, tab Backfill", "28.097 giá KBS 2023–2026; VPL từ 13/05/2025; 0 xung đột"],
     ["4:00", "Vận hành EOD: run #37 và #39", "Bốn mốc ngày; PARTIAL không ghi; dry run qua form"],
     ["5:30", "Token sai; Sync không xác nhận", "INVALID_OPS_TOKEN; CONFIRMATION_REQUIRED"],
     ["6:00", "SSMS: COUNT(*) DailyPrice; TOP 5 ops.EodRun", "Số trên trang = SQL"],
@@ -894,17 +966,18 @@ cur.table(["Phút", "Thao tác", "Điểm cần nói"], [
 # Conclusion
 _, p = find("Phần mở rộng đề xuất Web UI, local REST API")
 set_text(p, "Phần mở rộng đưa bài tập lớn từ demo SSMS sang một ứng dụng chạy cục bộ có thể dùng sau mỗi phiên: ứng dụng web dựng trang "
-            "ở máy chủ từ SQL Server với năm khu vực chức năng, và tác vụ đồng bộ cuối phiên đã nạp 780 dòng giá thật của 30 mã với "
-            "transaction toàn vẹn, chạy lại không tạo trùng và nhật ký đầy đủ. Kiến trúc cuối bỏ lớp API Gateway để giảm bề mặt và độ phức "
+            "ở máy chủ từ SQL Server với sáu khu vực chức năng, và tác vụ đồng bộ cuối phiên cùng backfill lịch sử đã nạp 28.097 dòng giá "
+            "thật của 30 mã từ 03/01/2023 đến 05/11/2026 với transaction theo từng phiên, chạy lại không tạo trùng và nhật ký đầy đủ. Kiến trúc cuối bỏ lớp API Gateway để giảm bề mặt và độ phức "
             "tạp mà không mất chức năng.")
 cur = Cursor(p._p)
 cur.cap_table("Bảng 34. Đối chiếu yêu cầu và kết quả")
 cur.table(["Yêu cầu", "Kết quả", "Trạng thái"], [
     ["13 bảng 3NF, khóa, CHECK, trigger", "Giữ nguyên; 44/44 ca PASS trên demo và trên bản đã migrate", "Đã kiểm chứng"],
     ["16 truy vấn, 4 procedure, 3 function, 4 view", "Chạy lại 06/11/2026, khớp số dòng lịch sử", "Đã kiểm chứng"],
-    ["Ứng dụng web 5 khu vực, khớp SQL", "Đối chiếu tự động DEMO 9/9, REAL 11/11; 4 kích thước màn hình", "Đã kiểm chứng"],
+    ["Ứng dụng web 6 khu vực, khớp SQL", "Đối chiếu tự động DEMO 26/26, LIVE 38/38; 4 kích thước màn hình, 48/48 màn hình", "Đã kiểm chứng"],
     ["Không API Gateway, không Swagger", "/api/* và /api/docs trả 404; trình duyệt không gọi dữ liệu", "Đã kiểm chứng"],
-    ["EOD với nguồn thật, idempotent, rollback", "780 dòng; chạy lại 0 dòng mới; PARTIAL/FAILED không ghi", "Đã kiểm chứng"],
+    ["EOD với nguồn thật, idempotent, rollback", "Phiên 05/11/2026 chạy lại 0 dòng mới; PARTIAL/FAILED không ghi", "Đã kiểm chứng"],
+    ["Backfill OHLCV thật 2023 → nay", "28.097 dòng, 956 phiên, 0 thiếu (trừ VPL trước niêm yết), 0 xung đột; chạy lại hash không đổi", "Đã kiểm chứng"],
     ["Lịch Task Scheduler 16:10 tự chạy", "Task cài ở trạng thái tắt; chạy thử -RunNow thành công", "Chưa kiểm chứng"],
     ["Migration database nghiên cứu", "Có preflight, backup, rollback; chưa áp dụng", "Chưa thực hiện"],
     ["Tạo dự báo mới hằng ngày", "Không có model artifact", "Chưa triển khai"],
@@ -912,9 +985,11 @@ cur.table(["Yêu cầu", "Kết quả", "Trạng thái"], [
 _, p = find("Giới hạn thứ hai là môi trường triển khai")
 set_text(p, "Giới hạn thứ hai là môi trường triển khai. Hệ thống chỉ được kiểm chứng trên SQL Server 2025 Developer, chưa trên Express/2016. "
             "Lịch tự động 16:10 chưa được bật nên chưa có bằng chứng tự chạy; task chỉ chạy khi người dùng đã đăng nhập Windows. Lịch nghỉ "
-            "được suy từ chuỗi chỉ số của chính nguồn. Nguồn KBS điều chỉnh hồi tố giá lịch sử nên chuỗi giá lưu có thể gãy tại sự kiện doanh "
-            "nghiệp; cơ chế đối soát phát hiện thay đổi trong cửa sổ 10 ngày và cần người duyệt. Quyền đẩy nhánh và tạo pull request lên "
-            "GitHub bị chặn trong môi trường làm việc nên mã nguồn mới chỉ có trên nhánh cục bộ.")
+            "được suy từ chuỗi chỉ số của chính nguồn và nến của đa số mã. Universe 30 mã là snapshot VN30 06/2026, chưa có thành phần VN30 "
+            "tại từng thời điểm từ 2023. Nguồn KBS điều chỉnh hồi tố giá lịch sử nên chuỗi giá lưu có thể gãy tại sự kiện doanh "
+            "nghiệp; cơ chế đối soát phát hiện thay đổi và cần người duyệt. Nhánh chưa được đẩy lên GitHub: cổng kiểm tra công bố "
+            "(scripts/check_publication.py) chưa duyệt các tệp mới và việc công bố cần chủ repository phê duyệt; mã nguồn mới hiện có "
+            "trên nhánh cục bộ.")
 _, p = find("Hướng hoàn thiện ưu tiên gồm")
 set_text(p, "Hướng phát triển: (1) bật và theo dõi lịch tự động sau khi được chủ dữ liệu đồng ý; (2) migrate database nghiên cứu sau khi "
             "sao lưu và duyệt; (3) bổ sung lịch nghỉ HOSE chính thức dạng máy đọc được; (4) quy trình duyệt đối soát trên giao diện; (5) "
@@ -949,13 +1024,13 @@ remove_between(t27, pa1._p)
 cur = Cursor(pc._p)
 cur.table(["Tệp", "Mục đích", "Trạng thái"], [
     ["sql/00–10, all_in_one.sql", "13 bảng, ràng buộc, đối tượng SQL, truy vấn, 44 ca kiểm thử, demo", "Có, chạy lại 06/11/2026"],
-    ["sql/13_*.sql, 14_*.sql, 15_*.sql", "Migration EOD, database Ops, preflight, rollback", "Có, đã áp lên Live và Ops"],
+    ["sql/13_*.sql – 16_*.sql", "Migration EOD, database Ops (v1–v3), preflight, rollback", "Có, đã áp lên Live và Ops"],
     ["marketlab_app/", "Ứng dụng web, truy vấn, EOD Worker", "Có (nhánh cục bộ)"],
     ["scripts/*.ps1", "Cài đặt, khởi động, dừng, EOD, Task Scheduler", "Có, đã chạy"],
-    ["tests/product/", "102 ca kiểm thử", "102 PASS"],
+    ["tests/product/", "140 ca kiểm thử", "140 PASS"],
     ["tests/product_evidence/", "Log pytest/JUnit, regression, kiểm tra giao diện, đối chiếu", "Có"],
-    ["report/final/assets/screens/", "17 ảnh giao diện + manifest", "Có"],
-    ["docs/PRODUCT_*.md", "Audit, runbook, hợp đồng dữ liệu EOD, QA, bằng chứng, kịch bản demo", "Có"],
+    ["report/final/assets/screens/, web_final/", "17 + 16 ảnh giao diện + manifest", "Có"],
+    ["docs/PRODUCT_*.md, BACKFILL_*.md, FINAL_WEB_ACCEPTANCE.md", "Audit, runbook, hợp đồng dữ liệu EOD, backfill, nghiệm thu, QA, bằng chứng", "Có"],
 ], [5.0, 8.0, 3.6])
 _, pa1 = find("A.1. Ảnh chụp minh chứng")
 set_text(pa1, "A.1. Ảnh đã đưa vào báo cáo và ảnh cần chụp bổ sung")
@@ -963,7 +1038,8 @@ _, pa2 = find("A.2. Các lệnh đối chiếu")
 remove_between(pa1._p.getnext(), pa2._p)
 cur = Cursor(pa1._p)
 cur.para("Ảnh giao diện trong báo cáo (Hình 4–17) đều được chụp tự động bằng Microsoft Edge từ ứng dụng đang chạy; thông tin route, chế độ "
-         "dữ liệu, kích thước và thời điểm chụp ghi trong report/final/assets/screens/screens_manifest.json. Ảnh cần chụp bổ sung bằng tay "
+         "dữ liệu, kích thước và thời điểm chụp ghi trong report/final/assets/web_final/manifest.json và "
+         "report/final/assets/screens/screens_manifest.json. Ảnh cần chụp bổ sung bằng tay "
          "(chưa có trong báo cáo):")
 cur.bullets(["SSMS: Object Explorer của MarketLabVN30_Demo với 13 bảng và kết quả SELECT @@VERSION.",
              "SSMS: kết quả Q02, Q06/Q07 và usp_CompareModels (đã có output sqlcmd trong Chương 3–4).",
@@ -975,7 +1051,7 @@ _, pb = find("PHỤ LỤC B.")
 remove_between(nxt, pb._p)
 cur = Cursor(pa2._p)
 cur.code(["SELECT DB_NAME() AS DBName, @@VERSION AS SqlServerVersion;",
-          "SELECT COUNT(*) AS PriceRows FROM dbo.DailyPrice;           -- Demo 280, Live 780",
+          "SELECT COUNT(*) AS PriceRows FROM dbo.DailyPrice;           -- Demo 280, Live 28097",
           "SELECT * FROM dbo.vw_ModelPerformance;",
           "SELECT TOP(20) EodRunId,SessionDate,TriggerKind,IsDryRun,Status,ErrorCode,",
           "       RequestedCount,ReceivedCount,InsertedCount,UnchangedCount",
@@ -999,15 +1075,18 @@ cur.table(["Tuyên bố", "Bằng chứng", "Trạng thái"], [
     ["44/44 sau migration 13", "test_integration_sql_regression.py", "PASS"],
     ["16 truy vấn khớp số dòng lịch sử", "tests/runs/public_20261105T175220966677Z/query_*.log", "PASS"],
     ["Bảng 22 (600 quan sát) tái lập được", "usp_CompareModels chỉ đọc trên DB nghiên cứu 06/11/2026", "PASS"],
-    ["102 ca kiểm thử phần mở rộng", "tests/product_evidence/logs/pytest_product.xml", "PASS"],
-    ["Giao diện 40/40 màn hình không lỗi", "tests/product_evidence/ui_audit/ssr/audit.json", "PASS"],
-    ["Số liệu trang khớp SQL", "web_vs_sql_demo.json (9/9); báo cáo REAL riêng tư (11/11)", "PASS"],
-    ["780 giá thật, chạy lại 0 dòng mới", "ops.EodRun #2–28, #35; COUNT DailyPrice", "PASS"],
+    ["140 ca kiểm thử phần mở rộng", "tests/product_evidence/logs/pytest_final_web.xml", "PASS"],
+    ["Giao diện 48/48 màn hình không lỗi", "tests/product_evidence/ui_audit/final_web/", "PASS"],
+    ["Số liệu trang khớp SQL", "web_vs_sql_demo.json (26/26); web_vs_sql_real_summary.json (38/38)", "PASS"],
+    ["28.097 giá thật 2023–2026, 0 xung đột", "ops.BackfillJob #4; docs/BACKFILL_COVERAGE_REPORT.md", "PASS"],
+    ["Chạy lại không thêm dòng, hash không đổi", "ops.BackfillJob #5; EodRun 05/11/2026 0 dòng mới", "PASS"],
+    ["Không dòng nào trước 01/01/2023", "COUNT TradeDate < 2023-01-01 = 0; test sàn lịch sử", "PASS"],
     ["Không còn API Gateway/Swagger", "Route 404; test_pages_render_and_no_api_or_swagger_surface", "PASS"],
     ["Lịch tự động 16:10", "Task ở trạng thái tắt", "NOT VERIFIED"],
     ["Migration DB nghiên cứu", "—", "NOT DONE"],
     ["Inference dự báo mới", "—", "NOT IMPLEMENTED"],
-    ["Đẩy nhánh / pull request", "Quyền bị chặn", "BLOCKED"],
+    ["EOD phiên 06/11/2026", "Chưa qua 16:10 lúc kiểm chứng", "NOT VERIFIED"],
+    ["Đẩy nhánh / pull request", "Chưa đẩy: cổng công bố FAIL, chờ chủ repository duyệt", "BLOCKED"],
 ], [5.6, 7.6, 3.4])
 cur.para("Chi tiết đầy đủ: report/final/CLAIMS_EVIDENCE_MATRIX.md và report/final/QA_REPORT.md.", align="left")
 

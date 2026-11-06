@@ -1,5 +1,35 @@
 # QA báo cáo FINAL – MarketLab VN30
 
+## Bản v2 (06/11/2026 11:30) – backfill OHLCV 2023 → nay và Web FINAL
+
+- **Tệp:** `report/final/MarketLabVN30_FINAL.docx` và `.pdf`, **67 trang A4**, mọi font được nhúng. Mục lục, danh mục hình và danh mục bảng do Word cập nhật.
+- **Bản v1 được lưu nguyên:** `report/final/archive/MarketLabVN30_FINAL_v1_99e1b25.docx` và `.pdf` (65 trang), SHA-256 trùng bản đã commit ở `99e1b25`.
+- **Mã nguồn được mô tả:** commit `762c784`.
+- **Phạm vi sửa (chỉ các đoạn về Web UI, khoảng dữ liệu, nguồn, kết quả):**
+  - Phần 13 bảng và SQL theo mẫu giữ nguyên.
+  - Bảng 3 và 3a: số liệu Live mới.
+  - Bảng 18b: TradingDay 956, DailyPrice 28.097.
+  - Bảng 22a: 140 ca.
+  - Mục 5.3: giao diện sáu khu vực. Hình 4–10 và 13–15 chụp lại từ `report/final/assets/web_final/`. Thêm mục 5.3.6 Backfill (Hình 12a).
+  - Bảng 25: thêm route `/market/export.csv`, `/backfill`, `/backfill/run`, `/backfill/jobs/{id}`.
+  - Mục mới 5.5.7 (Bảng 28a, 28b): dry run, backfill thật, chạy lại, kiểm tra sau backfill.
+  - Bảng 30, 31 và 34–36 cập nhật số liệu kiểm thử và đối chiếu.
+  - Phần Giới hạn: universe snapshot và trạng thái đẩy nhánh.
+- **Hình 11–12 giữ ảnh cũ** (giao diện năm tab, chụp 06/11/2026 00:51). Luồng biểu mẫu EOD không đổi; văn bản ghi rõ điều này.
+- **QA:**
+  - Render 67 trang (`scripts/render_report_pages.py`) và xem các trang 43–60.
+  - Bảng 28a có cột "Phiên" bị ngắt chữ; đã nới cột và dựng lại.
+  - `pdftotext`: không trang trắng, 0 lần xuất hiện "Claude".
+  - `validate.py --original <template>`: *All validations PASSED*.
+  - Ảnh LIVE làm mờ ô giá, khối lượng, biểu đồ và tooltip. Báo cáo không chứa giá thật, token hay chuỗi kết nối.
+- **Ảnh trong bản v2:** 15 ảnh giao diện thật.
+  - 11 ảnh mới từ `web_final` (Hình 4–10, 12a, 13–15; chụp 06/11/2026 11:24).
+  - 3 ảnh của bản trước (Hình 11, 12, 17; chụp 06/11/2026 00:50–00:51).
+  - 1 ảnh "before" (Hình 16).
+  - Ngoài ra: 1 sơ đồ kiến trúc, 2 hình của template, 0 ảnh SSMS (vẫn NOT DONE).
+
+Các mục dưới đây là QA của bản v1 (65 trang), giữ lại để đối chiếu.
+
 Ngày QA: 06/11/2026. Máy: Windows 11 Pro, Microsoft Word for Microsoft 365 (COM), Poppler `pdftoppm`/`pdfinfo`/`pdffonts` (MiKTeX).
 
 ## 1. Tệp bàn giao
