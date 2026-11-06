@@ -11,11 +11,14 @@
   finish within 20 minutes on this machine; a fresh session exports in a few seconds. Steps go to var\logs\finalize_report.log.
 #>
 [CmdletBinding()]
-param()
+param(
+    [string]$Docx,      # default report\final\MarketLabVN30_FINAL.docx
+    [string]$Pdf        # default: same name as -Docx with .pdf
+)
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
-$docx = Join-Path $Root 'report\final\MarketLabVN30_FINAL.docx'
-$pdf = Join-Path $Root 'report\final\MarketLabVN30_FINAL.pdf'
+$docx = if ($Docx) { (Resolve-Path $Docx).Path } else { Join-Path $Root 'report\final\MarketLabVN30_FINAL.docx' }
+$pdf = if ($Pdf) { $Pdf } else { [System.IO.Path]::ChangeExtension($docx, '.pdf') }
 New-Item -ItemType Directory -Force (Join-Path $Root 'var\logs') | Out-Null
 $log = Join-Path $Root 'var\logs\finalize_report.log'
 function Step($m) { $line = "{0} {1}" -f (Get-Date -Format 'HH:mm:ss'), $m; Add-Content $log $line -Encoding utf8; Write-Host $line }
