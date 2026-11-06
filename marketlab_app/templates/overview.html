@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge, card, empty %}
+{% block title %}Tổng quan{% endblock %}
+{% block main %}
+<h1 class="page-title">Tổng quan dataset {{ ds.DatasetCode }} <span class="mode-pill {{ mode_short|lower }}">{{ mode_short }}</span></h1>
+{% if universe_label %}<p class="caption" id="universeNote">Universe: {{ universe_label }}.</p>{% endif %}
+<div class="grid cards">
+  {{ card("Số mã có giá", cov.StocksWithPrices|num(0), "trên " ~ cov.Stocks|num(0) ~ " mã của dataset" ~ ((" · sàn lịch sử " ~ floor) if floor else ""), None, "stocks_with_prices") }}
+  {{ card("Phiên có dữ liệu", cov.SessionsWithPrices|num(0), ds.TradingDays|num(0) ~ " phiên trong dbo.TradingDay", None, "sessions_with_prices") }}
+  {{ card("Phạm vi ngày thực tế", (cov.FirstPriceDate|dt) ~ " → " ~ (ds.LastPriceDate|dt), "MIN → MAX TradeDate trong dbo.DailyPrice", None, "date_range") }}
+  {{ card("Số dòng OHLCV (dbo.DailyPrice)", ds.PriceRows|num(0), "ObservedThrough " ~ ds.ObservedThrough|dt, None, "price_rows") }}
+  {{ card("Giá mới nhất trong DB", ds.LastPriceDate|dt, fresh.message, badge(fresh.status), "last_price_date") }}
+  {% set gaps = cov.MissingRows or 0 %}
+  {{ card("Tình trạng dữ liệu", ("Đủ phiên" if gaps == 0 else (gaps|num(0) ~ " mã-phiên thiếu")),
+          ("Không mã nào thiếu phiên kể từ nến đầu tiên đã lưu" if gaps == 0 else (cov.StocksWithGaps|num(0) ~ " mã có lỗ hổng so với lịch phiên kể từ nến đầu tiên đã lưu")) ~ "; thiếu chỉ được báo cáo, không tự điền.",
+          badge("x", "good" if gaps == 0 else "serious", "Không thiếu" if gaps == 0 else "Còn thiếu"), "data_status") }}
+</div>
+
+<div class="grid cards">
+  {% if eod_status %}
+    {% set lr = eod_status.last_run %}
+    {{ card("Phiên đồng bộ thành công gần nhất", eod_status.last_successful_trade_date|dt,
+            ("Lần chạy EOD gần nhất: #" ~ lr.EodRunId ~ " · " ~ lr.Status ~ (" (dry run)" if lr.IsDryRun else "") ~ " · phiên " ~ lr.SessionDate|dt) if lr else "Chưa có lần chạy EOD hằng ngày",
+            None, "last_success") }}
+  {% else %}
+    {{ card("Đồng bộ EOD", "Không áp dụng", eod.reason) }}
+  {% endif %}
+  {% if last_backfill %}{% set b = last_backfill %}
+    {{ card("Backfill lịch sử (job chính)", b.StartDate|dt ~ " → " ~ b.EndDate|dt,
+            "Job #" ~ b.JobId ~ (" (dry run)" if b.IsDryRun else "") ~ " · " ~ b.SessionsProcessed|num(0) ~ "/" ~ (b.SessionsPlanned or 0)|num(0) ~ " phiên · thêm " ~ b.RowsInserted|num(0) ~ ", không đổi " ~ b.RowsUnchanged|num(0) ~ " dòng"
+            ~ ((" · job gần nhất #" ~ b.LatestJobId ~ " " ~ b.LatestStatus) if b.LatestJobId != b.JobId else ""),
+            badge(b.Status), "last_backfill") }}
+  {% elif mode_short == 'LIVE' %}
+    {{ card("Backfill lịch sử", "Chưa chạy", "Xem tab Backfill lịch sử") }}
+  {% endif %}
+  {% if eligible is none %}
+    {{ card("Dự báo đủ điều kiện", "—", "Dataset chưa có ModelRun: chưa cấu hình mô hình tạo dự báo mới, không có gì để chấm.", None, "eligible_predictions") }}
+  {% else %}
+    {{ card("Dự báo đủ điều kiện", eligible|num(0), "trên " ~ ds.Predictions|num(0) ~ " dự báo · " ~ ds.ModelRuns|num(0) ~ " run · as_of " ~ as_of, None, "eligible_predictions") }}
+  {% endif %}
+  {% if eod_status %}
+    {{ card("Giá đã chốt chờ đối soát", eod_status.pending_reconciliation|num(0), "nguồn trả giá khác giá đã lưu: xếp hàng duyệt, không ghi đè",
+            badge("PENDING_REVIEW") if eod_status.pending_reconciliation else badge("x", "good", "Không có"), "pending_recon") }}
+  {% endif %}
+</div>
+
+<section class="panel" aria-labelledby="provTitle">
+  <div class="panel-head"><h2 id="provTitle">Nguồn, đơn vị &amp; giới hạn của dataset</h2></div>
+  <dl class="facts">
+    <dt>Phạm vi dữ liệu</dt><dd>{{ scope_label }}</dd>
+    <dt>Dataset</dt><dd>{{ ds.DatasetCode }} ({{ ds.DataKind }})</dd>
+    <dt>Thị trường</dt><dd>{{ ds.MarketCode }} · {{ ds.CurrencyCode }}</dd>
+    {% if universe_label %}<dt>Universe</dt><dd>{{ universe_label }}</dd>{% endif %}
+    {% if floor %}<dt>Sàn lịch sử</dt><dd>Chỉ lưu, truy vấn và hiển thị giá có TradeDate ≥ {{ floor }}</dd>{% endif %}
+    <dt>Price basis</dt><dd>{{ ds.PriceBasis }}: giá nguồn như được lưu tại thời điểm tải; không phải total return</dd>
+    <dt>Đơn vị giá</dt><dd>{{ ds.PriceUnit }}</dd>
+    <dt>Nguồn / lineage</dt><dd>{{ ds.ProvenanceNote }}</dd>
+    <dt>Manifest</dt><dd>{{ ds.ManifestPath }}</dd>
+    <dt>Tính thời gian</dt><dd>EOD (cuối phiên), không phải realtime. Phiên ngày làm việc dự kiến gần nhất: {{ fresh.expected }} (không tính nghỉ lễ).</dd>
+  </dl>
+</section>
+
+<section class="panel" aria-labelledby="latestTitle">
+  <div class="panel-head"><h2 id="latestTitle">Giá gần nhất theo mã</h2>
+    <span class="hint">{{ ds.PriceBasis }} · EOD, không realtime · ObservedThrough {{ ds.ObservedThrough|dt }}</span></div>
+  {% if latest %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="latestTable">
+    <caption class="sr-only">Giá gần nhất của từng mã (dbo.vw_LatestStockPrice)</caption>
+    <thead><tr><th scope="col">Mã</th><th scope="col">Phiên</th><th scope="col" class="num">Close</th><th scope="col">Phiên trước</th>
+      <th scope="col" class="num">Thay đổi Close nguồn</th><th scope="col" class="num">Volume</th></tr></thead>
+    <tbody>{% for r in latest %}<tr data-ticker="{{ r.Ticker }}">
+      <th scope="row"><a href="/market?{{ dsq }}&amp;t={{ r.Ticker }}">{{ r.Ticker }}</a></th><td>{{ r.TradeDate|dt }}</td>
+      <td class="num" data-v="{{ r.ClosePrice }}">{{ r.ClosePrice|num(4) }}</td><td>{{ r.PreviousDate|dt }}</td>
+      <td class="num">{% if r.SourceCloseChangePct is none %}—{% else %}{{ r.SourceCloseChangePct|num(2) }}%{% endif %}</td>
+      <td class="num" data-v="{{ r.Volume }}">{{ r.Volume|num(0) }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}{{ empty("Dataset chưa có giá nào.") }}{% endif %}
+</section>
+{% endblock %}

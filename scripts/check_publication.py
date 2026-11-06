@@ -1,14 +1,30 @@
 """Offline publication gate: exact allowlist, hashes, links, synthetic scope and secret patterns."""
 from pathlib import Path
 from urllib.parse import unquote,urlsplit
-import argparse, csv, hashlib, json, re, subprocess, sys, xml.etree.ElementTree as ET, zipfile
+import argparse, csv, hashlib, json, os, re, subprocess, sys, xml.etree.ElementTree as ET, zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
 GENERATED_PREFIXES=('tests/runs/','tests/generated/','tests/document_renders/')
+LOCAL_ONLY_PREFIXES=GENERATED_PREFIXES+('tests/product_evidence/private/',)
+LOCAL_ONLY_DIRS={'.git','.venv','.pytest_cache','var','__pycache__'}
 CONTROLLED={'docs/PUBLICATION_ALLOWLIST.json','docs/PUBLICATION_AUDIT.md','tests/publication_evidence/offline_checks.json'}
 def sha(data):return hashlib.sha256(data).hexdigest()
 def files():
-    return {p.relative_to(ROOT).as_posix():p for p in ROOT.rglob('*') if p.is_file() and '.git' not in p.relative_to(ROOT).parts and '__pycache__' not in p.parts and not p.relative_to(ROOT).as_posix().startswith(GENERATED_PREFIXES)}
+    # Local runtime is not a publication candidate. Never let that exclusion hide
+    # an accidentally tracked secret or runtime artifact; .gitignore is not used.
+    def local_only(relative):
+        return (any(p in LOCAL_ONLY_DIRS for p in Path(relative).parts)
+                or relative=='.env' or relative.startswith(LOCAL_ONLY_PREFIXES))
+    if (ROOT/'.git').exists():
+        tracked=subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode('utf-8').split('\0')
+        assert not [p for p in tracked if p and local_only(p)],'Local-only files are tracked'
+    found={}
+    for base,dirs,names in os.walk(ROOT):
+        dirs[:]=[d for d in dirs if not local_only((Path(base)/d).relative_to(ROOT).as_posix()+'/')]
+        for name in names:
+            path=Path(base)/name;relative=path.relative_to(ROOT).as_posix()
+            if not local_only(relative):found[relative]=path
+    return found
 def scan_text(text):
     patterns={
         'github_token':r'\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{30,})\b',
@@ -33,7 +49,8 @@ def check(staged=False):
         if relative not in CONTROLLED:
             assert len(data)==entry['bytes'] and sha(data)==entry['sha256'],relative+' hash mismatch'
         assert not any(part in {'private_prepared','raw','.env','.tools'} for part in path.relative_to(ROOT).parts),relative
-        assert path.suffix.lower() not in {'.bak','.mdf','.ldf','.zip','.pyc','.tmp'},relative
+        assert not (path.name.startswith('.env.') and path.name!='.env.example'),relative
+        assert path.suffix.lower() not in {'.bak','.mdf','.ldf','.zip','.pyc','.tmp','.parquet','.key','.pem'},relative
         assert not path.name.startswith('~$'),relative
         texts=[]
         if path.suffix.lower() in {'.docx','.pptx'}:
@@ -81,7 +98,11 @@ def check(staged=False):
     for name in ('02_constraints_indexes.sql',*expected):
         defined.update(re.findall(r'CREATE(?: OR ALTER)? (?:FUNCTION|VIEW|PROCEDURE|TRIGGER) dbo\.(\w+)',(ROOT/'sql'/name).read_text(encoding='utf-8-sig'),re.I))
     for path in (ROOT/'sql').glob('*.sql'):
-        refs=set(re.findall(r'\bdbo\.\[?(\w+)\]?',path.read_text(encoding='utf-8-sig')))
+        sql_text=path.read_text(encoding='utf-8-sig')
+        # The EOD preflight reads SQL Server's backup catalog, not an application table.
+        external=set(re.findall(r'\b(\w+)\.dbo\.(\w+)',sql_text))
+        assert external<={('msdb','backupset')},(path.name,external)
+        refs=set(re.findall(r'(?<![\w.])dbo\.\[?(\w+)\]?',sql_text))
         assert refs<=defined,(path.name,sorted(refs-defined))
     assert len(re.findall(r'^-- Q\d{2} \|',(ROOT/'sql/07_business_queries.sql').read_text(encoding='utf-8-sig'),re.M))==16
     parts=['00_create_database.sql','01_create_tables.sql','02_constraints_indexes.sql','03_insert_sample_data.sql','04_functions.sql','05_views.sql','06_stored_procedures.sql']

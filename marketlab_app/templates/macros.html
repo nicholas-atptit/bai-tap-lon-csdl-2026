@@ -1,0 +1,20 @@
+{% macro badge(status, cls=None, text=None) -%}
+<span class="badge {{ cls or STATUS_CLASS.get(status, 'info') }}">{{ text or STATUS_TEXT.get(status, status) or '—' }}</span>
+{%- endmacro %}
+
+{% macro card(k, v, s=None, extra=None, metric=None) -%}
+<div class="card"{% if metric %} data-metric="{{ metric }}"{% endif %}><div class="k">{{ k }}</div><div class="v">{{ v }}</div>
+{%- if extra %}{{ extra }}{% endif %}{% if s %}<div class="s">{{ s }}</div>{% endif %}</div>
+{%- endmacro %}
+
+{% macro empty(msg) -%}<div class="state">{{ msg }}</div>{%- endmacro %}
+
+{% macro errors_box(errors) -%}
+{% if errors %}<div class="state error" role="alert"><strong>Bộ lọc chưa hợp lệ:</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+{%- endmacro %}
+
+{% macro pager(p, label) -%}
+{% if p and p.total %}<nav class="pager" aria-label="{{ label }}"><span>{{ p.from|num(0) }}–{{ p.to|num(0) }} / {{ p.total|num(0) }}</span>
+{% if p.prev %}<a class="btn" href="{{ p.prev }}" rel="prev">‹ Trước</a>{% else %}<span class="btn disabled" aria-disabled="true">‹ Trước</span>{% endif %}
+{% if p.next %}<a class="btn" href="{{ p.next }}" rel="next">Sau ›</a>{% else %}<span class="btn disabled" aria-disabled="true">Sau ›</span>{% endif %}</nav>{% endif %}
+{%- endmacro %}

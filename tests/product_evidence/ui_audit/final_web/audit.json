@@ -1,0 +1,453 @@
+{
+ "phase": "final_web",
+ "captured_at": "2026-11-06T11:19:15+07:00",
+ "items": [
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1440x900_overview.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1440x900_market.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1440x900_forecast.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1440x900_compare.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1440x900_ops.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1440x900_backfill.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1280x800_overview.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1280x800_market.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1280x800_forecast.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1280x800_compare.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1280x800_ops.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_1280x800_backfill.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_768x1024_overview.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_768x1024_market.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_768x1024_forecast.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_768x1024_compare.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_768x1024_ops.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_768x1024_backfill.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_390x844_overview.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_390x844_market.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_390x844_forecast.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_390x844_compare.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_390x844_ops.png"
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\ui_audit\\final_web\\DEMO_390x844_backfill.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1440x900_overview.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1440x900_market.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1440x900_forecast.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1440x900_compare.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1440x900_ops.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1440x900_backfill.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1280x800_overview.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1280x800_market.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1280x800_forecast.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1280x800_compare.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1280x800_ops.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_1280x800_backfill.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_768x1024_overview.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_768x1024_market.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_768x1024_forecast.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_768x1024_compare.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_768x1024_ops.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_768x1024_backfill.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "page": "/",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_390x844_overview.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "page": "/market",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_390x844_market.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "page": "/forecast",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_390x844_forecast.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "page": "/compare",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_390x844_compare.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "page": "/ops",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_390x844_ops.png"
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "page": "/backfill",
+   "issues": [],
+   "screenshot": "tests\\product_evidence\\private\\ui_audit\\final_web\\REAL_390x844_backfill.png"
+  }
+ ],
+ "console": [],
+ "network": [],
+ "fetches": [],
+ "keyboard": [
+  {
+   "mode": "DEMO",
+   "viewport": "1440x900",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "1280x800",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "768x1024",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "DEMO",
+   "viewport": "390x844",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1440x900",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "REAL",
+   "viewport": "1280x800",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "REAL",
+   "viewport": "768x1024",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  },
+  {
+   "mode": "REAL",
+   "viewport": "390x844",
+   "first_tab_stop": {
+    "cls": "skip-link",
+    "outline": "solid"
+   }
+  }
+ ],
+ "removed_surface": [
+  {
+   "mode": "DEMO",
+   "path": "/api/docs",
+   "status": 404
+  },
+  {
+   "mode": "DEMO",
+   "path": "/api/openapi.json",
+   "status": 404
+  },
+  {
+   "mode": "DEMO",
+   "path": "/docs",
+   "status": 404
+  },
+  {
+   "mode": "DEMO",
+   "path": "/openapi.json",
+   "status": 404
+  },
+  {
+   "mode": "REAL",
+   "path": "/api/docs",
+   "status": 404
+  },
+  {
+   "mode": "REAL",
+   "path": "/api/openapi.json",
+   "status": 404
+  },
+  {
+   "mode": "REAL",
+   "path": "/docs",
+   "status": 404
+  },
+  {
+   "mode": "REAL",
+   "path": "/openapi.json",
+   "status": 404
+  }
+ ]
+}

@@ -18,3 +18,9 @@ data/raw/
 ~$*
 *.tmp
 *.log.tmp
+
+# MarketLab product runtime (logs, deploy scripts, private evidence, pytest temp)
+var/
+tests/product_evidence/private/
+!.env.example
+.pytest_cache/

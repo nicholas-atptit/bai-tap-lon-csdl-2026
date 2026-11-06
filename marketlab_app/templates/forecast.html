@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge, empty, errors_box, pager %}
+{% block title %}Dự báo & hiệu năng{% endblock %}
+{% block main %}
+<h1 class="page-title">Dự báo &amp; hiệu năng · {{ ds.DatasetCode }}</h1>
+<div class="notice" role="note">{{ inference_msg }}</div>
+<section class="panel" aria-labelledby="runTitle">
+  <div class="panel-head"><h2 id="runTitle">Lần chạy mô hình &amp; chỉ tiêu tại ngày tham chiếu</h2>
+    <form method="get" action="/forecast" class="inline-group">
+      <input type="hidden" name="ds" value="{{ ds.DatasetId }}">{% if run_id %}<input type="hidden" name="run" value="{{ run_id }}">{% endif %}
+      <label class="inline" for="fAsOf">as_of <input type="date" id="fAsOf" name="as_of" value="{{ as_of }}"></label>
+      <button type="submit">Tính lại</button></form></div>
+  {% if runs %}
+  <p class="caption" id="perfCaption" data-metric="total_eligible" data-v="{{ total_eligible }}">Dataset {{ ds.DatasetCode }} · as_of {{ as_of }} · {{ total_eligible|num(0) }} quan sát đủ điều kiện (tổng các run).
+    Chỉ chấm dự báo có đủ giá gốc và giá mục tiêu, TargetDate ≤ as_of và ≤ ObservedThrough, OriginDate &gt; ValidationEnd; nhãn = 1 khi Close mục tiêu &gt; Close gốc;
+    dự đoán = 1 khi p ≥ Threshold của run. Mỗi run dùng tập đủ điều kiện của riêng nó — muốn so sánh công bằng hãy dùng trang So sánh mô hình.</p>
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="runTable">
+    <caption class="sr-only">Danh sách run và chỉ tiêu tại as_of {{ as_of }}</caption>
+    <thead><tr><th scope="col" class="num">Run</th><th scope="col">Mã run</th><th scope="col">Mô hình</th><th scope="col">Mục tiêu</th>
+      <th scope="col" class="num">Horizon</th><th scope="col" class="num">Threshold</th><th scope="col" class="num">Dự báo</th><th scope="col" class="num">Đã chấm</th>
+      <th scope="col" class="num">Chưa trưởng thành</th><th scope="col" class="num">Thiếu endpoint</th><th scope="col" class="num">Accuracy</th>
+      <th scope="col" class="num">Brier</th><th scope="col" class="num">Log loss</th><th scope="col">Loại đánh giá</th></tr></thead>
+    <tbody>{% for r in runs %}{% set p = perf.get(r.RunId, {}) %}
+      <tr data-run="{{ r.RunId }}" {% if r.RunId == run_id %}class="selected" aria-current="true"{% endif %}>
+      <th scope="row" class="num"><a href="/forecast?{{ dsq }}&amp;run={{ r.RunId }}&amp;as_of={{ as_of }}">{{ r.RunId }}</a></th>
+      <td><a href="/forecast?{{ dsq }}&amp;run={{ r.RunId }}&amp;as_of={{ as_of }}">{{ r.RunCode }}</a></td><td>{{ r.ModelCode }}</td><td>{{ r.TargetCode }}</td>
+      <td class="num">{{ r.HorizonSessions }}</td><td class="num">{{ r.Threshold|num(4) }}</td><td class="num">{{ p.TotalPredictions|num(0) }}</td>
+      <td class="num" data-v="{{ p.EvaluatedRows }}">{{ p.EvaluatedRows|num(0) }}</td><td class="num">{{ p.PendingNotMatured|num(0) }}</td><td class="num">{{ p.MissingEndpoint|num(0) }}</td>
+      <td class="num" data-v="{{ p.Accuracy }}">{{ p.Accuracy|pct }}</td><td class="num" data-v="{{ p.BrierScore }}">{{ p.BrierScore|num(4) }}</td>
+      <td class="num" data-v="{{ p.NaturalLogLoss }}">{{ p.NaturalLogLoss|num(4) }}</td><td>{{ r.EvaluationClass }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}{{ empty("Dataset này chưa có ModelRun / dự báo. " ~ inference_msg) }}{% endif %}
+</section>
+{% if run %}
+<section class="panel" aria-labelledby="predTitle">
+  <div class="panel-head"><h2 id="predTitle">Dự báo của run {{ run.RunId }} · {{ run.RunCode }} · horizon {{ run.HorizonSessions }} · ngưỡng {{ run.Threshold|num(4) }}</h2></div>
+  <form class="filters compact" method="get" action="/forecast" novalidate>
+    <input type="hidden" name="ds" value="{{ ds.DatasetId }}"><input type="hidden" name="run" value="{{ run.RunId }}"><input type="hidden" name="as_of" value="{{ as_of }}">
+    <label for="fTicker">Mã <input id="fTicker" name="t" maxlength="20" placeholder="tất cả" value="{{ form.t }}" pattern="[A-Za-z0-9]{0,20}"></label>
+    <label for="fStatus">Trạng thái tại as_of
+      <select id="fStatus" name="status">
+        {% for v, l in [("", "Tất cả"), ("eligible", "Đủ điều kiện (đã chấm)"), ("pending", "Chưa trưởng thành"), ("missing_endpoint", "Thiếu giá endpoint")] %}
+        <option value="{{ v }}" {% if form.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+    <div class="actions"><button type="submit" class="primary">Lọc</button>
+      <a class="btn" id="fClear" href="/forecast?{{ dsq }}&amp;run={{ run.RunId }}&amp;as_of={{ as_of }}">Xóa lọc</a></div>
+  </form>
+  {{ errors_box(errors) }}
+  {% if preds %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="predTable">
+    <caption class="sr-only">Dự báo của run {{ run.RunId }}</caption>
+    <thead><tr><th scope="col">Mã</th><th scope="col">OriginDate</th><th scope="col">TargetDate</th><th scope="col" class="num">ProbabilityPositive</th>
+      <th scope="col" class="num">Dự đoán (p ≥ ngưỡng)</th><th scope="col" class="num">Nhãn thực</th><th scope="col" class="num">Thay đổi Close nguồn</th><th scope="col">Trạng thái tại as_of</th></tr></thead>
+    <tbody>{% for x in preds %}<tr>
+      <th scope="row">{{ x.Ticker }}</th><td>{{ x.OriginDate|dt }}</td><td>{{ x.TargetDate|dt }}</td><td class="num">{{ x.ProbabilityPositive|num(4) }}</td>
+      <td class="num">{{ "1 (tăng)" if x.PredictedLabel else "0" }}</td>
+      <td class="num">{% if x.ActualLabel is none %}— (chưa chấm){% else %}{{ 1 if x.ActualLabel else 0 }}{% endif %}</td>
+      <td class="num">{% if x.ActualSourceCloseReturnPct is none %}—{% else %}{{ x.ActualSourceCloseReturnPct|num(2) }}%{% endif %}</td>
+      <td>{{ badge(x.EvaluationStatus) }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  <p class="hint">ProbabilityPositive là xác suất Close mục tiêu &gt; Close gốc; không phải khuyến nghị đầu tư. "—" nghĩa là chưa có nhãn (chưa trưởng thành hoặc thiếu giá), không phải 0. as_of = {{ as_of }}.</p>
+  {{ pager(pg, "Phân trang dự báo") }}
+  {% elif not errors %}{{ empty("Không có dự báo khớp bộ lọc.") }}{% endif %}
+</section>
+{% else %}{{ errors_box(errors) }}{% endif %}
+{% endblock %}

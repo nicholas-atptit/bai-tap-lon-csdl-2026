@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge, card, empty %}
+{% block title %}Backfill lịch sử{% endblock %}
+{% block main %}
+<h1 class="page-title">Backfill OHLCV lịch sử · {{ ds.DatasetCode }} <span class="mode-pill {{ mode_short|lower }}">{{ mode_short }}</span></h1>
+{% if universe_label %}<p class="caption" id="universeNote">Universe: {{ universe_label }}. Sàn lịch sử: chỉ nạp và hiển thị giá từ {{ floor }}.</p>{% endif %}
+
+{% set j = bf_job %}
+<div class="grid cards">
+  {% if j %}
+    {{ card("Job backfill #" ~ j.JobId ~ (" (dry run)" if j.IsDryRun else ""), j.StartDate|dt ~ " → " ~ j.EndDate|dt,
+            "EndDate yêu cầu: " ~ j.EndDateSpec ~ " · kết thúc " ~ j.FinishedAtUtc|ts, badge(j.Status), "bf_status") }}
+    {% set planned = j.SessionsPlanned or 0 %}
+    {% set pct = ((j.SessionsProcessed or 0) * 100 / planned) if planned else 0 %}
+    <div class="card" data-metric="bf_progress"><div class="k">Tiến độ phiên</div><div class="v">{{ j.SessionsProcessed|num(0) }} / {{ planned|num(0) }}</div>
+      <progress class="bar-progress" max="100" value="{{ pct|round(1) }}" aria-label="Tiến độ backfill">{{ pct|round(1) }}%</progress>
+      <div class="s">{{ pct|round(1) }}% · {{ j.FetchCalls|num(0) }} lần gọi nguồn, {{ j.FetchRetries|num(0) }} retry, resume {{ j.ResumeCount|num(0) }} lần</div></div>
+    {{ card("Dòng thêm mới", (j.RowsWouldInsert if j.IsDryRun else j.RowsInserted)|num(0), ("sẽ thêm (dry run, đã ROLLBACK)" if j.IsDryRun else "INSERTED vào dbo.DailyPrice") ~ " · không đổi " ~ j.RowsUnchanged|num(0), None, "bf_inserted") }}
+    {{ card("Thiếu / trước lịch sử nguồn", j.RowsMissing|num(0) ~ " / " ~ j.RowsNoHistory|num(0), "mã-phiên MISSING / NO_HISTORY (vd. mã niêm yết sau)", badge("x", "good" if j.RowsMissing == 0 else "serious", "Không thiếu" if j.RowsMissing == 0 else "Có thiếu"), "bf_missing") }}
+    {{ card("Từ chối / xung đột", j.RowsRejected|num(0) ~ " / " ~ j.ConflictCount|num(0), "dòng nguồn sai bị loại / giá đã lưu khác nguồn (vào hàng đợi đối soát, không ghi đè)", None, "bf_conflicts") }}
+    {{ card("Backup trước khi ghi", "Đã xác minh" if j.BackupVerifiedAtUtc else ("Không cần (dry run)" if j.IsDryRun else "—"), j.BackupVerifiedAtUtc|ts if j.BackupVerifiedAtUtc else "BACKUP + RESTORE VERIFYONLY + restore thử", None, "bf_backup") }}
+  {% else %}
+    {{ card("Backfill lịch sử", "Chưa có job", bf_reason or "Chạy dry run trước để xem số lượng dự kiến.") }}
+  {% endif %}
+  {% set gaps = cov.MissingRows or 0 %}
+  {{ card("Độ phủ hiện tại (SQL)", ("Đủ phiên" if gaps == 0 else gaps|num(0) ~ " mã-phiên thiếu"), cov.SessionsWithPrices|num(0) ~ " phiên có giá · " ~ cov.FirstPriceDate|dt ~ " → " ~ ds.LastPriceDate|dt,
+          badge("x", "good" if gaps == 0 else "serious", "Không thiếu" if gaps == 0 else "Còn thiếu"), "bf_coverage") }}
+</div>
+
+{% if running %}<div class="state loading" role="status" id="bfRunning">Đang chạy job web {{ running[0].job_id[:8] }} ({{ running[0].action }}). <a href="/backfill/jobs/{{ running[0].job_id }}?{{ dsq }}">Xem tiến độ</a></div>{% endif %}
+
+<section class="panel" aria-labelledby="bfActTitle">
+  <div class="panel-head"><h2 id="bfActTitle">Chạy backfill (token vận hành, chống CSRF, có xác nhận)</h2></div>
+  {% if action_error %}<div class="state error" role="alert" id="actionError">{{ action_error }}</div>{% endif %}
+  {% if bf_enabled %}
+  <p class="caption" id="bfScope">Phạm vi ghi: database {{ database }} · dataset {{ ds.DatasetCode }} · nguồn {{ eod.config[0].SourceCode }} (KBS qua vnstock) ·
+    tải theo mã × năm, có retry/backoff, lưu staging trong DB Ops rồi ghi mỗi phiên một transaction qua ops.usp_EodApplySession.
+    Dry run kiểm tra trong SQL Server rồi ROLLBACK. Ghi thật tự backup + xác minh trước. Giá đã lưu khác nguồn chỉ vào hàng đợi đối soát.</p>
+  <form class="filters" method="post" action="/backfill/run" autocomplete="off" id="backfillForm" data-database="{{ database }}" data-dataset="{{ ds.DatasetCode }}">
+    <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="ds" value="{{ ds.DatasetId }}">
+    <label for="bStart">Từ ngày <input type="date" id="bStart" name="start_date" value="{{ bf_form.start }}" min="{{ floor }}" required></label>
+    <label for="bEnd">Đến ngày (latest hoặc YYYY-MM-DD) <input id="bEnd" name="end_date" value="{{ bf_form.end }}" pattern="latest|\d{4}-\d{2}-\d{2}" maxlength="10"></label>
+    <label for="bTickers">Mã (trống = cả universe) <input id="bTickers" name="tickers" value="{{ bf_form.tickers }}" placeholder="VD: FPT,VNM" maxlength="400"></label>
+    <label for="bToken">Mã vận hành (token) <input type="password" id="bToken" name="ops_token" autocomplete="off" placeholder="MARKETLAB_OPS_TOKEN" required></label>
+    <label class="check" for="bConfirm"><input type="checkbox" id="bConfirm" name="confirm_write" value="yes"> Tôi xác nhận ghi thật vào {{ database }} (chỉ cần cho Backfill / Tiếp tục)</label>
+    <div class="actions">
+      <button type="submit" name="action" value="DRY_RUN" id="bDry">Dry run (không ghi)</button>
+      <button type="submit" name="action" value="RUN" id="bRun" class="danger">Backfill thật</button>
+      <button type="submit" name="action" value="RESUME" id="bResume">Tiếp tục job dở dang</button>
+    </div>
+    <p class="hint">Có thể chạy cùng lệnh từ PowerShell: <span class="mono">scripts\Backfill-MarketLab.ps1 -StartDate 2023-01-01 -EndDate latest -DryRun</span>. Chỉ một job chạy tại một thời điểm (khóa sp_getapplock trong DB Ops).</p>
+  </form>
+  {% else %}
+  <p class="caption" id="bfScope">Backfill bị tắt ở chế độ {{ scope }}: {{ bf_reason }}</p>
+  <form class="filters" aria-disabled="true"><button type="button" id="bDry" disabled>Dry run (không ghi)</button>
+    <button type="button" id="bRun" class="danger" disabled>Backfill thật</button></form>
+  {% endif %}
+</section>
+
+{% if bf_enabled %}
+<section class="panel" aria-labelledby="bfJobsTitle">
+  <div class="panel-head"><h2 id="bfJobsTitle">Các job backfill</h2><a class="btn" href="/backfill?{{ dsq }}">Làm mới</a></div>
+  {% if bf_jobs %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="bfJobs"><caption class="sr-only">Job backfill</caption>
+    <thead><tr><th scope="col" class="num">#</th><th scope="col">Trạng thái</th><th scope="col">Cửa sổ</th><th scope="col" class="num">Mã</th><th scope="col">Loại</th>
+      <th scope="col" class="num">Phiên</th><th scope="col" class="num">Thêm</th><th scope="col" class="num">Không đổi</th><th scope="col" class="num">Thiếu</th>
+      <th scope="col" class="num">NO_HISTORY</th><th scope="col" class="num">Xung đột</th><th scope="col" class="num">Thời gian</th><th scope="col">Bắt đầu</th></tr></thead>
+    <tbody>{% for x in bf_jobs %}<tr data-job="{{ x.JobId }}"{% if j and x.JobId == j.JobId %} class="selected"{% endif %}>
+      <th scope="row" class="num"><a href="/backfill?{{ dsq }}&amp;job={{ x.JobId }}#bfDetail">{{ x.JobId }}</a></th><td>{{ badge(x.Status) }}</td>
+      <td>{{ x.StartDate|dt }} → {{ x.EndDate|dt }}</td><td class="num">{{ x.TickerCount|num(0) }}</td><td>{{ "dry run" if x.IsDryRun else "ghi thật" }} · {{ x.TriggerKind }}</td>
+      <td class="num">{{ x.SessionsProcessed|num(0) }}/{{ (x.SessionsPlanned or 0)|num(0) }}</td>
+      <td class="num">{{ (x.RowsWouldInsert if x.IsDryRun else x.RowsInserted)|num(0) }}</td><td class="num">{{ x.RowsUnchanged|num(0) }}</td>
+      <td class="num">{{ x.RowsMissing|num(0) }}</td><td class="num">{{ x.RowsNoHistory|num(0) }}</td><td class="num">{{ x.ConflictCount|num(0) }}</td>
+      <td class="num">{{ (x.DurationSec * 1000)|ms }}</td><td>{{ x.CreatedAtUtc|ts }}</td></tr>{% endfor %}</tbody></table></div>
+  {% else %}{{ empty("Chưa có job backfill nào. Chạy Dry run để xem số lượng dự kiến trước khi ghi.") }}{% endif %}
+
+  {% if j %}{% set pm = j.ProviderMeta or {} %}
+  <div id="bfDetail" class="run-detail">
+    <h3>Job #{{ j.JobId }} · {{ badge(j.Status) }} {% if j.ErrorCode %}<span class="mono">{{ j.ErrorCode }}</span>{% endif %}</h3>
+    <p>{{ j.Message }}</p>
+    <p class="hint">JobRef <span class="mono">{{ j.JobRef }}</span> · nguồn {{ pm.package or "—" }} {{ pm.package_version or "" }} ({{ pm.source or "—" }}) · gọi nguồn lần cuối {{ pm.called_utc|ts if pm.called_utc else "—" }} ·
+      {{ pm.basis_note or "" }} · bắt đầu {{ j.CreatedAtUtc|ts }} · heartbeat {{ j.HeartbeatAtUtc|ts }}</p>
+    <div class="two-col">
+      <div>
+        <h3>Kết quả theo trạng thái phiên</h3>
+        <div class="table-wrap"><table id="bfSessions"><caption class="sr-only">Phiên theo trạng thái</caption>
+          <thead><tr><th scope="col">Trạng thái</th><th scope="col">Mã lỗi</th><th scope="col" class="num">Phiên</th><th scope="col">Từ → đến</th><th scope="col" class="num">Thêm</th><th scope="col" class="num">Không đổi</th><th scope="col" class="num">Thiếu</th><th scope="col" class="num">NO_HISTORY</th></tr></thead>
+          <tbody>{% for x in j.sessions %}<tr><th scope="row">{{ badge(x.Status) }}</th><td>{{ x.ErrorCode or "—" }}</td><td class="num">{{ x.n|num(0) }}</td>
+            <td>{{ x.FirstDate|dt }} → {{ x.LastDate|dt }}</td><td class="num">{{ (x.WouldInsert if j.IsDryRun else x.Inserted)|num(0) }}</td><td class="num">{{ x.Unchanged|num(0) }}</td>
+            <td class="num">{{ x.Missing|num(0) }}</td><td class="num">{{ x.NoHistory|num(0) }}</td></tr>{% else %}<tr><td colspan="8">Chưa xử lý phiên nào.</td></tr>{% endfor %}</tbody></table></div>
+        {% if j.problem_sessions %}
+        <h3>Phiên cần chú ý (thiếu mã, từ chối, xung đột, không ghi)</h3>
+        <div class="table-wrap"><table id="bfProblems"><caption class="sr-only">Phiên cần chú ý</caption>
+          <thead><tr><th scope="col">Phiên</th><th scope="col">Trạng thái</th><th scope="col" class="num">Có / cần</th><th scope="col">Chi tiết</th></tr></thead>
+          <tbody>{% for x in j.problem_sessions %}<tr><th scope="row">{{ x.SessionDate|dt }}</th><td>{{ badge(x.Status) }} {{ x.ErrorCode or "" }}</td>
+            <td class="num">{{ x.Present }}/{{ x.Requested }}</td><td class="wrap">{{ x.MissingTickers or "" }} {{ x.Message }}</td></tr>{% endfor %}</tbody></table></div>
+        {% endif %}
+      </div>
+      <div>
+        <h3>Tải nguồn theo mã (checkpoint mã × năm)</h3>
+        <div class="table-wrap"><table id="bfFetch"><caption class="sr-only">Tải nguồn theo mã</caption>
+          <thead><tr><th scope="col">Mã</th><th scope="col" class="num">Chunk OK</th><th scope="col" class="num">Nhận</th><th scope="col" class="num">Staging</th><th scope="col" class="num">Từ chối</th><th scope="col">Nến đầu → cuối</th><th scope="col">Lỗi</th></tr></thead>
+          <tbody>{% for x in j.fetch %}<tr><th scope="row">{{ x.Ticker }}{% if x.IsReference %} <span class="badge info">lịch</span>{% endif %}</th>
+            <td class="num">{{ x.ChunksOk }}/{{ x.Chunks }}</td><td class="num">{{ x.RowsReceived|num(0) }}</td><td class="num">{{ x.RowsStaged|num(0) }}</td>
+            <td class="num">{{ x.RowsRejected|num(0) }}</td><td>{{ x.FirstDate|dt }} → {{ x.LastDate|dt }}</td><td>{{ x.ErrorCode or "—" }}</td></tr>{% endfor %}</tbody></table></div>
+        {% if j.rejects %}<h3>Dòng nguồn bị từ chối</h3>
+        <div class="table-wrap"><table><caption class="sr-only">Dòng bị từ chối</caption><thead><tr><th scope="col">Mã</th><th scope="col">Ngày</th><th scope="col">Mã lỗi</th><th scope="col">Chi tiết</th></tr></thead>
+          <tbody>{% for x in j.rejects %}<tr><th scope="row">{{ x.Ticker }}</th><td>{{ x.TradeDate|dt }}</td><td>{{ x.Code }}</td><td class="wrap">{{ x.Detail }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+
+<section class="panel" aria-labelledby="covTitle">
+  <div class="panel-head"><h2 id="covTitle">Độ phủ theo mã (truy vấn trực tiếp dbo.DailyPrice × dbo.TradingDay)</h2></div>
+  {% if ticker_cov %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="tickerCoverage"><caption class="sr-only">Độ phủ theo mã</caption>
+    <thead><tr><th scope="col">Mã</th><th scope="col" class="num">Dòng</th><th scope="col">Phiên đầu → cuối đã lưu</th><th scope="col" class="num">Phiên kỳ vọng</th>
+      <th scope="col" class="num">Thiếu</th><th scope="col" class="num">Trước nến đầu tiên</th></tr></thead>
+    <tbody>{% for x in ticker_cov %}<tr data-ticker="{{ x.Ticker }}"><th scope="row"><a href="/market?{{ dsq }}&amp;t={{ x.Ticker }}">{{ x.Ticker }}</a></th>
+      <td class="num">{{ x.Rows|num(0) }}</td><td>{{ x.FirstDate|dt }} → {{ x.LastDate|dt }}</td><td class="num">{{ x.ExpectedSessions|num(0) }}</td>
+      <td class="num">{% if x.MissingSessions %}{{ badge("x", "serious", x.MissingSessions ~ " thiếu") }}{% else %}0{% endif %}</td>
+      <td class="num">{{ x.SessionsBeforeFirst|num(0) }}</td></tr>{% endfor %}</tbody></table></div>
+  <p class="hint">Phiên kỳ vọng = phiên trong dbo.TradingDay kể từ nến đầu tiên đã lưu của mã. "Trước nến đầu tiên" = phiên của dataset trước khi mã có dữ liệu (vd. niêm yết sau), không tính là thiếu.</p>
+  {% else %}{{ empty("Dataset chưa có mã nào.") }}{% endif %}
+</section>
+{% endblock %}

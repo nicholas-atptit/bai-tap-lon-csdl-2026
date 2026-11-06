@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "macros.html" import badge %}
+{% block head %}{% if job.state == "RUNNING" %}<meta http-equiv="refresh" content="2">{% endif %}{% endblock %}
+{% block title %}Job EOD{% endblock %}
+{% block main %}
+<h1 class="page-title">Job EOD {{ job.job_id[:8] }} · {{ "dry run" if job.dry_run else "ghi thật" }} · phiên {{ job.session_date }}</h1>
+<section class="panel" aria-labelledby="jobTitle" aria-live="polite">
+  <div class="panel-head"><h2 id="jobTitle">Trạng thái</h2></div>
+  {% if job.state == "RUNNING" %}
+    <div class="state loading" role="status" id="jobState">Đang chạy (bắt đầu {{ job.started }} UTC). Trang tự làm mới mỗi 2 giây; có thể rời trang, kết quả vẫn được ghi vào nhật ký.</div>
+  {% elif job.state == "ERROR" %}
+    <div class="state error" role="alert" id="jobState">{{ job.error }}</div>
+  {% else %}{% set r = job.result %}
+    <div id="jobState" data-status="{{ r.status }}" data-run="{{ r.eod_run_id }}">
+      <p>{{ badge(r.status) }} run #{{ r.eod_run_id }} · phiên {{ r.session_date }}{% if r.error_code %} · {{ r.error_code }}{% endif %} ·
+        thêm {{ r.inserted }}, không đổi {{ r.unchanged }}{% if r.would_insert is not none %}, sẽ thêm {{ r.would_insert }}{% endif %} / {{ r.requested }} mã</p>
+      <p>{{ r.message }}</p>
+    </div>
+    <p><a class="btn primary" href="/ops?{{ dsq }}&amp;run={{ r.eod_run_id }}#runDetail">Xem chi tiết run #{{ r.eod_run_id }}</a></p>
+  {% endif %}
+  <p><a class="btn" href="/ops?{{ dsq }}">← Về Vận hành EOD</a></p>
+</section>
+{% endblock %}

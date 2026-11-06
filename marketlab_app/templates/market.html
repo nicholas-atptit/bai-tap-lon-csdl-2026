@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "macros.html" import empty, errors_box, pager %}
+{% block title %}Lịch sử OHLCV{% endblock %}
+{% block main %}
+<h1 class="page-title">Tra cứu lịch sử OHLCV · {{ ds.DatasetCode }} <span class="mode-pill {{ mode_short|lower }}">{{ mode_short }}</span></h1>
+<form class="filters" method="get" action="/market" novalidate id="marketForm">
+  <input type="hidden" name="ds" value="{{ ds.DatasetId }}">
+  <label for="mTicker">Mã ({{ stocks|length }} mã)
+    <input id="mTicker" name="t" list="tickerList" autocomplete="off" placeholder="Gõ để tìm, VD: FPT" maxlength="20" value="{{ form.t }}" pattern="[A-Za-z0-9]{1,20}"></label>
+  <datalist id="tickerList">{% for s in stocks %}<option value="{{ s.Ticker }}">{{ s.PriceRows }} phiên có giá{% if s.FirstObservedDate %} · từ {{ s.FirstObservedDate|dt }}{% endif %}</option>{% endfor %}</datalist>
+  <label for="mFrom">Từ ngày <input type="date" id="mFrom" name="f" value="{{ form.f or (eff.f if eff is defined else '') }}"{% if floor %} min="{{ floor }}"{% endif %}></label>
+  <label for="mTo">Đến ngày <input type="date" id="mTo" name="to" value="{{ form.to or (eff.to if eff is defined else '') }}"{% if floor %} min="{{ floor }}"{% endif %}></label>
+  <input type="hidden" name="sort" value="{{ form.sort }}"><input type="hidden" name="order" value="{{ form.order }}">
+  <div class="actions"><button type="submit" class="primary">Xem</button>
+    <a class="btn" id="mClear" href="/market?{{ dsq }}&amp;t={{ form.t }}">Về 12 tháng gần nhất</a></div>
+</form>
+{% if presets %}<nav class="presets" aria-label="Khoảng thời gian nhanh"><span>Khoảng nhanh:</span>
+  {% for p in presets %}<a href="{{ p.href }}"{% if p.active %} aria-current="true"{% endif %}>{{ p.label }}</a>{% endfor %}</nav>{% endif %}
+{{ errors_box(errors) }}
+{% if not errors %}
+<section class="panel" aria-labelledby="chartTitle">
+  {% if points %}
+  <div class="panel-head"><h2 id="chartTitle">{{ form.t }} · {{ ds.DatasetCode }} · {{ points[0].TradeDate|dt }} → {{ points[-1].TradeDate|dt }} · {{ points|length }} phiên</h2>
+    {% if defaulted %}<span class="hint">Mặc định: 12 tháng gần nhất đã lưu</span>{% endif %}</div>
+  <div class="legend" id="chartLegend" aria-hidden="true">
+    <span><span class="sw line"></span>Close ({{ ds.PriceBasis }}, {{ ds.PriceUnit.split(";")[0].split("(")[0] }})</span>
+    <span><span class="sw bar"></span>Volume (cổ phiếu)</span>
+    {% if gaps %}<span><span class="sw gap"></span>Phiên thiếu giá (không nối, không nội suy)</span>{% endif %}
+    <span class="zoom-state" id="zoomState">Kéo chuột ngang trên biểu đồ để phóng to · ←/→ đọc từng phiên</span>
+    <button type="button" id="zoomReset" hidden>Bỏ phóng to</button>
+  </div>
+  <div id="chart" class="chart" role="img" aria-label="Biểu đồ Close và Volume {{ form.t }} từ {{ points[0].TradeDate|dt }} đến {{ points[-1].TradeDate|dt }}">
+    <noscript><div class="state">Bật JavaScript để xem biểu đồ; bảng OHLCV bên dưới chứa cùng số liệu.</div></noscript>
+  </div>
+  <script type="application/json" id="chartData">{{ chart_json|tojson }}</script>
+  <p class="hint" id="chartHint">Close nguồn cuối phiên ({{ ds.PriceBasis }}), không phải total return, không realtime.
+    {% if gaps %}{{ gaps|length }} phiên thiếu giá của {{ form.t }} (có trong lịch dataset; vạch gạch, không nối đường, không nội suy): {{ gaps[:12]|join(", ") }}{% if gaps|length > 12 %}…{% endif %}.{% else %}Không phiên nào trong khoảng này thiếu giá.{% endif %}
+    {% if rng.FirstDate %}Dữ liệu đã lưu của {{ form.t }}: {{ rng.FirstDate|dt }} → {{ rng.LastDate|dt }} ({{ rng.Rows|num(0) }} phiên).{% endif %}</p>
+  <p class="source-line" id="sourceLine">Nguồn: {% if source.job %}KBS qua vnstock {{ (source.provider or {}).package_version or "" }} · backfill job #{{ source.job.JobId }} ({{ source.job.StartDate|dt }} → {{ source.job.EndDate|dt }}, kết thúc {{ source.job.FinishedAtUtc|ts }}) và EOD hằng ngày{% else %}{{ source.note[:160] }}{% endif %} · đơn vị {{ source.unit }}.</p>
+  {% elif form.t %}
+  <div class="panel-head"><h2 id="chartTitle">{{ form.t }}</h2></div>{{ empty("Không có phiên nào của " ~ form.t ~ " trong khoảng ngày đã chọn" ~ ((" (dữ liệu đã lưu: " ~ rng.FirstDate ~ " → " ~ rng.LastDate ~ ")") if rng and rng.FirstDate else "") ~ ".") }}
+  {% else %}
+  <div class="panel-head"><h2 id="chartTitle">Biểu đồ</h2></div>{{ empty("Dataset chưa có giá để vẽ.") }}
+  {% endif %}
+</section>
+<section class="panel" aria-labelledby="priceTitle">
+  <div class="panel-head"><h2 id="priceTitle">Bảng OHLCV {{ form.t }}</h2>
+    <div class="inline-group"><span class="hint">Bấm tiêu đề cột có ⇅ để sắp xếp · {{ pg.total|num(0) if pg else 0 }} dòng, {{ 50 }} dòng/trang</span>
+      {% if rows %}<a class="btn" id="exportCsv" href="{{ export_href }}" download>Xuất CSV</a>{% endif %}</div></div>
+  {% if rows %}
+  {% if mode_short == 'LIVE' %}<p class="hint">Xuất CSV: dữ liệu riêng tư, quyền phân phối dữ liệu nguồn UNKNOWN — chỉ dùng cục bộ, không chia sẻ. Tối đa 5.000 dòng, cùng bộ lọc và sàn {{ floor }}.</p>{% endif %}
+  <p class="scroll-hint">Vuốt ngang để xem thêm cột →</p>
+  <div class="table-wrap sticky-first"><table id="priceTable">
+    <caption class="sr-only">Bảng OHLCV {{ form.t }}</caption>
+    <thead><tr>
+      {% for key, label, numc in [("ticker","Mã",False),("date","Phiên",False),(None,"Open",True),(None,"High",True),(None,"Low",True),("close","Close",True),("volume","Volume",True),(None,"Nạp lúc",False)] %}
+      {% if key %}<th scope="col" class="sortable{{ ' num' if numc }}" aria-sort="{{ ('ascending' if form.order == 'asc' else 'descending') if form.sort == key else 'none' }}">
+        <a class="th-sort" href="{{ sort_links[key] }}">{{ label }}<span aria-hidden="true">{{ (' ▲' if form.order == 'asc' else ' ▼') if form.sort == key else ' ⇅' }}</span></a></th>
+      {% else %}<th scope="col"{{ ' class=num' if numc }}>{{ label }}</th>{% endif %}
+      {% endfor %}</tr></thead>
+    <tbody>{% for r in rows %}<tr>
+      <th scope="row">{{ r.Ticker }}</th><td>{{ r.TradeDate|dt }}</td>
+      <td class="num">{{ r.OpenPrice|num(4) }}</td><td class="num">{{ r.HighPrice|num(4) }}</td><td class="num">{{ r.LowPrice|num(4) }}</td>
+      <td class="num" data-v="{{ r.ClosePrice }}">{{ r.ClosePrice|num(4) }}</td><td class="num" data-v="{{ r.Volume }}">{{ r.Volume|num(0) }}</td>
+      <td>{{ r.LoadedAt|ts }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {{ pager(pg, "Phân trang bảng giá") }}
+  {% else %}{{ empty("Không có dòng giá cho bộ lọc này.") }}{% endif %}
+</section>
+{% endif %}
+{% endblock %}

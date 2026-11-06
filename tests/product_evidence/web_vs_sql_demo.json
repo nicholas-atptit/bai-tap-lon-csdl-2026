@@ -1,0 +1,183 @@
+{
+ "checked_at": "2026-11-06T11:18:52+07:00",
+ "base_url": "http://127.0.0.1:8000",
+ "mode": "DEMO_OFFLINE",
+ "database": "MarketLabVN30_Demo",
+ "passed": true,
+ "checks": [
+  {
+   "check": "mode label",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "overview: price rows",
+   "ui": "280",
+   "sql": "280",
+   "match": true
+  },
+  {
+   "check": "overview: stocks with prices",
+   "ui": "8",
+   "sql": "8",
+   "match": true
+  },
+  {
+   "check": "overview: last price date",
+   "ui": "2025-02-19",
+   "sql": "2025-02-19",
+   "match": true
+  },
+  {
+   "check": "overview: vw_LatestStockPrice (hash of close, volume)",
+   "ui": "b6ce77c5d1ba23d4",
+   "sql": "b6ce77c5d1ba23d4",
+   "match": true
+  },
+  {
+   "check": "overview: sessions with prices",
+   "ui": "35",
+   "sql": "35",
+   "match": true
+  },
+  {
+   "check": "overview: date range",
+   "ui": "2025-01-02 → 2025-02-19",
+   "sql": "2025-01-02 → 2025-02-19",
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-02..2025-02-19: first page rows (hash)",
+   "ui": "3328ab2078f6db89",
+   "sql": "3328ab2078f6db89",
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-02..2025-02-19: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-02..2025-02-19: chart sessions with price",
+   "ui": 35,
+   "sql": 35,
+   "match": true
+  },
+  {
+   "check": "market DEMO02 2025-01-07..2025-02-28: first page rows (hash)",
+   "ui": "2fb0a2ad531f4b1a",
+   "sql": "2fb0a2ad531f4b1a",
+   "match": true
+  },
+  {
+   "check": "market DEMO02 2025-01-07..2025-02-28: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO02 2025-01-07..2025-02-28: chart sessions with price",
+   "ui": 32,
+   "sql": 32,
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-14..2025-01-23: first page rows (hash)",
+   "ui": "03bcf5ed0eebbd31",
+   "sql": "03bcf5ed0eebbd31",
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-14..2025-01-23: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-14..2025-01-23: chart sessions with price",
+   "ui": 8,
+   "sql": 8,
+   "match": true
+  },
+  {
+   "check": "market DEMO07 2025-01-30..2025-02-26: first page rows (hash)",
+   "ui": "413e6e6b5ad5d35f",
+   "sql": "413e6e6b5ad5d35f",
+   "match": true
+  },
+  {
+   "check": "market DEMO07 2025-01-30..2025-02-26: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO07 2025-01-30..2025-02-26: chart sessions with price",
+   "ui": 15,
+   "sql": 15,
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-02..2025-01-27: first page rows (hash)",
+   "ui": "5fdae44814f2226f",
+   "sql": "5fdae44814f2226f",
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-02..2025-01-27: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO01 2025-01-02..2025-01-27: chart sessions with price",
+   "ui": 18,
+   "sql": 18,
+   "match": true
+  },
+  {
+   "check": "market DEMO05 2025-01-13..2025-01-21: first page rows (hash)",
+   "ui": "6959c99db4ab7024",
+   "sql": "6959c99db4ab7024",
+   "match": true
+  },
+  {
+   "check": "market DEMO05 2025-01-13..2025-01-21: total rows in pager",
+   "ui": true,
+   "sql": true,
+   "match": true
+  },
+  {
+   "check": "market DEMO05 2025-01-13..2025-01-21: chart sessions with price",
+   "ui": 7,
+   "sql": 7,
+   "match": true
+  },
+  {
+   "check": "forecast: eligible rows per run at 2026-11-06",
+   "ui": [
+    [
+     1,
+     128
+    ],
+    [
+     2,
+     128
+    ]
+   ],
+   "sql": [
+    [
+     1,
+     128
+    ],
+    [
+     2,
+     128
+    ]
+   ],
+   "match": true
+  }
+ ]
+}

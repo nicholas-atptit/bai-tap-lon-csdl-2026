@@ -1,0 +1,194 @@
+[
+ {
+  "file": "report/final/evidence/ssms/01_database_tables.png",
+  "sql": "report/final/evidence/ssms/sql/01_database_tables.sql",
+  "sql_sha256": "9cafee3ecbb1f1c3",
+  "object_explorer": "Databases > MarketLabVN30_Demo > Tables",
+  "status_bar": [
+   "Query executed successfully.",
+   "13 rows"
+  ],
+  "size": [
+   1468,
+   900
+  ],
+  "captured_at": "2026-11-06T12:15:44+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/02_erd_relationships.png",
+  "sql": "report/final/evidence/ssms/sql/02_erd_relationships.sql",
+  "sql_sha256": "3c9cdc3ea175bbe2",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "16 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:13:41+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/03_table_constraints.png",
+  "sql": "report/final/evidence/ssms/sql/03_table_constraints.sql",
+  "sql_sha256": "e5e47997570d6e5d",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "17 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:13:46+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/04_select_query.png",
+  "sql": "report/final/evidence/ssms/sql/04_select_query.sql",
+  "sql_sha256": "c47b4448bc0f3f90",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "8 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:13:51+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/05_join_query.png",
+  "sql": "report/final/evidence/ssms/sql/05_join_query.sql",
+  "sql_sha256": "dfa3c55899be3254",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "8 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:13:56+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/06_groupby_having_subquery.png",
+  "sql": "report/final/evidence/ssms/sql/06_groupby_having_subquery.sql",
+  "sql_sha256": "27b86dfe1b6783db",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "146 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:14:02+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/07_set_operations.png",
+  "sql": "report/final/evidence/ssms/sql/07_set_operations.sql",
+  "sql_sha256": "f0972b59bbc99736",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "16 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:14:07+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/08_views.png",
+  "sql": "report/final/evidence/ssms/sql/08_views.sql",
+  "sql_sha256": "04414342d38fc729",
+  "object_explorer": "Databases > MarketLabVN30_Demo > Views",
+  "status_bar": [
+   "Query executed successfully.",
+   "6 rows"
+  ],
+  "size": [
+   1468,
+   900
+  ],
+  "captured_at": "2026-11-06T12:15:53+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/09_stored_procedures.png",
+  "sql": "report/final/evidence/ssms/sql/09_stored_procedures.sql",
+  "sql_sha256": "09c219938d8bfb75",
+  "object_explorer": "Databases > MarketLabVN30_Demo > Programmability > Stored Procedures",
+  "status_bar": [
+   "Query executed successfully.",
+   "5 rows"
+  ],
+  "size": [
+   1468,
+   900
+  ],
+  "captured_at": "2026-11-06T12:16:02+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/10_functions.png",
+  "sql": "report/final/evidence/ssms/sql/10_functions.sql",
+  "sql_sha256": "10c3b462544c65af",
+  "object_explorer": "Databases > MarketLabVN30_Demo > Programmability > Functions",
+  "status_bar": [
+   "Query executed successfully.",
+   "14 rows"
+  ],
+  "size": [
+   1468,
+   900
+  ],
+  "captured_at": "2026-11-06T12:16:12+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/11_live_data_summary.png",
+  "sql": "report/final/evidence/ssms/sql/11_live_data_summary.sql",
+  "sql_sha256": "0c214612fc7dd1ef",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "6 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:14:44+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ },
+ {
+  "file": "report/final/evidence/ssms/12_constraint_test.png",
+  "sql": "report/final/evidence/ssms/sql/12_constraint_test.sql",
+  "sql_sha256": "a16975f6e82d8529",
+  "object_explorer": null,
+  "status_bar": [
+   "Query executed successfully.",
+   "3 rows"
+  ],
+  "size": [
+   1034,
+   900
+  ],
+  "captured_at": "2026-11-06T12:16:18+07:00",
+  "redaction": "Windows login text blurred; Copilot pane and account picture cropped"
+ }
+]

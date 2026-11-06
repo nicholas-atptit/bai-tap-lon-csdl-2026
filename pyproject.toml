@@ -1,0 +1,35 @@
+[project]
+name = "marketlab-vn30-product"
+version = "0.1.0"
+description = "MarketLab VN30 local product: FastAPI gateway, web dashboard and guarded EOD sync on top of the verified SQL Server schema"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi==0.115.12",
+    "uvicorn==0.34.2",
+    "pyodbc==5.2.0",
+    "tzdata==2025.2",
+    "jinja2==3.1.6",
+]
+# The real EOD provider (vnstock, KBS source) is deliberately NOT a dependency of this
+# environment: vnstock is no longer on PyPI and is installed by the user from the vendor
+# index into an interpreter of their choice. The EOD worker calls that interpreter through
+# an isolated subprocess bridge (MARKETLAB_PROVIDER_PYTHON). See docs/EOD_DATA_CONTRACT.md.
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.5",
+    "httpx==0.28.1",
+    "playwright==1.52.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests/product"]
+markers = [
+    "integration: needs local SQL Server and creates isolated MarketLabVN30_IT_* databases",
+    "network: calls the real EOD provider over the Internet",
+    "e2e: starts the local server and drives Microsoft Edge",
+]
+addopts = "-ra --basetemp=var/pytest_tmp"

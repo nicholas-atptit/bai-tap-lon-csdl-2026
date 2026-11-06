@@ -163,3 +163,44 @@ Kết quả dự báo, phân tích và tài sản nghiên cứu được ghi nh�
 Dữ liệu **mô phỏng** trong bộ demo được tạo để phục vụ bài tập lớn, không phải bản ghi thị trường thu thập từ VNstock hoặc kết quả nghiên cứu thực tế. Nhóm được phân công và giảng viên chỉ sử dụng tài liệu được chia sẻ hợp pháp trong phạm vi bài tập/đánh giá; nghiên cứu khác hoặc việc khai thác tài sản hạn chế ngoài phạm vi được ủy quyền cần được cho phép trước bằng email hoặc văn bản từ chủ thể có thẩm quyền. Gửi yêu cầu mà chưa được chấp thuận không tạo sự cho phép.
 
 Xem [LICENSE.md](LICENSE.md) — **MarketLab VN30 — Restricted Research and Academic Use License (2026)**. Đây là giấy phép riêng hạn chế, không phải giấy phép nguồn mở được OSI công nhận. Quyền theo pháp luật, giấy phép có trước, điều kiện bên thứ ba và các quyền áp dụng theo GitHub vẫn được giữ nguyên.
+
+
+## 20. Ứng dụng web cục bộ (nhánh `feature/marketlab-working-product`)
+
+Phần mở rộng tùy chọn: **ứng dụng web Python render phía máy chủ** (FastAPI làm framework + Jinja2) kết nối SQL Server ở backend, cộng worker đồng bộ dữ liệu cuối phiên (EOD). Không có API Gateway, REST JSON cho giao diện hay Swagger; trình duyệt không kết nối SQL Server. Lõi 13 bảng và đường chạy SSMS ở trên **không đổi**. Không tạo dự báo mới (không có model artifact).
+
+```text
+Trình duyệt ──HTML──► ứng dụng web Python ──pyodbc──► SQL Server (Demo | Live | Ops)
+EOD Worker (PowerShell / Task Scheduler / form có CSRF) ──► SQL Server + Ops
+```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\Setup-MarketLab.ps1      # lần đầu: .venv (uv.lock), .env, token
+powershell -ExecutionPolicy Bypass -File scripts\Start-MarketLab.ps1      # http://127.0.0.1:8000/
+```
+
+| Trang | Nội dung |
+|---|---|
+| `/` | Dashboard: nhãn LIVE/DEMO, số mã, phiên có dữ liệu, phạm vi ngày thực tế, số OHLCV, phiên EOD gần nhất, tình trạng dữ liệu, backfill gần nhất |
+| `/market` | Tra cứu lịch sử OHLCV: tìm 30 mã, lọc ngày (LIVE ≥ 2023-01-01, mặc định 12 tháng, khoảng nhanh 3T/6T/1N/2N/Tất cả), biểu đồ Close + Volume có tooltip, chú giải, kéo để phóng to; bảng sắp xếp/phân trang; xuất CSV ≤ 5.000 dòng |
+| `/forecast` | ModelRun, Accuracy/Brier/log loss tại `as_of` (`fn_EligiblePredictions`), danh sách dự báo; rỗng thì giải thích, không vẽ giả |
+| `/compare` | `usp_CompareModels` trên tập quan sát giao |
+| `/ops` | Trạng thái và nhật ký EOD hằng ngày, kiểm tra lịch phiên, đối soát, form Dry run/Sync có bảo vệ |
+| `/backfill` | Backfill lịch sử: job, tiến độ, checkpoint mã × năm, phiên thiếu/không ghi, độ phủ theo mã, form Dry run/Backfill/Tiếp tục có token + CSRF + xác nhận |
+
+**Dữ liệu LIVE hiện có** (06/11/2026): 28.097 dòng OHLCV thật của 30 mã thuộc universe được cấu hình (tham chiếu VN30 06/2026), 956 phiên, 2023-01-03 → 2026-11-05. VPL chỉ có dữ liệu từ 2025-05-13 (nguồn không có lịch sử trước đó). Không có phiên thiếu nào khác. Chi tiết: [báo cáo coverage](docs/BACKFILL_COVERAGE_REPORT.md) · [runbook backfill](docs/BACKFILL_RUNBOOK.md) · [nghiệm thu web FINAL](docs/FINAL_WEB_ACCEPTANCE.md).
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\Backfill-MarketLab.ps1 -StartDate 2023-01-01 -EndDate latest -DryRun   # số lượng dự kiến
+powershell -ExecutionPolicy Bypass -File .\scripts\Backfill-MarketLab.ps1 -StartDate 2023-01-01 -EndDate latest           # backup + ghi
+powershell -ExecutionPolicy Bypass -File .\scripts\Backfill-MarketLab.ps1 -Resume                                         # tiếp tục
+powershell -ExecutionPolicy Bypass -File .\scripts\Run-MarketLab-EOD.ps1 -IfNeeded                                        # EOD hằng ngày sau 16:10
+```
+
+| Chế độ | Database | EOD |
+|---|---|---|
+| DEMO_OFFLINE | `MarketLabVN30_Demo` (SYNTHETIC) | tắt |
+| REAL_PRIVATE | DB REAL_PRIVATE riêng, ví dụ `MarketLabVN30_Live` (`-Mode REAL_PRIVATE -Database … -Port 8001`) | PowerShell / Task Scheduler (mặc định tắt) / form web |
+| RESEARCH_READ_ONLY | DB nghiên cứu, chỉ đọc | tắt |
+
+Kiểm thử: `uv run pytest tests/product` (140 ca ngày 06/11/2026: unit, integration DB cô lập gồm backfill, web, E2E Edge). Tài liệu: [runbook Windows](docs/PRODUCT_RUNBOOK_WINDOWS.md) · [hợp đồng dữ liệu EOD](docs/EOD_DATA_CONTRACT.md) · [audit triển khai](docs/PRODUCT_IMPLEMENTATION_AUDIT.md) · [audit UI](docs/PRODUCT_UI_AUDIT.md) · [QA UI](docs/PRODUCT_UI_QA.md) · [bằng chứng kiểm thử](docs/PRODUCT_TEST_EVIDENCE.md) · [kịch bản demo](docs/PRODUCT_DEMO_SCRIPT.md). Migration: `sql/13_eod_extension.sql`, `sql/14_ops_database.sql`, `sql/15_ops_schema_v2.sql`, `sql/16_ops_schema_v3_backfill.sql` (chỉ DB Ops) (mỗi file có preflight/rollback). Bản ghi REAL_PRIVATE, `.env`, log/ảnh dữ liệu thật không được commit.

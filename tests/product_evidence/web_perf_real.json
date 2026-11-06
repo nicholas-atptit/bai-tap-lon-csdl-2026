@@ -1,0 +1,135 @@
+{
+ "measured_at": "2026-11-06T11:18:47+07:00",
+ "base_url": "http://127.0.0.1:8001",
+ "n_per_scenario": 15,
+ "scenarios": {
+  "overview /": {
+   "first_request_ms": 43.9,
+   "wall_ms": {
+    "min": 32.7,
+    "median": 43.4,
+    "p90": 47.1,
+    "max": 67.2
+   },
+   "server_ms": {
+    "min": 31.8,
+    "median": 41.5,
+    "p90": 46.2,
+    "max": 66.2
+   },
+   "html_kb_median": 15.7
+  },
+  "history default (12 months, chart + page 1)": {
+   "first_request_ms": 19.7,
+   "wall_ms": {
+    "min": 16.8,
+    "median": 21.6,
+    "p90": 27.1,
+    "max": 31.1
+   },
+   "server_ms": {
+    "min": 15.7,
+    "median": 20.6,
+    "p90": 26.0,
+    "max": 30.1
+   },
+   "html_kb_median": 62.8
+  },
+  "history change ticker, all data 2023+": {
+   "first_request_ms": 31.6,
+   "wall_ms": {
+    "min": 20.0,
+    "median": 26.2,
+    "p90": 30.2,
+    "max": 41.2
+   },
+   "server_ms": {
+    "min": 19.0,
+    "median": 25.1,
+    "p90": 28.9,
+    "max": 40.1
+   },
+   "html_kb_median": 173.9
+  },
+  "history change date range (2 years)": {
+   "first_request_ms": 29.6,
+   "wall_ms": {
+    "min": 18.9,
+    "median": 27.2,
+    "p90": 32.6,
+    "max": 40.5
+   },
+   "server_ms": {
+    "min": 17.8,
+    "median": 26.2,
+    "p90": 31.4,
+    "max": 39.4
+   },
+   "html_kb_median": 102.4
+  },
+  "history page 10 sorted by close": {
+   "first_request_ms": 31.0,
+   "wall_ms": {
+    "min": 22.0,
+    "median": 27.3,
+    "p90": 37.7,
+    "max": 47.2
+   },
+   "server_ms": {
+    "min": 21.0,
+    "median": 26.3,
+    "p90": 31.3,
+    "max": 46.1
+   },
+   "html_kb_median": 174.1
+  },
+  "CSV export one ticker 2023+": {
+   "first_request_ms": 26.8,
+   "wall_ms": {
+    "min": 18.3,
+    "median": 26.6,
+    "p90": 28.0,
+    "max": 28.8
+   },
+   "server_ms": {
+    "min": 17.3,
+    "median": 25.5,
+    "p90": 26.8,
+    "max": 27.2
+   },
+   "html_kb_median": 77.3
+  },
+  "backfill page": {
+   "first_request_ms": 44.4,
+   "wall_ms": {
+    "min": 32.5,
+    "median": 44.2,
+    "p90": 49.8,
+    "max": 52.3
+   },
+   "server_ms": {
+    "min": 31.5,
+    "median": 43.2,
+    "p90": 48.8,
+    "max": 51.2
+   },
+   "html_kb_median": 26.9
+  },
+  "EOD ops page": {
+   "first_request_ms": 49.0,
+   "wall_ms": {
+    "min": 14.5,
+    "median": 19.7,
+    "p90": 40.5,
+    "max": 50.2
+   },
+   "server_ms": {
+    "min": 13.5,
+    "median": 18.4,
+    "p90": 38.1,
+    "max": 49.2
+   },
+   "html_kb_median": 18.8
+  }
+ }
+}
